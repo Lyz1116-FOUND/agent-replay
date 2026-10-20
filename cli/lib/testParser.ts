@@ -188,8 +188,10 @@ export function parseTestOutput(rawText: string): TestOutcome | null {
   }
 }
 
+// Boundaries include quotes and parentheses: agents rarely run a bare command,
+// they run `sh -lc 'node --test test.mjs'` or `bash -c "npm test"`.
 const TEST_COMMAND_PATTERN =
-  /(?:^|[\s;&|])(?:pytest|py\.test|python\s+-m\s+(?:pytest|unittest)|npm\s+(?:run\s+)?test|yarn\s+test|pnpm\s+test|npx\s+(?:vitest|jest)|vitest|jest|mocha|cargo\s+test|go\s+test|make\s+test|tox|phpunit|rspec|dotnet\s+test|node\s+--test|bun\s+test)(?:$|[\s;&|])/i
+  /(?:^|[\s;&|'"`(])(?:pytest|py\.test|python\s+-m\s+(?:pytest|unittest)|npm\s+(?:run\s+)?test|yarn\s+test|pnpm\s+test|npx\s+(?:vitest|jest)|vitest|jest|mocha|cargo\s+test|go\s+test|make\s+test|tox|phpunit|rspec|dotnet\s+test|node\s+--test|bun\s+test)(?:$|[\s;&|'"`),])/i
 
 export function isTestCommand(command: string): boolean {
   return TEST_COMMAND_PATTERN.test(` ${command} `)

@@ -418,7 +418,7 @@ Agent：Codex / gpt-5-codex，59.2s，16 steps，1 个变更文件（另读取 3
 | **M4.7** Real agent validation | OpenCode + Claude + Qoder + GLM + ZCode live；9 个免费模型矩阵 | **已完成** |
 | **M4.8** Measurement integrity | termination taxonomy + environment fingerprint + capture integrity + 措辞清理 | **本次实现** |
 | **v0.3.0 beta** | CI、LICENSE、CONTRIBUTING、CHANGELOG、adapter 状态表 | **本次实现** |
-| M4.9 Codex / Cursor live | 两个 adapter 的真机验证 | 下一阶段（不阻塞发布） |
+| **M4.9** Codex / Cursor live | Codex 真机通过；Cursor 装好但需浏览器登录 | **进行中** |
 | M5 OTel import | OTLP/JSON → Trace | 暂缓 |
 
 ### 验收标准（本次）
@@ -495,8 +495,15 @@ Agent：Codex / gpt-5-codex，59.2s，16 steps，1 个变更文件（另读取 3
 | Claude Code | ✓ | ✓ | ✓ |
 | Qoder CLI | ✓ | ✓ | ✓ |
 | ZCode CLI | ✓ | ✓ | ✓ |
-| Codex | ✓ | ✓ | — |
-| Cursor | ✓ | ✓ | — |
+| Codex | ✓ | ✓ | ✓ |
+| Cursor | ✓ | ✓ | 装好待登录 |
+
+### M4.9 真机验证进展
+
+- Codex 0.163.0 真机通过：`codex exec --json -s danger-full-access`，PASS · 53.5s · 1 edit verified · 2 test runs · recovery，trace 固化为 `examples/real-codex.trace.json`。
+- Codex 环境注意：嵌套 sandbox 在本机报 `sandbox-exec: sandbox_apply: Operation not permitted`，需 `-s danger-full-access`；`chatgpt.com` 必须显式走 `HTTPS_PROXY=http://127.0.0.1:7892`（默认代理返回 502）。
+- 真机暴露并修掉一个测试识别缺口：`isTestCommand` 的边界字符类不含引号，导致 `sh -lc 'node --test test.mjs'` 这类包装命令不被识别为测试，整条 run 被记成 `partial`。已把 `'"`(` 与 `)` `,` 纳入边界，并补 4 条断言。
+- Cursor CLI 2026.10.19 已安装（`~/.local/bin/cursor-agent`），但 `cursor-agent -p` 直接返回 `Authentication required`，需要 `agent login` 浏览器授权；登录流程已启动，等用户确认。
 
 ### 下一阶段（未开始）
 

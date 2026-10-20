@@ -4,6 +4,7 @@ import realOpenCode from '../../examples/real-opencode.trace.json'
 import realQoder from '../../examples/real-qoder.trace.json'
 import realGlm from '../../examples/real-glm-flash.trace.json'
 import realZCode from '../../examples/real-zcode.trace.json'
+import realCodex from '../../examples/real-codex.trace.json'
 import { traceSchema } from '../../src/schema/trace'
 
 describe('real CLI recordings', () => {
@@ -13,6 +14,7 @@ describe('real CLI recordings', () => {
     ['qoder', realQoder, 'qoder'],
     ['glm-flash', realGlm, 'opencode'],
     ['zcode', realZCode, 'zcode'],
+    ['codex', realCodex, 'codex'],
   ] as const)('%s produced a native+workspace trace', (_label, sample, adapter) => {
     const trace = traceSchema.parse(sample)
     expect(trace.capture).toMatchObject({

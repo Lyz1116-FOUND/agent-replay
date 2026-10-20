@@ -175,7 +175,7 @@ The Overview shows this label next to the agent, along with `observed`, `mixed`,
 
 ### Real CLI validation
 
-Five live agent/model configurations were recorded end-to-end on the same small bug-fix task (`calc.mjs` + `node --test`), with the recorder generating every trace automatically:
+Six live agent/model configurations were recorded end-to-end on the same small bug-fix task (`calc.mjs` + `node --test`), with the recorder generating every trace automatically:
 
 | Agent | Version / model | Result | Capture |
 |---|---|---|---|
@@ -184,6 +184,7 @@ Five live agent/model configurations were recorded end-to-end on the same small 
 | Qoder CLI | 1.1.74 · `DeepSeek-Flash` (free) | PASS · 14.4s · 1 edit · 3/3 tests | native+workspace · 1 verified · 0 unverified |
 | OpenCode + GLM | `opencode/glm-5.3-flash-free` | PASS · 12.0s · 1 edit · 3/3 tests | native+workspace · 1 verified · 0 unverified |
 | ZCode CLI | 3.15.3-37 · `bigmodel-standard-api-2/GLM-5.3-Flash` | PASS · 61.9s · 1 edit · 3/3 tests | native+workspace · 1 verified · 0 unverified |
+| Codex | 0.163.0 · default model | PASS · 53.5s · 1 edit · 2 test runs · recovery | native+workspace · 1 verified · 0 unverified · test recall 2/2 |
 
 The Claude run exposed a real integration bug: Claude reports absolute file paths while the workspace watcher reports repo-relative paths. The EventMerger now normalizes native file paths before matching and trace serialization.
 
@@ -243,10 +244,10 @@ Edit recall is `matchedEdits / nativeEdits`; test recall is `parsedTestRuns / na
 | Claude Code | ✓ | ✓ | ✓ |
 | Qoder CLI | ✓ | ✓ | ✓ |
 | ZCode CLI | ✓ | ✓ | ✓ |
-| Codex | ✓ | ✓ | — |
+| Codex | ✓ | ✓ | ✓ |
 | Cursor | ✓ | ✓ | — |
 
-Codex and Cursor have adapters and fixtures but no live run yet. That is a gap in validation, not a missing feature, and it does not block the beta.
+Codex is now validated live. Cursor has an adapter and fixtures but still no live run: the CLI installs, but `cursor-agent` requires an interactive browser login before it will make a request. That is a gap in validation, not a missing feature, and it does not block the beta.
 
 ![Real Claude Code capture](docs/recorded.png)
 

@@ -25,6 +25,9 @@ recorded trace trustworthy enough to argue about.
   persisted. Requires Node >= 22.5 (`node:sqlite`).
 - **Unavailable runs are labelled.** A provider 403 shows as `UNAVAILABLE`
   instead of a plain failure.
+- **Codex live validation.** `codex exec --json` recorded end to end
+  (`examples/real-codex.trace.json`): 1 verified edit, 2 parsed test runs,
+  recovery detected, test recall 2/2.
 - `LICENSE` (MIT), `CONTRIBUTING.md`, `CHANGELOG.md`, GitHub Actions CI
   (Ubuntu + macOS, Node 22 + 24).
 
@@ -43,6 +46,10 @@ recorded trace trustworthy enough to argue about.
 - **Error fidelity.** OpenCode's error events kept only a generic message. The
   adapter now reads `error.message` and `error.status`, so traces contain
   `This model is not available in your country (HTTP 403)`.
+- **Shell-wrapped test commands were not recognised.** Agents run
+  `sh -lc 'node --test test.mjs'`, and the test-command matcher rejected the
+  leading quote, so a passing run was recorded as `partial`. Quotes, parentheses
+  and commas are now valid boundaries.
 
 ### Changed
 
@@ -52,8 +59,8 @@ recorded trace trustworthy enough to argue about.
 
 ### Known limitations
 
-- Codex and Cursor adapters are implemented and fixture-tested but have no live
-  validation yet.
+- Cursor's adapter is implemented and fixture-tested but has no live run: the
+  CLI installs, but `cursor-agent` needs an interactive browser login.
 - ZCode events are read from the session store after the process exits, not
   streamed live.
 - The repository URL is not set in `package.json` yet.

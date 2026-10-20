@@ -57,6 +57,14 @@ describe('test output parsing', () => {
     expect(isTestCommand('node --test test/a.test.mjs')).toBe(true)
     expect(isTestCommand('git status')).toBe(false)
   })
+
+  it('recognises test commands wrapped in a shell', () => {
+    // Codex runs everything as `/bin/zsh -lc '<command>'`.
+    expect(isTestCommand("/bin/zsh -lc 'node --test test.mjs'")).toBe(true)
+    expect(isTestCommand('bash -c "npm test"')).toBe(true)
+    expect(isTestCommand("(cd packages/core && pytest -q)")).toBe(true)
+    expect(isTestCommand("/bin/zsh -lc 'git status --short'")).toBe(false)
+  })
 })
 
 describe('streaming test detection', () => {

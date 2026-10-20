@@ -1,0 +1,282 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvg488wj_6e242f",
+  "task": {
+    "id": "real-claude-verified",
+    "title": "real-claude-verified",
+    "description": "Recorded Claude Code session in ar-real-claude.",
+    "repo": "ar-real-claude",
+    "baseCommit": "6e38213"
+  },
+  "agent": {
+    "name": "Claude Code",
+    "model": "claude-haiku-5-5"
+  },
+  "status": "pass",
+  "startedAt": "2026-10-20T03:20:24.595Z",
+  "endedAt": "2026-10-20T03:20:33.122Z",
+  "durationMs": 8527,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "claude",
+    "sources": [
+      "native:claude",
+      "workspace"
+    ],
+    "workspaceVerified": 1,
+    "unverifiedEdits": 0
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "6e38213",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-real-claude"
+        }
+      ]
+    },
+    {
+      "id": "native-call_00_ET_BrscfTRL3yfddPkc2KZR7761",
+      "type": "read",
+      "name": "Read calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 2037,
+      "endMs": 2291,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "claude",
+        "callId": "call_00_ET_BrscfTRL3yfddPkc2KZR7761",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "calc.mjs",
+          "language": "javascript",
+          "content": "1\texport function bump(value) {\n2\t  return value\n3\t}\n4"
+        }
+      ]
+    },
+    {
+      "id": "native-call_01_ET_q72KbNaDMDtvIu9Ta1QU4489",
+      "type": "read",
+      "name": "Read test.mjs",
+      "summary": "test.mjs",
+      "startMs": 2113,
+      "endMs": 2358,
+      "status": "ok",
+      "files": [
+        "test.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "claude",
+        "callId": "call_01_ET_q72KbNaDMDtvIu9Ta1QU4489",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "test.mjs",
+          "language": "javascript",
+          "content": "1\timport test from 'node:test'\n2\timport assert from 'node:assert/strict'\n3\timport { bump } from './calc.mjs'\n4\t\n5\ttest('bump 1', () => assert.equal(bump(1), 2))\n6\ttest('bump 2', () => assert.equal(bump(2), 3))\n7\ttest('bump 0', () => assert.equal(bump(0), 1))\n8"
+        }
+      ]
+    },
+    {
+      "id": "native-call_00_IUQr1yi2xG149d1mCqh06474",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 3823,
+      "endMs": 4079,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "claude",
+        "callId": "call_00_IUQr1yi2xG149d1mCqh06474",
+        "timingKind": "observed",
+        "workspaceVerified": true,
+        "operation": "modify"
+      },
+      "artifacts": [
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value\n}",
+          "after": "export function bump(value) {\n  return value + 1\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "native-call_00_ET_bFUFouzHRECQ3wm0wh7S1714",
+      "type": "test",
+      "name": "node --test test.mjs",
+      "summary": "3/3 passed",
+      "startMs": 5003,
+      "endMs": 6269,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "claude",
+        "callId": "call_00_ET_bFUFouzHRECQ3wm0wh7S1714",
+        "timingKind": "observed",
+        "command": "node --test test.mjs",
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node --test test.mjs",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "\u2714 bump 1 (0.668208ms)\n\u2714 bump 2 (0.0525ms)\n\u2714 bump 0 (0.041ms)\n\u2139 tests 3\n\u2139 suites 0\n\u2139 pass 3\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 65.571167"
+        }
+      ]
+    },
+    {
+      "id": "message-7555-1998321517",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "Fixed. `calc.mjs:2` now returns `value + 1`.",
+      "startMs": 7555,
+      "endMs": 7555,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "claude",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "Fixed. `calc.mjs:2` now returns `value + 1`.\n\n`node --test test.mjs` \u2192 3 tests, 3 pass, 0 fail."
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "startMs": 8077,
+      "endMs": 8277,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-real-claude"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+      "startMs": 8327,
+      "endMs": 8527,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": false,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit.\n\nFixed. `calc.mjs:2` now returns `value + 1`.\n\n`node --test test.mjs` \u2192 3 tests, 3 pass, 0 fail.\n- 1 test run\n- 1 edit across 1 file\n- duration 8.5s\n- capture native+workspace \u00b7 observed timing\nNative agent events verified against workspace diffs."
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvg488wj_6e242f",
+    "command": "claude -p --output-format stream-json --verbose --permission-mode acceptEdits --allowedTools \"Read,Edit,Write,Bash(node --test test.mjs)\" --model haiku \"Fix calc.mjs so that 'node --test test.mjs' passes. Make the minimal edit, run that exact test command, and report the result.\"",
+    "cwd": "/private/tmp/ar-real-claude",
+    "repoRoot": "/private/tmp/ar-real-claude",
+    "baseCommit": "6e38213",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 8477,
+    "adapter": "claude",
+    "nativeSessionId": "0d41c96b-92c6-4d8e-844f-31f72fa58bf2",
+    "recoveryDetected": false,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T03:20:33.073Z"
+  }
+}

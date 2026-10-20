@@ -1,0 +1,14 @@
+{"type":"system","subtype":"init","model":"Claude 4 Sonnet","cwd":"/repo","session_id":"cursor-session-1"}
+{"type":"user","message":{"role":"user","content":[{"type":"text","text":"Fix the cache bug"}]}}
+{"type":"assistant","message":{"content":[{"type":"text","text":"I'll inspect the cache implementation."}]}}
+{"type":"tool_call","subtype":"started","call_id":"call_read_1","tool_call":{"readToolCall":{"args":{"path":"src/cache.ts"}}}}
+{"type":"tool_call","subtype":"completed","call_id":"call_read_1","tool_call":{"readToolCall":{"result":{"success":{"content":"export function evict() { return 1 }\n"}}}}}
+{"type":"tool_call","subtype":"started","call_id":"call_edit_1","tool_call":{"writeToolCall":{"args":{"path":"src/cache.ts"}}}}
+{"type":"tool_call","subtype":"completed","call_id":"call_edit_1","tool_call":{"writeToolCall":{"result":{"success":{}}}}}
+{"type":"tool_call","subtype":"started","call_id":"call_test_1","tool_call":{"shellToolCall":{"args":{"command":"npm test","workingDirectory":"/repo"}}}}
+{"type":"tool_call","subtype":"completed","call_id":"call_test_1","tool_call":{"shellToolCall":{"result":{"success":{"exitCode":1,"stdout":"1 failed, 2 passed in 0.2s"}}}}}
+{"type":"tool_call","subtype":"started","call_id":"call_edit_2","tool_call":{"writeToolCall":{"args":{"path":"src/cache.ts"}}}}
+{"type":"tool_call","subtype":"completed","call_id":"call_edit_2","tool_call":{"writeToolCall":{"result":{"success":{}}}}}
+{"type":"tool_call","subtype":"started","call_id":"call_test_2","tool_call":{"shellToolCall":{"args":{"command":"npm test"}}}}
+{"type":"tool_call","subtype":"completed","call_id":"call_test_2","tool_call":{"shellToolCall":{"result":{"success":{"exitCode":0,"stdout":"Tests: 3 passed, 3 total"}}}}}
+{"type":"result","subtype":"success","duration_ms":1234,"result":"Fixed the cache bug."}

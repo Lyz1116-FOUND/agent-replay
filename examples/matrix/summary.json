@@ -1,0 +1,337 @@
+{
+  "name": "OpenCode Free-Model Capture Validation Matrix",
+  "what_it_validates": "the recorder pipeline across models, not model capability",
+  "task": "fix calc.mjs so node --test test.mjs passes",
+  "agent": "OpenCode 2.0.32",
+  "adapter": "opencode",
+  "recorded_at": "2026-10-20",
+  "latency_metric": "end-to-end wall-clock latency (model inference + provider queue + network + agent orchestration + tool execution)",
+  "totals": {
+    "models": 9,
+    "attempted": 8,
+    "passed": 8,
+    "unavailable": 1,
+    "capability_pass_rate": 1.0,
+    "note": "unavailable runs are excluded from capability_pass_rate and reported separately"
+  },
+  "notes": [
+    "All successful runs: 1 native edit, 1 workspace-verified edit, 0 unverified, 0 outside-workspace.",
+    "minimax and beam were run with isolation=none: an empty XDG config has no provider routing for them and returns provider.no-route.",
+    "beam-free is region-blocked (HTTP 403); it is an availability result, not a capability one."
+  ],
+  "results": [
+    {
+      "model": "opencode/deepseek-v4.1-flash-free",
+      "status": "pass",
+      "termination": {
+        "kind": "completed"
+      },
+      "elapsed_s": 10.8,
+      "tests": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "edits": 1,
+      "integrity": {
+        "nativeEdits": 1,
+        "workspaceEdits": 1,
+        "matchedEdits": 1,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 1,
+        "parsedTestRuns": 1,
+        "capturedTests": 1
+      },
+      "fidelity": "native+workspace",
+      "timing": "observed",
+      "environment": {
+        "isolation": "xdg",
+        "provider": "opencode",
+        "harnessVersion": "2.0.32",
+        "platform": "darwin-arm64",
+        "nodeVersion": "v22.22.2"
+      },
+      "outside_workspace": false,
+      "trace": "free-opencode-deepseek-v4.1-flash-free.trace.json"
+    },
+    {
+      "model": "opencode/glm-5.3-flash-free",
+      "status": "pass",
+      "termination": {
+        "kind": "completed"
+      },
+      "elapsed_s": 17.9,
+      "tests": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "edits": 1,
+      "integrity": {
+        "nativeEdits": 1,
+        "workspaceEdits": 1,
+        "matchedEdits": 1,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 1,
+        "parsedTestRuns": 1,
+        "capturedTests": 1
+      },
+      "fidelity": "native+workspace",
+      "timing": "observed",
+      "environment": {
+        "isolation": "xdg",
+        "provider": "opencode",
+        "harnessVersion": "2.0.32",
+        "platform": "darwin-arm64",
+        "nodeVersion": "v22.22.2"
+      },
+      "outside_workspace": false,
+      "trace": "free-opencode-glm-5.3-flash-free.trace.json"
+    },
+    {
+      "model": "opencode/minimax-m3.1-flash-free",
+      "status": "pass",
+      "termination": {
+        "kind": "completed"
+      },
+      "elapsed_s": 18.7,
+      "tests": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "edits": 1,
+      "integrity": {
+        "nativeEdits": 1,
+        "workspaceEdits": 1,
+        "matchedEdits": 1,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 2,
+        "parsedTestRuns": 2,
+        "capturedTests": 2
+      },
+      "fidelity": "native+workspace",
+      "timing": "observed",
+      "environment": {
+        "isolation": "none",
+        "provider": "opencode",
+        "harnessVersion": "2.0.32",
+        "platform": "darwin-arm64",
+        "nodeVersion": "v22.22.2"
+      },
+      "outside_workspace": false,
+      "trace": "free-opencode-minimax-m3.1-flash-free.trace.json"
+    },
+    {
+      "model": "opencode/mimo-v2.6-flash-free",
+      "status": "pass",
+      "termination": {
+        "kind": "completed"
+      },
+      "elapsed_s": 19.3,
+      "tests": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "edits": 1,
+      "integrity": {
+        "nativeEdits": 1,
+        "workspaceEdits": 1,
+        "matchedEdits": 1,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 1,
+        "parsedTestRuns": 1,
+        "capturedTests": 1
+      },
+      "fidelity": "native+workspace",
+      "timing": "observed",
+      "environment": {
+        "isolation": "xdg",
+        "provider": "opencode",
+        "harnessVersion": "2.0.32",
+        "platform": "darwin-arm64",
+        "nodeVersion": "v22.22.2"
+      },
+      "outside_workspace": false,
+      "trace": "free-opencode-mimo-v2.6-flash-free.trace.json"
+    },
+    {
+      "model": "opencode/nemotron-3.5-lightning-free",
+      "status": "pass",
+      "termination": {
+        "kind": "completed"
+      },
+      "elapsed_s": 21.8,
+      "tests": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "edits": 1,
+      "integrity": {
+        "nativeEdits": 1,
+        "workspaceEdits": 1,
+        "matchedEdits": 1,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 2,
+        "parsedTestRuns": 2,
+        "capturedTests": 2
+      },
+      "fidelity": "native+workspace",
+      "timing": "observed",
+      "environment": {
+        "isolation": "xdg",
+        "provider": "opencode",
+        "harnessVersion": "2.0.32",
+        "platform": "darwin-arm64",
+        "nodeVersion": "v22.22.2"
+      },
+      "outside_workspace": false,
+      "trace": "free-opencode-nemotron-3.5-lightning-free.trace.json"
+    },
+    {
+      "model": "opencode/nemotron-3-ultra-free",
+      "status": "pass",
+      "termination": {
+        "kind": "completed"
+      },
+      "elapsed_s": 30.7,
+      "tests": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "edits": 1,
+      "integrity": {
+        "nativeEdits": 1,
+        "workspaceEdits": 1,
+        "matchedEdits": 1,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 1,
+        "parsedTestRuns": 1,
+        "capturedTests": 1
+      },
+      "fidelity": "native+workspace",
+      "timing": "observed",
+      "environment": {
+        "isolation": "xdg",
+        "provider": "opencode",
+        "harnessVersion": "2.0.32",
+        "platform": "darwin-arm64",
+        "nodeVersion": "v22.22.2"
+      },
+      "outside_workspace": false,
+      "trace": "free-opencode-nemotron-3-ultra-free.trace.json"
+    },
+    {
+      "model": "opencode/longcat-2.5-preview-free",
+      "status": "pass",
+      "termination": {
+        "kind": "completed"
+      },
+      "elapsed_s": 31.3,
+      "tests": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "edits": 1,
+      "integrity": {
+        "nativeEdits": 1,
+        "workspaceEdits": 1,
+        "matchedEdits": 1,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 1,
+        "parsedTestRuns": 1,
+        "capturedTests": 1
+      },
+      "fidelity": "native+workspace",
+      "timing": "observed",
+      "environment": {
+        "isolation": "xdg",
+        "provider": "opencode",
+        "harnessVersion": "2.0.32",
+        "platform": "darwin-arm64",
+        "nodeVersion": "v22.22.2"
+      },
+      "outside_workspace": false,
+      "trace": "free-opencode-longcat-2.5-preview-free.trace.json"
+    },
+    {
+      "model": "opencode/nemotron-3.5-super-vl-free",
+      "status": "pass",
+      "termination": {
+        "kind": "completed"
+      },
+      "elapsed_s": 34.9,
+      "tests": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "edits": 1,
+      "integrity": {
+        "nativeEdits": 1,
+        "workspaceEdits": 1,
+        "matchedEdits": 1,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 1,
+        "parsedTestRuns": 1,
+        "capturedTests": 1
+      },
+      "fidelity": "native+workspace",
+      "timing": "observed",
+      "environment": {
+        "isolation": "xdg",
+        "provider": "opencode",
+        "harnessVersion": "2.0.32",
+        "platform": "darwin-arm64",
+        "nodeVersion": "v22.22.2"
+      },
+      "outside_workspace": false,
+      "trace": "free-opencode-nemotron-3.5-super-vl-free.trace.json"
+    },
+    {
+      "model": "opencode/beam-free",
+      "status": "fail",
+      "termination": {
+        "kind": "provider_unavailable",
+        "message": "This model is not available in your country (HTTP 403)",
+        "code": 403
+      },
+      "elapsed_s": 3.3,
+      "tests": {},
+      "edits": 0,
+      "integrity": {
+        "nativeEdits": 0,
+        "workspaceEdits": 0,
+        "matchedEdits": 0,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 0,
+        "parsedTestRuns": 0,
+        "capturedTests": 0
+      },
+      "fidelity": "native-events",
+      "timing": "observed",
+      "environment": {
+        "isolation": "none",
+        "provider": "opencode",
+        "harnessVersion": "2.0.32",
+        "platform": "darwin-arm64",
+        "nodeVersion": "v22.22.2"
+      },
+      "outside_workspace": false,
+      "trace": "free-opencode-beam-free.trace.json"
+    }
+  ]
+}

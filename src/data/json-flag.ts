@@ -1,0 +1,212 @@
+import { finalizeTrace } from './build'
+import {
+  CLI_AFTER,
+  CLI_BEFORE,
+  CLI_PATCH,
+  CLI_TEST_AFTER,
+  CLI_TEST_BEFORE,
+  CLI_TEST_OUTPUT,
+  REPO,
+} from './demoRepo'
+
+export const jsonFlagRun = finalizeTrace({
+  id: 'run_json_codex_a13c',
+  task: {
+    id: 'json-output-flag',
+    title: 'Add --json output to cachekit inspect',
+    description:
+      'The inspect command prints human-readable output only. Add a --json flag that emits the parsed entries as JSON.',
+    repo: REPO,
+    baseCommit: '9b02f1e',
+  },
+  agent: { name: 'Codex', version: '2026.09', model: 'gpt-5-codex' },
+  status: 'pass',
+  startedAt: '2026-10-19T15:02:44Z',
+  spans: [
+    {
+      id: 'j01',
+      type: 'reasoning',
+      name: 'Task received',
+      summary: 'Locate the CLI entrypoint and its tests.',
+      startMs: 0,
+      endMs: 2200,
+      status: 'ok',
+      attributes: { phase: 'Discover', tokens: 298 },
+      artifacts: [
+        {
+          kind: 'reasoning',
+          content:
+            'Add an opt-in --json flag without changing the default output. I need the CLI module, its tests, and the current argument parser.',
+        },
+      ],
+    },
+    {
+      id: 'j02',
+      type: 'read',
+      name: 'src/cachekit/cli.py',
+      summary: 'Read the inspect command.',
+      startMs: 2200,
+      endMs: 5200,
+      status: 'ok',
+      files: ['src/cachekit/cli.py'],
+      attributes: { phase: 'Discover', tool: 'read_file', lines: 27, tokens: 1180 },
+      artifacts: [
+        { kind: 'code', path: 'src/cachekit/cli.py', language: 'python', content: CLI_BEFORE },
+      ],
+    },
+    {
+      id: 'j03',
+      type: 'read',
+      name: 'tests/test_cli.py',
+      summary: 'Read the existing CLI test.',
+      startMs: 5200,
+      endMs: 7600,
+      status: 'ok',
+      files: ['tests/test_cli.py'],
+      attributes: { phase: 'Discover', tool: 'read_file', lines: 12, tokens: 540 },
+      artifacts: [
+        {
+          kind: 'code',
+          path: 'tests/test_cli.py',
+          language: 'python',
+          content: CLI_TEST_BEFORE,
+        },
+      ],
+    },
+    {
+      id: 'j04',
+      type: 'search',
+      name: 'Search "argparse"',
+      summary: 'Confirm the argument parser is only used in cli.py.',
+      startMs: 7600,
+      endMs: 9800,
+      status: 'ok',
+      files: ['src/cachekit/cli.py'],
+      attributes: { phase: 'Discover', tool: 'search', results: 2 },
+      artifacts: [
+        {
+          kind: 'search',
+          query: 'argparse',
+          results: [
+            { path: 'src/cachekit/cli.py', line: 3, preview: 'import argparse' },
+            {
+              path: 'src/cachekit/cli.py',
+              line: 18,
+              preview: 'parser = argparse.ArgumentParser(prog="cachekit")',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'j05',
+      type: 'edit',
+      name: 'Edit cli.py',
+      summary: 'Return entries from inspect_cache and add --json.',
+      startMs: 9800,
+      endMs: 16600,
+      status: 'ok',
+      files: ['src/cachekit/cli.py'],
+      attributes: { phase: 'Implement', tool: 'apply_patch', added: 17, removed: 7 },
+      artifacts: [
+        {
+          kind: 'diff',
+          path: 'src/cachekit/cli.py',
+          before: CLI_BEFORE,
+          after: CLI_AFTER,
+          language: 'python',
+        },
+      ],
+    },
+    {
+      id: 'j06',
+      type: 'edit',
+      name: 'Edit test_cli.py',
+      summary: 'Add a JSON output test.',
+      startMs: 16600,
+      endMs: 21600,
+      status: 'ok',
+      files: ['tests/test_cli.py'],
+      attributes: { phase: 'Implement', tool: 'apply_patch', added: 12, removed: 0 },
+      artifacts: [
+        {
+          kind: 'diff',
+          path: 'tests/test_cli.py',
+          before: CLI_TEST_BEFORE,
+          after: CLI_TEST_AFTER,
+          language: 'python',
+        },
+      ],
+    },
+    {
+      id: 'j07',
+      type: 'test',
+      name: 'pytest -q tests/test_cli.py',
+      summary: '2 CLI tests pass.',
+      startMs: 21600,
+      endMs: 27600,
+      status: 'ok',
+      files: ['tests/test_cli.py'],
+      attributes: { phase: 'Implement', tool: 'shell', exitCode: 0, passed: 2, failed: 0 },
+      artifacts: [
+        {
+          kind: 'test',
+          command: 'pytest -q tests/test_cli.py',
+          passed: 2,
+          failed: 0,
+          total: 2,
+          output: CLI_TEST_OUTPUT,
+        },
+      ],
+    },
+    {
+      id: 'j08',
+      type: 'checkpoint',
+      name: 'git diff --stat',
+      summary: '2 files changed, default output untouched.',
+      startMs: 27600,
+      endMs: 30000,
+      status: 'ok',
+      files: ['src/cachekit/cli.py', 'tests/test_cli.py'],
+      attributes: { phase: 'Verify', tool: 'shell', exitCode: 0 },
+      artifacts: [
+        {
+          kind: 'terminal',
+          command: 'git diff --stat',
+          output:
+            ' src/cachekit/cli.py   | 20 +++++++++++---------\n tests/test_cli.py    | 12 ++++++++++++\n 2 files changed, 25 insertions(+), 7 deletions(-)',
+          exitCode: 0,
+          cwd: '/home/dev/cachekit',
+        },
+        { kind: 'patch', diff: CLI_PATCH },
+      ],
+    },
+    {
+      id: 'j09',
+      type: 'final',
+      name: 'Done',
+      summary: 'Added --json; 2/2 CLI tests pass.',
+      startMs: 30000,
+      endMs: 34000,
+      status: 'ok',
+      files: ['src/cachekit/cli.py', 'tests/test_cli.py'],
+      attributes: { phase: 'Verify', tokens: 221 },
+      artifacts: [
+        {
+          kind: 'markdown',
+          content:
+            '## Result\n\n`cachekit inspect` now accepts `--json`.\n\n- Default human-readable output is unchanged.\n- `inspect_cache` returns the parsed entries.\n- Added `test_json_flag`.\n\n2/2 CLI tests pass. 2 files changed.',
+        },
+        { kind: 'patch', diff: CLI_PATCH },
+      ],
+    },
+  ],
+  result: {
+    summary: 'Added a --json flag to cachekit inspect without changing default output. 2/2 CLI tests pass.',
+    exitCode: 0,
+    tests: { passed: 2, failed: 0, total: 2 },
+    filesChanged: ['src/cachekit/cli.py', 'tests/test_cli.py'],
+    patch: CLI_PATCH,
+  },
+  metadata: { source: 'demo', estimatedTiming: false, workspace: REPO },
+})

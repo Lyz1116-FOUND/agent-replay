@@ -1,0 +1,307 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvgc2uuj_b07d72",
+  "task": {
+    "id": "free-opencode-nemotron-3-ultra-free",
+    "title": "free-opencode-nemotron-3-ultra-free",
+    "description": "Recorded OpenCode session in opencode-nemotron-3-ultra-free.",
+    "repo": "opencode-nemotron-3-ultra-free",
+    "baseCommit": "52ede46"
+  },
+  "agent": {
+    "name": "OpenCode",
+    "model": "opencode/nemotron-3-ultra-free"
+  },
+  "status": "pass",
+  "termination": {
+    "kind": "completed"
+  },
+  "environment": {
+    "isolation": "xdg",
+    "provider": "opencode",
+    "harnessVersion": "2.0.32",
+    "platform": "darwin-arm64",
+    "nodeVersion": "v22.22.2"
+  },
+  "startedAt": "2026-10-20T07:00:10.027Z",
+  "endedAt": "2026-10-20T07:00:40.604Z",
+  "durationMs": 30577,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "opencode",
+    "sources": [
+      "native:opencode",
+      "workspace"
+    ],
+    "workspaceVerified": 1,
+    "unverifiedEdits": 0,
+    "integrity": {
+      "nativeEdits": 1,
+      "workspaceEdits": 1,
+      "matchedEdits": 1,
+      "unverifiedEdits": 0,
+      "outsideWorkspaceEdits": 0,
+      "nativeTestRuns": 1,
+      "parsedTestRuns": 1,
+      "capturedTests": 1
+    }
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "52ede46",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3-ultra-free"
+        }
+      ]
+    },
+    {
+      "id": "native-call-f6ba28a3-d16e-46c7-924d-f4e00c643d2d",
+      "type": "read",
+      "name": "Read calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 5577,
+      "endMs": 5846,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-f6ba28a3-d16e-46c7-924d-f4e00c643d2d",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "calc.mjs",
+          "language": "javascript",
+          "content": "Read file /private/tmp/ar-matrix/opencode-nemotron-3-ultra-free/calc.mjs, lines 1-3\n1: export function bump(value) {\n2:   return value\n3: }"
+        }
+      ]
+    },
+    {
+      "id": "native-call-463f792d-a740-4ab0-a061-efd6c522fb15",
+      "type": "read",
+      "name": "Read test.mjs",
+      "summary": "test.mjs",
+      "startMs": 5774,
+      "endMs": 5817,
+      "status": "ok",
+      "files": [
+        "test.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-463f792d-a740-4ab0-a061-efd6c522fb15",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "test.mjs",
+          "language": "javascript",
+          "content": "Read file /private/tmp/ar-matrix/opencode-nemotron-3-ultra-free/test.mjs, lines 1-7\n1: import test from 'node:test'\n2: import assert from 'node:assert/strict'\n3: import { bump } from './calc.mjs'\n4: \n5: test('bump 1', () => assert.equal(bump(1), 2))\n6: test('bump 2', () => assert.equal(bump(2), 3))\n7: test('bump 0', () => assert.equal(bump(0), 1))"
+        }
+      ]
+    },
+    {
+      "id": "native-call-c5021fa6-e300-45d6-b37f-af5bbe268102",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 10129,
+      "endMs": 10170,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-c5021fa6-e300-45d6-b37f-af5bbe268102",
+        "timingKind": "observed",
+        "operation": "modify",
+        "workspaceVerified": true
+      },
+      "artifacts": [
+        {
+          "kind": "patch",
+          "diff": "Index: calc.mjs\n===================================================================\n--- calc.mjs\n+++ calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+        },
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value\n}",
+          "after": "export function bump(value) {\n  return value + 1\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "native-call-add8cdf2-2a4d-45c8-b401-5ec93fdaa5f9",
+      "type": "test",
+      "name": "node --test test.mjs",
+      "summary": "3/3 passed",
+      "startMs": 11945,
+      "endMs": 12218,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-add8cdf2-2a4d-45c8-b401-5ec93fdaa5f9",
+        "timingKind": "observed",
+        "command": "node --test test.mjs",
+        "exitCode": 0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node --test test.mjs",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "TAP version 13\n# Subtest: bump 1\nok 1 - bump 1\n  ---\n  duration_ms: 0.27525\n  type: 'test'\n  ...\n# Subtest: bump 2\nok 2 - bump 2\n  ---\n  duration_ms: 0.077375\n  type: 'test'\n  ...\n# Subtest: bump 0\nok 3 - bump 0\n  ---\n  duration_ms: 0.03575\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 98.684667"
+        }
+      ]
+    },
+    {
+      "id": "message-30075-2051838986",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "Done. The fix was a single-line change in `calc.mjs`: `return value + 1` instead of `return value`.",
+      "startMs": 30075,
+      "endMs": 30075,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "Done. The fix was a single-line change in `calc.mjs`: `return value + 1` instead of `return value`.\n\n**Test result: All 3 tests pass.**\n- `bump 1` → 2 ✓\n- `bump 2` → 3 ✓\n- `bump 0` → 1 ✓"
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "startMs": 30127,
+      "endMs": 30327,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3-ultra-free"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+      "startMs": 30377,
+      "endMs": 30577,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": false,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit.\n- 1 test run\n- 1 edit across 1 file\n- duration 30.5s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvgc2uuj_b07d72",
+    "command": "opencode run --standalone --format json --auto --model opencode/nemotron-3-ultra-free \"Fix calc.mjs so that 'node --test test.mjs' passes. Make the minimal edit, run that exact test command, and report the result.\"",
+    "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3-ultra-free",
+    "repoRoot": "/private/tmp/ar-matrix/opencode-nemotron-3-ultra-free",
+    "baseCommit": "52ede46",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 30527,
+    "adapter": "opencode",
+    "nativeSessionId": "ses_ea7e3b9e2ffeIAsMUm6RP74g74",
+    "recoveryDetected": false,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T07:00:40.555Z"
+  }
+}

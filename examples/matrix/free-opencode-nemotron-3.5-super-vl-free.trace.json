@@ -1,0 +1,384 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvgc0ynb_f3b057",
+  "task": {
+    "id": "free-opencode-nemotron-3-5-super-vl-free",
+    "title": "free-opencode-nemotron-3.5-super-vl-free",
+    "description": "Recorded OpenCode session in opencode-nemotron-3.5-super-vl-free.",
+    "repo": "opencode-nemotron-3.5-super-vl-free",
+    "baseCommit": "3963176"
+  },
+  "agent": {
+    "name": "OpenCode",
+    "model": "opencode/nemotron-3.5-super-vl-free"
+  },
+  "status": "pass",
+  "termination": {
+    "kind": "completed"
+  },
+  "environment": {
+    "isolation": "xdg",
+    "provider": "opencode",
+    "harnessVersion": "2.0.32",
+    "platform": "darwin-arm64",
+    "nodeVersion": "v22.22.2"
+  },
+  "startedAt": "2026-10-20T06:58:41.639Z",
+  "endedAt": "2026-10-20T06:59:16.388Z",
+  "durationMs": 34749,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "opencode",
+    "sources": [
+      "native:opencode",
+      "workspace"
+    ],
+    "workspaceVerified": 1,
+    "unverifiedEdits": 0,
+    "integrity": {
+      "nativeEdits": 1,
+      "workspaceEdits": 1,
+      "matchedEdits": 1,
+      "unverifiedEdits": 0,
+      "outsideWorkspaceEdits": 0,
+      "nativeTestRuns": 1,
+      "parsedTestRuns": 1,
+      "capturedTests": 1
+    }
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "3963176",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3.5-super-vl-free"
+        }
+      ]
+    },
+    {
+      "id": "native-call-f062234b-e4f9-4f01-914d-ea74f4ce7121",
+      "type": "read",
+      "name": "Read opencode-nemotron-3.5-super-vl-free",
+      "summary": "",
+      "startMs": 3011,
+      "endMs": 3346,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-f062234b-e4f9-4f01-914d-ea74f4ce7121",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "Read opencode-nemotron-3.5-super-vl-free",
+          "output": "Read directory /private/tmp/ar-matrix/opencode-nemotron-3.5-super-vl-free, entries 1-5\n.agent-replay/\n.git/\nreplays/\ncalc.mjs\ntest.mjs",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3.5-super-vl-free"
+        }
+      ]
+    },
+    {
+      "id": "native-call-339c642d-4142-44fa-9808-7f20f0e7dc09",
+      "type": "search",
+      "name": "glob",
+      "summary": "",
+      "startMs": 3296,
+      "endMs": 13464,
+      "status": "error",
+      "files": [],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-339c642d-4142-44fa-9808-7f20f0e7dc09",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "glob",
+          "output": "",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3.5-super-vl-free"
+        }
+      ]
+    },
+    {
+      "id": "native-call-0098504d-faf8-44ad-a639-9fcd365217f5",
+      "type": "read",
+      "name": "Read calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 14978,
+      "endMs": 15176,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-0098504d-faf8-44ad-a639-9fcd365217f5",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "calc.mjs",
+          "language": "javascript",
+          "content": "Read file /private/tmp/ar-matrix/opencode-nemotron-3.5-super-vl-free/calc.mjs, lines 1-3\n1: export function bump(value) {\n2:   return value\n3: }"
+        }
+      ]
+    },
+    {
+      "id": "native-call-ed7039c7-8270-41ff-a22f-ec88b7a02ae5",
+      "type": "read",
+      "name": "Read test.mjs",
+      "summary": "test.mjs",
+      "startMs": 15158,
+      "endMs": 15188,
+      "status": "ok",
+      "files": [
+        "test.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-ed7039c7-8270-41ff-a22f-ec88b7a02ae5",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "test.mjs",
+          "language": "javascript",
+          "content": "Read file /private/tmp/ar-matrix/opencode-nemotron-3.5-super-vl-free/test.mjs, lines 1-7\n1: import test from 'node:test'\n2: import assert from 'node:assert/strict'\n3: import { bump } from './calc.mjs'\n4: \n5: test('bump 1', () => assert.equal(bump(1), 2))\n6: test('bump 2', () => assert.equal(bump(2), 3))\n7: test('bump 0', () => assert.equal(bump(0), 1))"
+        }
+      ]
+    },
+    {
+      "id": "native-call-2df63c11-2855-4855-820d-84d64d37faec",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 30965,
+      "endMs": 30974,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-2df63c11-2855-4855-820d-84d64d37faec",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250,
+        "operation": "modify",
+        "workspaceVerified": true
+      },
+      "artifacts": [
+        {
+          "kind": "patch",
+          "diff": "Index: calc.mjs\n===================================================================\n--- calc.mjs\n+++ calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+        },
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value\n}",
+          "after": "export function bump(value) {\n  return value + 1\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "message-30969-1916703496",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "The `bump` function returns its argument unchanged, but tests expect `value + 1`. Minimal fix:",
+      "startMs": 30969,
+      "endMs": 30969,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "The `bump` function returns its argument unchanged, but tests expect `value + 1`. Minimal fix:\n"
+        }
+      ]
+    },
+    {
+      "id": "native-call-1e5ef87a-ceac-47aa-afff-f6f9dd7b2b1f",
+      "type": "test",
+      "name": "node --test test.mjs",
+      "summary": "3/3 passed",
+      "startMs": 32292,
+      "endMs": 32466,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-1e5ef87a-ceac-47aa-afff-f6f9dd7b2b1f",
+        "timingKind": "observed",
+        "command": "node --test test.mjs",
+        "exitCode": 0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node --test test.mjs",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "TAP version 13\n# Subtest: bump 1\nok 1 - bump 1\n  ---\n  duration_ms: 0.287666\n  type: 'test'\n  ...\n# Subtest: bump 2\nok 2 - bump 2\n  ---\n  duration_ms: 0.077959\n  type: 'test'\n  ...\n# Subtest: bump 0\nok 3 - bump 0\n  ---\n  duration_ms: 0.034792\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 99.479208"
+        }
+      ]
+    },
+    {
+      "id": "message-34298-729213023",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "Done. `calc.mjs` now returns `value + 1` (minimal one-line edit). `node --test test.mjs` passes: **3 tests, 3 pass, 0 f…",
+      "startMs": 34298,
+      "endMs": 34298,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "Done. `calc.mjs` now returns `value + 1` (minimal one-line edit). `node --test test.mjs` passes: **3 tests, 3 pass, 0 fail**."
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "startMs": 34299,
+      "endMs": 34499,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3.5-super-vl-free"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+      "startMs": 34549,
+      "endMs": 34749,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": false,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit.\n- 1 test run\n- 1 edit across 1 file\n- duration 34.6s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvgc0ynb_f3b057",
+    "command": "opencode run --standalone --format json --auto --model opencode/nemotron-3.5-super-vl-free \"Fix calc.mjs so that 'node --test test.mjs' passes. Make the minimal edit, run that exact test command, and report the result.\"",
+    "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3.5-super-vl-free",
+    "repoRoot": "/private/tmp/ar-matrix/opencode-nemotron-3.5-super-vl-free",
+    "baseCommit": "3963176",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 34641,
+    "adapter": "opencode",
+    "nativeSessionId": "ses_ea7e51295ffep6cF5rCbh5eSCB",
+    "recoveryDetected": false,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T06:59:16.281Z"
+  }
+}

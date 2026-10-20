@@ -1,0 +1,321 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvg3pkhe_cfb6e1",
+  "task": {
+    "id": "native-cursor",
+    "title": "native-cursor",
+    "description": "Recorded cursor-agent -p --output-format stream-json \"fix the cache tick bug\" in ar-native3",
+    "repo": "ar-native3",
+    "baseCommit": "fffdc3d"
+  },
+  "agent": {
+    "name": "Cursor",
+    "model": "cursor-fixture-model"
+  },
+  "status": "pass",
+  "startedAt": "2026-10-20T03:05:53.138Z",
+  "endedAt": "2026-10-20T03:05:58.032Z",
+  "durationMs": 4894,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 2 edits (recovered).",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "src/cache.ts"
+    ],
+    "patch": "diff --git a/src/cache.ts b/src/cache.ts\nindex 02b22eb..9fc1ad8 100644\n--- a/src/cache.ts\n+++ b/src/cache.ts\n@@ -1,3 +1,3 @@\n-export function evict(tick: number): number {\n-  return tick - 1\n+export function evict(tick: number) {\n+  return tick + 1\n }"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "cursor",
+    "sources": [
+      "native:cursor",
+      "workspace"
+    ],
+    "workspaceVerified": 2,
+    "unverifiedEdits": 0
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "fffdc3d",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-native3"
+        }
+      ]
+    },
+    {
+      "id": "message-111-2015725523",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "I will inspect and fix the cache tick.",
+      "startMs": 111,
+      "endMs": 111,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "cursor",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "I will inspect and fix the cache tick."
+        }
+      ]
+    },
+    {
+      "id": "native-read-1",
+      "type": "read",
+      "name": "Read cache.ts",
+      "summary": "src/cache.ts",
+      "startMs": 111,
+      "endMs": 232,
+      "status": "ok",
+      "files": [
+        "src/cache.ts"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "cursor",
+        "callId": "read-1",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "src/cache.ts",
+          "language": "typescript",
+          "content": "export function evict(tick: number) { return tick - 1 }"
+        }
+      ]
+    },
+    {
+      "id": "native-edit-1",
+      "type": "edit",
+      "name": "Edit cache.ts",
+      "summary": "src/cache.ts",
+      "startMs": 233,
+      "endMs": 233,
+      "status": "ok",
+      "files": [
+        "src/cache.ts"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "cursor",
+        "callId": "edit-1",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250,
+        "workspaceVerified": true,
+        "operation": "modify"
+      },
+      "artifacts": [
+        {
+          "kind": "diff",
+          "path": "src/cache.ts",
+          "before": "export function evict(tick: number): number {\n  return tick - 1\n}",
+          "after": "export function evict(tick: number) {\n  return tick + 2\n}\n",
+          "language": "typescript"
+        }
+      ]
+    },
+    {
+      "id": "native-test-1",
+      "type": "test",
+      "name": "npm test",
+      "summary": "2/3 passed",
+      "startMs": 484,
+      "endMs": 3586,
+      "status": "error",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "cursor",
+        "callId": "test-1",
+        "timingKind": "observed",
+        "command": "npm test",
+        "exitCode": 1,
+        "passed": 2,
+        "failed": 1,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "npm test",
+          "passed": 2,
+          "failed": 1,
+          "total": 3,
+          "output": "1 failed, 2 passed in 0.2s"
+        }
+      ]
+    },
+    {
+      "id": "native-edit-2",
+      "type": "edit",
+      "name": "Edit cache.ts",
+      "summary": "src/cache.ts",
+      "startMs": 1385,
+      "endMs": 1385,
+      "status": "ok",
+      "files": [
+        "src/cache.ts"
+      ],
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "cursor",
+        "callId": "edit-2",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250,
+        "workspaceVerified": true,
+        "operation": "modify"
+      },
+      "artifacts": [
+        {
+          "kind": "diff",
+          "path": "src/cache.ts",
+          "before": "export function evict(tick: number) {\n  return tick + 2\n}\n",
+          "after": "export function evict(tick: number) {\n  return tick + 1\n}\n",
+          "language": "typescript"
+        }
+      ]
+    },
+    {
+      "id": "native-test-2",
+      "type": "test",
+      "name": "npm test",
+      "summary": "3/3 passed",
+      "startMs": 3838,
+      "endMs": 4139,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "cursor",
+        "callId": "test-2",
+        "timingKind": "observed",
+        "command": "npm test",
+        "exitCode": 0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "npm test",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "Tests: 3 passed, 3 total"
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 2 insertions(+), 2 deletions(-)",
+      "startMs": 4444,
+      "endMs": 4644,
+      "status": "ok",
+      "files": [
+        "src/cache.ts"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " src/cache.ts | 4 ++--\n 1 file changed, 2 insertions(+), 2 deletions(-)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-native3"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/src/cache.ts b/src/cache.ts\nindex 02b22eb..9fc1ad8 100644\n--- a/src/cache.ts\n+++ b/src/cache.ts\n@@ -1,3 +1,3 @@\n-export function evict(tick: number): number {\n-  return tick - 1\n+export function evict(tick: number) {\n+  return tick + 1\n }"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 2 edits (recovered).",
+      "startMs": 4694,
+      "endMs": 4894,
+      "status": "ok",
+      "files": [
+        "src/cache.ts"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": true,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 2 edits (recovered).\n\nFixed the cache tick bug.\n- 2 test runs\n- 2 edits across 1 file\n- duration 4.8s\n- capture native+workspace · observed timing\n- recovery detected after 1 failing test\nNative agent events verified against workspace diffs."
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/src/cache.ts b/src/cache.ts\nindex 02b22eb..9fc1ad8 100644\n--- a/src/cache.ts\n+++ b/src/cache.ts\n@@ -1,3 +1,3 @@\n-export function evict(tick: number): number {\n-  return tick - 1\n+export function evict(tick: number) {\n+  return tick + 1\n }"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvg3pkhe_cfb6e1",
+    "command": "cursor-agent -p --output-format stream-json \"fix the cache tick bug\"",
+    "cwd": "/private/tmp/ar-native3",
+    "repoRoot": "/private/tmp/ar-native3",
+    "baseCommit": "fffdc3d",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 4844,
+    "adapter": "cursor",
+    "nativeSessionId": "native-fixture",
+    "recoveryDetected": true,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T03:05:57.988Z"
+  }
+}

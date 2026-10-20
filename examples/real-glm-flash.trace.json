@@ -1,0 +1,310 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvg4wn21_487a0d",
+  "task": {
+    "id": "real-glm-flash",
+    "title": "real-glm-flash",
+    "description": "Recorded OpenCode session in ar-real-glm.",
+    "repo": "ar-real-glm",
+    "baseCommit": "68e22f5"
+  },
+  "agent": {
+    "name": "OpenCode",
+    "model": "opencode/glm-5.3-flash-free"
+  },
+  "status": "pass",
+  "startedAt": "2026-10-20T03:39:22.681Z",
+  "endedAt": "2026-10-20T03:39:34.725Z",
+  "durationMs": 12044,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "opencode",
+    "sources": [
+      "native:opencode",
+      "workspace"
+    ],
+    "workspaceVerified": 1,
+    "unverifiedEdits": 0
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "68e22f5",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-real-glm"
+        }
+      ]
+    },
+    {
+      "id": "native-6419a49f-f7ef-4cdc-95a7-ca08bac7dcff",
+      "type": "read",
+      "name": "Read calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 2309,
+      "endMs": 2425,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "6419a49f-f7ef-4cdc-95a7-ca08bac7dcff",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "calc.mjs",
+          "language": "javascript",
+          "content": "Read file /private/tmp/ar-real-glm/calc.mjs, lines 1-3\n1: export function bump(value) {\n2:   return value\n3: }"
+        }
+      ]
+    },
+    {
+      "id": "native-8510f99b-c1e9-433d-b813-88c756c34b3c",
+      "type": "read",
+      "name": "Read test.mjs",
+      "summary": "test.mjs",
+      "startMs": 2372,
+      "endMs": 2423,
+      "status": "ok",
+      "files": [
+        "test.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "8510f99b-c1e9-433d-b813-88c756c34b3c",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "test.mjs",
+          "language": "javascript",
+          "content": "Read file /private/tmp/ar-real-glm/test.mjs, lines 1-7\n1: import test from 'node:test'\n2: import assert from 'node:assert/strict'\n3: import { bump } from './calc.mjs'\n4: \n5: test('bump 1', () => assert.equal(bump(1), 2))\n6: test('bump 2', () => assert.equal(bump(2), 3))\n7: test('bump 0', () => assert.equal(bump(0), 1))"
+        }
+      ]
+    },
+    {
+      "id": "native-0d875c0c-e2f8-474d-aa50-2297a5eb5ee3",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 8476,
+      "endMs": 8499,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "0d875c0c-e2f8-474d-aa50-2297a5eb5ee3",
+        "timingKind": "observed",
+        "operation": "modify",
+        "workspaceVerified": true
+      },
+      "artifacts": [
+        {
+          "kind": "patch",
+          "diff": "Index: calc.mjs\n===================================================================\n--- calc.mjs\n+++ calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+        },
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value\n}",
+          "after": "export function bump(value) {\n  return value + 1\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "message-8494-1343140809",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "The bug is that `bump` returns the value unchanged instead of adding 1.",
+      "startMs": 8494,
+      "endMs": 8494,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "The bug is that `bump` returns the value unchanged instead of adding 1."
+        }
+      ]
+    },
+    {
+      "id": "native-76e3c80e-2a3a-4a63-95a9-1cde13a4e73f",
+      "type": "test",
+      "name": "node --test test.mjs",
+      "summary": "3/3 passed",
+      "startMs": 9693,
+      "endMs": 9840,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "76e3c80e-2a3a-4a63-95a9-1cde13a4e73f",
+        "timingKind": "observed",
+        "command": "node --test test.mjs",
+        "exitCode": 0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node --test test.mjs",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "✔ bump 1 (0.470167ms)\n✔ bump 2 (0.039458ms)\n✔ bump 0 (0.034042ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 56.044083"
+        }
+      ]
+    },
+    {
+      "id": "message-11593-1230853056",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "Done. The fix: `calc.mjs`'s `bump` returned `value` unchanged — changed to `value + 1`.",
+      "startMs": 11593,
+      "endMs": 11593,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "Done. The fix: `calc.mjs`'s `bump` returned `value` unchanged — changed to `value + 1`.\n\n**Test result: all 3 tests pass** (`bump 1`, `bump 2`, `bump 0` — 0 failures)."
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "startMs": 11594,
+      "endMs": 11794,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-real-glm"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+      "startMs": 11844,
+      "endMs": 12044,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": false,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit.\n- 1 test run\n- 1 edit across 1 file\n- duration 11.9s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvg4wn21_487a0d",
+    "command": "opencode run --format json --auto --model opencode/glm-5.3-flash-free \"Fix calc.mjs so that 'node --test test.mjs' passes. Make the minimal change, run the test, and report the result.\"",
+    "cwd": "/private/tmp/ar-real-glm",
+    "repoRoot": "/private/tmp/ar-real-glm",
+    "baseCommit": "68e22f5",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 11921,
+    "adapter": "opencode",
+    "nativeSessionId": "ses_ea89b8df6ffe3g5qM4ySmeEtE1",
+    "recoveryDetected": false,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T03:39:34.603Z"
+  }
+}

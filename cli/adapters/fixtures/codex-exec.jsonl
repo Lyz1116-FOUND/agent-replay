@@ -1,0 +1,10 @@
+{"type":"thread.started","thread_id":"thread-1"}
+{"type":"turn.started"}
+{"type":"item.completed","item":{"id":"item_0","type":"reasoning","text":"Scanning the cache implementation."}}
+{"type":"item.started","item":{"id":"item_1","type":"command_execution","command":"bash -lc npm test","aggregated_output":"","exit_code":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_1","type":"command_execution","command":"bash -lc npm test","aggregated_output":"1 failed, 2 passed in 0.2s","exit_code":1,"status":"failed"}}
+{"type":"item.completed","item":{"id":"item_2","type":"file_change","changes":[{"path":"src/cache.ts","kind":"update"}],"status":"completed"}}
+{"type":"item.started","item":{"id":"item_3","type":"command_execution","command":"bash -lc npm test","aggregated_output":"","exit_code":null,"status":"in_progress"}}
+{"type":"item.completed","item":{"id":"item_3","type":"command_execution","command":"bash -lc npm test","aggregated_output":"3 passed in 0.2s","exit_code":0,"status":"completed"}}
+{"type":"item.completed","item":{"id":"item_4","type":"agent_message","text":"Fixed the cache bug."}}
+{"type":"turn.completed","usage":{"input_tokens":100,"output_tokens":20}}

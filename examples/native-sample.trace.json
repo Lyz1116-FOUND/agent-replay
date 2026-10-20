@@ -1,0 +1,80 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "sample_native_cache_fix",
+  "task": {
+    "id": "lru-capacity-1",
+    "title": "Fix LRU cache eviction when capacity=1",
+    "description": "LRUCache(capacity=1) drops the most recent entry after a second put.",
+    "repo": "acme/cachekit",
+    "baseCommit": "3c1f2ab"
+  },
+  "agent": {
+    "name": "Example Agent",
+    "model": "demo"
+  },
+  "status": "pass",
+  "startedAt": "2026-10-19T14:32:07.000Z",
+  "endedAt": "2026-10-19T14:32:09.600Z",
+  "durationMs": 2600,
+  "result": {
+    "summary": "Fixed eviction direction in LRUCache.put.",
+    "exitCode": 0,
+    "tests": { "passed": 14, "failed": 0, "total": 14 },
+    "filesChanged": ["src/cachekit/lru.py"]
+  },
+  "spans": [
+    {
+      "id": "s01",
+      "type": "reasoning",
+      "name": "Task received",
+      "summary": "Read the report and plan a fix.",
+      "startMs": 0,
+      "endMs": 800,
+      "status": "ok",
+      "attributes": { "phase": "Discover", "tokens": 120 },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "The report says LRUCache(capacity=1) drops entries after a second put. I will inspect the eviction call."
+        }
+      ]
+    },
+    {
+      "id": "s02",
+      "type": "read",
+      "name": "src/cachekit/lru.py",
+      "summary": "Read the eviction implementation.",
+      "startMs": 800,
+      "endMs": 1800,
+      "status": "ok",
+      "files": ["src/cachekit/lru.py"],
+      "attributes": { "phase": "Discover", "tool": "read_file" },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "src/cachekit/lru.py",
+          "language": "python",
+          "content": "def put(self, key, value):\n    self._data[key] = value\n    if len(self._data) > self.capacity:\n        self._data.popitem(last=False)\n"
+        }
+      ]
+    },
+    {
+      "id": "s03",
+      "type": "final",
+      "name": "Done",
+      "summary": "Eviction now removes the least-recently-used entry.",
+      "startMs": 1800,
+      "endMs": 2600,
+      "status": "ok",
+      "files": ["src/cachekit/lru.py"],
+      "attributes": { "phase": "Verify" },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Result\n\nChanged `popitem(last=True)` to `popitem(last=False)`.\n\n- 14/14 tests pass\n- 1 file changed"
+        }
+      ]
+    }
+  ],
+  "metadata": { "source": "example" }
+}

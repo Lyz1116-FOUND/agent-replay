@@ -1,0 +1,281 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvg20jpd_e21264",
+  "task": {
+    "id": "cachekit-recovery",
+    "title": "cachekit-recovery",
+    "description": "Recorded node agent.mjs in ar-rec2",
+    "repo": "ar-rec2",
+    "baseCommit": "5209339"
+  },
+  "agent": {
+    "name": "Codex"
+  },
+  "status": "pass",
+  "startedAt": "2026-10-20T02:18:26.113Z",
+  "endedAt": "2026-10-20T02:18:31.683Z",
+  "durationMs": 5570,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 2 edits (recovered).",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 724c218..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value + (value > 0 ? 0 : 1)\n+  return value + 1\n }"
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 350,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "5209339"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-rec2"
+        }
+      ]
+    },
+    {
+      "id": "rec-command-003",
+      "type": "test",
+      "name": "node:test (detected)",
+      "summary": "1 passed · 2 failed",
+      "startMs": 644,
+      "endMs": 1294,
+      "status": "error",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "shell",
+        "command": "node:test (detected)",
+        "exitCode": 1,
+        "passed": 1,
+        "failed": 2,
+        "total": 3,
+        "detectedFromOutput": true,
+        "estimatedTiming": true
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node:test (detected)",
+          "passed": 1,
+          "failed": 2,
+          "total": 3,
+          "output": "✖ bump 1 (1.208458ms)\n✖ bump 2 (0.080416ms)\n✔ bump 0 (0.0675ms)\nℹ tests 3\nℹ suites 0\nℹ pass 1\nℹ fail 2",
+          "failedTests": [
+            "bump 1",
+            "bump 2"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rec-edit-001",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 1294,
+      "endMs": 1694,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "workspace-watcher",
+        "files": 1,
+        "truncated": false
+      },
+      "artifacts": [
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value + (value > 0 ? 0 : 1)\n}",
+          "after": "export function bump(value) {\n  return value + 2\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "rec-command-004",
+      "type": "test",
+      "name": "node:test (detected)",
+      "summary": "0 passed · 3 failed",
+      "startMs": 1783,
+      "endMs": 2433,
+      "status": "error",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "shell",
+        "command": "node:test (detected)",
+        "exitCode": 1,
+        "passed": 0,
+        "failed": 3,
+        "total": 3,
+        "detectedFromOutput": true,
+        "estimatedTiming": true
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node:test (detected)",
+          "passed": 0,
+          "failed": 3,
+          "total": 3,
+          "output": "✖ bump 1 (1.045458ms)\n✖ bump 2 (0.080084ms)\n✖ bump 0 (0.060583ms)\nℹ tests 3\nℹ suites 0\nℹ pass 0\nℹ fail 3",
+          "failedTests": [
+            "bump 1",
+            "bump 2",
+            "bump 0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rec-edit-002",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 3080,
+      "endMs": 3480,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 3",
+        "tool": "workspace-watcher",
+        "files": 1,
+        "truncated": false
+      },
+      "artifacts": [
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value + 2\n}\n",
+          "after": "export function bump(value) {\n  return value + 1\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "rec-command-005",
+      "type": "test",
+      "name": "node:test (detected)",
+      "summary": "3 passed · 0 failed",
+      "startMs": 4020,
+      "endMs": 4670,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 3",
+        "tool": "shell",
+        "command": "node:test (detected)",
+        "exitCode": 0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "detectedFromOutput": true,
+        "estimatedTiming": true
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node:test (detected)",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "✔ bump 1 (0.505083ms)\n✔ bump 2 (0.0405ms)\n✔ bump 0 (0.033ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0"
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "startMs": 4820,
+      "endMs": 5170,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-rec2"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 724c218..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value + (value > 0 ? 0 : 1)\n+  return value + 1\n }"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 2 edits (recovered).",
+      "startMs": 5270,
+      "endMs": 5570,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "recoveryDetected": true,
+        "regressionDetected": true
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 2 edits (recovered).\n- 3 test runs\n- 2 edits across 1 file\n- duration 5.4s\n- recovery detected after 2 failing tests"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 724c218..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value + (value > 0 ? 0 : 1)\n+  return value + 1\n }"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvg20jpd_e21264",
+    "command": "node agent.mjs",
+    "cwd": "/private/tmp/ar-rec2",
+    "repoRoot": "/private/tmp/ar-rec2",
+    "baseCommit": "5209339",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 5354,
+    "recoveryDetected": true,
+    "regressionDetected": true,
+    "recordedAt": "2026-10-20T02:18:31.468Z"
+  }
+}

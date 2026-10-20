@@ -1,0 +1,461 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvgc1plm_92beab",
+  "task": {
+    "id": "free-opencode-nemotron-3-5-lightning-free",
+    "title": "free-opencode-nemotron-3.5-lightning-free",
+    "description": "Recorded OpenCode session in opencode-nemotron-3.5-lightning-free.",
+    "repo": "opencode-nemotron-3.5-lightning-free",
+    "baseCommit": "9a35105"
+  },
+  "agent": {
+    "name": "OpenCode",
+    "model": "opencode/nemotron-3.5-lightning-free"
+  },
+  "status": "pass",
+  "termination": {
+    "kind": "completed"
+  },
+  "environment": {
+    "isolation": "xdg",
+    "provider": "opencode",
+    "harnessVersion": "2.0.32",
+    "platform": "darwin-arm64",
+    "nodeVersion": "v22.22.2"
+  },
+  "startedAt": "2026-10-20T06:59:16.570Z",
+  "endedAt": "2026-10-20T06:59:38.310Z",
+  "durationMs": 21740,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 1 edit (recovered).",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "opencode",
+    "sources": [
+      "native:opencode",
+      "workspace"
+    ],
+    "workspaceVerified": 1,
+    "unverifiedEdits": 0,
+    "integrity": {
+      "nativeEdits": 1,
+      "workspaceEdits": 1,
+      "matchedEdits": 1,
+      "unverifiedEdits": 0,
+      "outsideWorkspaceEdits": 0,
+      "nativeTestRuns": 2,
+      "parsedTestRuns": 2,
+      "capturedTests": 2
+    }
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "9a35105",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free"
+        }
+      ]
+    },
+    {
+      "id": "native-call-07b375d6-bd76-476c-88a6-b2a6f7ea39a1",
+      "type": "read",
+      "name": "Read opencode-nemotron-3.5-lightning-free",
+      "summary": "",
+      "startMs": 3018,
+      "endMs": 3133,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-07b375d6-bd76-476c-88a6-b2a6f7ea39a1",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "Read opencode-nemotron-3.5-lightning-free",
+          "output": "Read directory /private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free, entries 1-5\n.agent-replay/\n.git/\nreplays/\ncalc.mjs\ntest.mjs",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free"
+        }
+      ]
+    },
+    {
+      "id": "native-call-8a357879-2bb3-4a4d-be78-4efd5b626f3a",
+      "type": "read",
+      "name": "Read calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 5220,
+      "endMs": 5458,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-8a357879-2bb3-4a4d-be78-4efd5b626f3a",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "calc.mjs",
+          "language": "javascript",
+          "content": "Read file /private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/calc.mjs, lines 1-3\n1: export function bump(value) {\n2:   return value\n3: }"
+        }
+      ]
+    },
+    {
+      "id": "native-call-ab639b73-2aa5-4061-b8a4-08e841383dd1",
+      "type": "read",
+      "name": "Read test.mjs",
+      "summary": "test.mjs",
+      "startMs": 5424,
+      "endMs": 5472,
+      "status": "ok",
+      "files": [
+        "test.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-ab639b73-2aa5-4061-b8a4-08e841383dd1",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "test.mjs",
+          "language": "javascript",
+          "content": "Read file /private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs, lines 1-7\n1: import test from 'node:test'\n2: import assert from 'node:assert/strict'\n3: import { bump } from './calc.mjs'\n4: \n5: test('bump 1', () => assert.equal(bump(1), 2))\n6: test('bump 2', () => assert.equal(bump(2), 3))\n7: test('bump 0', () => assert.equal(bump(0), 1))"
+        }
+      ]
+    },
+    {
+      "id": "native-call-c108a206-da4b-4c32-a360-afcb5b9a526f",
+      "type": "test",
+      "name": "node --test test.mjs",
+      "summary": "0/3 passed",
+      "startMs": 8904,
+      "endMs": 9075,
+      "status": "error",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-c108a206-da4b-4c32-a360-afcb5b9a526f",
+        "timingKind": "observed",
+        "command": "node --test test.mjs",
+        "exitCode": 1,
+        "passed": 0,
+        "failed": 3,
+        "total": 3,
+        "error": "TAP version 13\n# Subtest: bump 1\nnot ok 1 - bump 1\n  ---\n  duration_ms: 0.915667\n  type: 'test'\n  location: '/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:5:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    1 !== 2\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 2\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:5:29)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.start (node:internal/test_runner/test:944:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)\n  ...\n# Subtest: bump 2\nnot ok 2 - bump 2\n  ---\n  duration_ms: 0.076833\n  type: 'test'\n  location: '/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:6:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    2 !== 3\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 3\n  actual: 2\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:6:29)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)\n  ...\n# Subtest: bump 0\nnot ok 3 - bump 0\n  ---\n  duration_ms: 0.057625\n  type: 'test'\n  location: '/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:7:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    0 !== 1\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 1\n  actual: 0\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:7:29)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 0\n# fail 3\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 102.038333"
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node --test test.mjs",
+          "passed": 0,
+          "failed": 3,
+          "total": 3,
+          "output": "TAP version 13\n# Subtest: bump 1\nnot ok 1 - bump 1\n  ---\n  duration_ms: 0.915667\n  type: 'test'\n  location: '/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:5:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    1 !== 2\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 2\n  actual: 1\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:5:29)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.start (node:internal/test_runner/test:944:17)\n    startSubtestAfterBootstrap (node:internal/test_runner/harness:296:17)\n  ...\n# Subtest: bump 2\nnot ok 2 - bump 2\n  ---\n  duration_ms: 0.076833\n  type: 'test'\n  location: '/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:6:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    2 !== 3\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 3\n  actual: 2\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:6:29)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)\n  ...\n# Subtest: bump 0\nnot ok 3 - bump 0\n  ---\n  duration_ms: 0.057625\n  type: 'test'\n  location: '/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:7:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    0 !== 1\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 1\n  actual: 0\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/test.mjs:7:29)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 0\n# fail 3\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 102.038333"
+        }
+      ]
+    },
+    {
+      "id": "message-8930-322744051",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "Now I can see the issue. The `bump` function in `calc.mjs` just returns the value unchanged, but the tests expect it to…",
+      "startMs": 8930,
+      "endMs": 8930,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "Now I can see the issue. The `bump` function in `calc.mjs` just returns the value unchanged, but the tests expect it to increment the value. Let me first run the test to confirm it fails, then fix it.\n"
+        }
+      ]
+    },
+    {
+      "id": "native-call-d2ff9181-5a52-4bb3-8e19-f056fbb8eb55",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 11288,
+      "endMs": 11306,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-d2ff9181-5a52-4bb3-8e19-f056fbb8eb55",
+        "timingKind": "observed",
+        "operation": "modify",
+        "workspaceVerified": true
+      },
+      "artifacts": [
+        {
+          "kind": "patch",
+          "diff": "Index: calc.mjs\n===================================================================\n--- calc.mjs\n+++ calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+        },
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value\n}",
+          "after": "export function bump(value) {\n  return value + 1\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "message-11296-2064598030",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "All 3 tests fail as expected. The fix is minimal: change `bump` to return `value + 1`.",
+      "startMs": 11296,
+      "endMs": 11296,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "All 3 tests fail as expected. The fix is minimal: change `bump` to return `value + 1`.\n"
+        }
+      ]
+    },
+    {
+      "id": "native-call-77cd86d0-00d2-4086-b98a-47e6fd0c8e5f",
+      "type": "test",
+      "name": "node --test test.mjs",
+      "summary": "3/3 passed",
+      "startMs": 14188,
+      "endMs": 14434,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-77cd86d0-00d2-4086-b98a-47e6fd0c8e5f",
+        "timingKind": "observed",
+        "command": "node --test test.mjs",
+        "exitCode": 0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node --test test.mjs",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "TAP version 13\n# Subtest: bump 1\nok 1 - bump 1\n  ---\n  duration_ms: 0.496542\n  type: 'test'\n  ...\n# Subtest: bump 2\nok 2 - bump 2\n  ---\n  duration_ms: 0.138709\n  type: 'test'\n  ...\n# Subtest: bump 0\nok 3 - bump 0\n  ---\n  duration_ms: 0.060375\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 163.994292"
+        }
+      ]
+    },
+    {
+      "id": "native-call-dc68bab7-432e-4eed-88f5-43e3db024dcb",
+      "type": "read",
+      "name": "Read calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 19069,
+      "endMs": 19098,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 3",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call-dc68bab7-432e-4eed-88f5-43e3db024dcb",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "calc.mjs",
+          "language": "javascript",
+          "content": "Read file /private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free/calc.mjs, lines 1-3\n1: export function bump(value) {\n2:   return value + 1\n3: }"
+        }
+      ]
+    },
+    {
+      "id": "message-19087-652228837",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "All 3 tests pass. The fix was a single character change: `return value` → `return value + 1` in `calc.mjs`.",
+      "startMs": 19087,
+      "endMs": 19087,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 3",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "All 3 tests pass. The fix was a single character change: `return value` → `return value + 1` in `calc.mjs`.\n"
+        }
+      ]
+    },
+    {
+      "id": "message-21220-452602659",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "The task is complete. Here's a summary:",
+      "startMs": 21220,
+      "endMs": 21220,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 3",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "The task is complete. Here's a summary:\n\n- **Problem**: `calc.mjs` had `bump(value)` returning `value` unchanged, but the tests expected `bump` to increment the value.\n- **Fix**: Changed `return value` to `return value + 1` on line 2 of `calc.mjs`.\n- **Result**: `node --test test.mjs` now passes all 3 subtests (bump 1, bump 2, bump 0)."
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "startMs": 21290,
+      "endMs": 21490,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 1 edit (recovered).",
+      "startMs": 21540,
+      "endMs": 21740,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": true,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit (recovered).\n- 2 test runs\n- 1 edit across 1 file\n- duration 21.7s\n- capture native+workspace · observed timing\n- recovery detected after 3 failing tests\nNative agent events verified against workspace diffs."
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvgc1plm_92beab",
+    "command": "opencode run --standalone --format json --auto --model opencode/nemotron-3.5-lightning-free \"Fix calc.mjs so that 'node --test test.mjs' passes. Make the minimal edit, run that exact test command, and report the result.\"",
+    "cwd": "/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free",
+    "repoRoot": "/private/tmp/ar-matrix/opencode-nemotron-3.5-lightning-free",
+    "baseCommit": "9a35105",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 21690,
+    "adapter": "opencode",
+    "nativeSessionId": "ses_ea7e48ac8ffesIux2eyYKFCEPI",
+    "recoveryDetected": true,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T06:59:38.261Z"
+  }
+}

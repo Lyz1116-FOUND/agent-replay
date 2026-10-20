@@ -1,0 +1,337 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvg4o5nb_fcfb18",
+  "task": {
+    "id": "real-qoder",
+    "title": "real-qoder",
+    "description": "Recorded Qoder CLI session in ar-real-qoder.",
+    "repo": "ar-real-qoder",
+    "baseCommit": "3c57297"
+  },
+  "agent": {
+    "name": "Qoder CLI",
+    "model": "DeepSeek-Flash"
+  },
+  "status": "pass",
+  "startedAt": "2026-10-20T03:32:46.871Z",
+  "endedAt": "2026-10-20T03:33:01.254Z",
+  "durationMs": 14383,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "qoder",
+    "sources": [
+      "native:qoder",
+      "workspace"
+    ],
+    "workspaceVerified": 1,
+    "unverifiedEdits": 0
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "3c57297",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-real-qoder"
+        }
+      ]
+    },
+    {
+      "id": "message-7956-2059849724",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "I'll inspect the files first.",
+      "startMs": 7956,
+      "endMs": 7956,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "qoder",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "I'll inspect the files first."
+        }
+      ]
+    },
+    {
+      "id": "native-call_00_ET_dp92dfbx2nNzZv97Gnwv1633",
+      "type": "shell",
+      "name": "ls -la",
+      "summary": "exit 0",
+      "startMs": 7957,
+      "endMs": 7988,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "qoder",
+        "callId": "call_00_ET_dp92dfbx2nNzZv97Gnwv1633",
+        "timingKind": "observed",
+        "command": "ls -la"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "ls -la",
+          "output": "total 16\ndrwxr-xr-x@   7 foundtt  wheel    224 Oct 20 12:32 .\ndrwxrwxrwt  455 root     wheel  14560 Oct 20 12:32 ..\ndrwxr-xr-x@   3 foundtt  wheel     96 Oct 20 12:32 .agent-replay\ndrwxr-xr-x@  12 foundtt  wheel    384 Oct 20 12:32 .git\n-rw-r--r--@   1 foundtt  wheel     47 Oct 20 12:32 calc.mjs\ndrwxr-xr-x@   2 foundtt  wheel     64 Oct 20 12:32 replays\n-rw-r--r--@   1 foundtt  wheel    245 Oct 20 12:32 test.mjs",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-real-qoder"
+        }
+      ]
+    },
+    {
+      "id": "native-call_01_ET_dTxLeJPH7TFXZu0ofdHb5116",
+      "type": "read",
+      "name": "Read calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 7957,
+      "endMs": 7971,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "qoder",
+        "callId": "call_01_ET_dTxLeJPH7TFXZu0ofdHb5116",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "calc.mjs",
+          "language": "javascript",
+          "content": "1\texport function bump(value) {\n2\t  return value\n3\t}\n4"
+        }
+      ]
+    },
+    {
+      "id": "native-call_02_ET_FW3xHEr316cS7WQf5No55916",
+      "type": "read",
+      "name": "Read test.mjs",
+      "summary": "test.mjs",
+      "startMs": 8088,
+      "endMs": 8088,
+      "status": "ok",
+      "files": [
+        "test.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "qoder",
+        "callId": "call_02_ET_FW3xHEr316cS7WQf5No55916",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "test.mjs",
+          "language": "javascript",
+          "content": "1\timport test from 'node:test'\n2\timport assert from 'node:assert/strict'\n3\timport { bump } from './calc.mjs'\n4\t\n5\ttest('bump 1', () => assert.equal(bump(1), 2))\n6\ttest('bump 2', () => assert.equal(bump(2), 3))\n7\ttest('bump 0', () => assert.equal(bump(0), 1))\n8"
+        }
+      ]
+    },
+    {
+      "id": "native-call_00_ET_JTm8VzHekV6jd8xNEDuL1668",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 9933,
+      "endMs": 9934,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "qoder",
+        "callId": "call_00_ET_JTm8VzHekV6jd8xNEDuL1668",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250,
+        "workspaceVerified": true,
+        "operation": "modify"
+      },
+      "artifacts": [
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value\n}",
+          "after": "export function bump(value) {\n  return value + 1\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "native-call_00_ET_i3XvhJnvkc44mVSa1HNv7367",
+      "type": "test",
+      "name": "node --test test.mjs",
+      "summary": "3/3 passed",
+      "startMs": 11256,
+      "endMs": 11256,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "qoder",
+        "callId": "call_00_ET_i3XvhJnvkc44mVSa1HNv7367",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250,
+        "command": "node --test test.mjs",
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node --test test.mjs",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "✔ bump 1 (0.47425ms)\n✔ bump 2 (0.040667ms)\n✔ bump 0 (0.031834ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 57.87925"
+        }
+      ]
+    },
+    {
+      "id": "message-12545-1212399531",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "Changed `bump` in calc.mjs:2 to `return value + 1`. `node --test test.mjs` passes: 3 tests, 3 pass, 0 fail.",
+      "startMs": 12545,
+      "endMs": 12545,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "qoder",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "Changed `bump` in calc.mjs:2 to `return value + 1`. `node --test test.mjs` passes: 3 tests, 3 pass, 0 fail."
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "startMs": 13933,
+      "endMs": 14133,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-real-qoder"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+      "startMs": 14183,
+      "endMs": 14383,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": false,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit.\n\nChanged `bump` in calc.mjs:2 to `return value + 1`. `node --test test.mjs` passes: 3 tests, 3 pass, 0 fail.\n- 1 test run\n- 1 edit across 1 file\n- duration 14.3s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvg4o5nb_fcfb18",
+    "command": "qodercli -p -o stream-json -m DeepSeek-Flash --permission-mode accept_edits --allowed-tools \"Read,Edit,Write,Bash(node --test test.mjs)\" \"Fix calc.mjs so that 'node --test test.mjs' passes. Make the minimal edit, run that exact test command, and report the result.\"",
+    "cwd": "/private/tmp/ar-real-qoder",
+    "repoRoot": "/private/tmp/ar-real-qoder",
+    "baseCommit": "3c57297",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 14333,
+    "adapter": "qoder",
+    "nativeSessionId": "b70950d4-a6ae-45a7-9b92-8ac182f08cd6",
+    "recoveryDetected": false,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T03:33:01.210Z"
+  }
+}

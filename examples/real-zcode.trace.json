@@ -1,0 +1,346 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvgc86vl_0f518e",
+  "task": {
+    "id": "real-zcode",
+    "title": "real-zcode",
+    "description": "Recorded ZCode CLI session in ar-zcode-160418.",
+    "repo": "ar-zcode-160418",
+    "baseCommit": "cf2fe84"
+  },
+  "agent": {
+    "name": "ZCode CLI",
+    "model": "bigmodel-standard-api-2/GLM-5.3-Flash"
+  },
+  "status": "pass",
+  "termination": {
+    "kind": "completed"
+  },
+  "environment": {
+    "provider": "bigmodel-standard-api-2",
+    "harnessVersion": "3.15.3-37",
+    "platform": "darwin-arm64",
+    "nodeVersion": "v22.22.2"
+  },
+  "startedAt": "2026-10-20T07:04:18.897Z",
+  "endedAt": "2026-10-20T07:05:20.752Z",
+  "durationMs": 61855,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "zcode",
+    "sources": [
+      "native:zcode",
+      "workspace"
+    ],
+    "workspaceVerified": 1,
+    "unverifiedEdits": 0,
+    "integrity": {
+      "nativeEdits": 1,
+      "workspaceEdits": 1,
+      "matchedEdits": 1,
+      "unverifiedEdits": 0,
+      "outsideWorkspaceEdits": 0,
+      "nativeTestRuns": 1,
+      "parsedTestRuns": 1,
+      "capturedTests": 1
+    }
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "cf2fe84",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-zcode-160418"
+        }
+      ]
+    },
+    {
+      "id": "message-18098-1617441988",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "I'll look at the files first.",
+      "startMs": 18098,
+      "endMs": 18098,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "zcode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "I'll look at the files first."
+        }
+      ]
+    },
+    {
+      "id": "native-call_be62d47187e54796be95c4a3",
+      "type": "shell",
+      "name": "ls /private/tmp/ar-zcode-160418 && cat /private/tmp/ar-zcode-160418/calc.mjs /private/tmp/ar-zcode-160418/test.mjs",
+      "summary": "exit 0",
+      "startMs": 24003,
+      "endMs": 29732,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "zcode",
+        "callId": "call_be62d47187e54796be95c4a3",
+        "timingKind": "observed",
+        "command": "ls /private/tmp/ar-zcode-160418 && cat /private/tmp/ar-zcode-160418/calc.mjs /private/tmp/ar-zcode-160418/test.mjs"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "ls /private/tmp/ar-zcode-160418 && cat /private/tmp/ar-zcode-160418/calc.mjs /private/tmp/ar-zcode-160418/test.mjs",
+          "output": "calc.mjs\nreplays\ntest.mjs\nexport function bump(value) {\n  return value\n}\nimport test from 'node:test'\nimport assert from 'node:assert/strict'\nimport { bump } from './calc.mjs'\n\ntest('bump 1', () => assert.equal(bump(1), 2))\ntest('bump 2', () => assert.equal(bump(2), 3))\ntest('bump 0', () => assert.equal(bump(0), 1))",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-zcode-160418"
+        }
+      ]
+    },
+    {
+      "id": "message-35481-84060743",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "`bump` needs to return `value + 1`. Making the minimal fix:",
+      "startMs": 35481,
+      "endMs": 35481,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "zcode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "`bump` needs to return `value + 1`. Making the minimal fix:"
+        }
+      ]
+    },
+    {
+      "id": "native-call_adf1be6879af400292e14e0d",
+      "type": "read",
+      "name": "Read calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 40609,
+      "endMs": 40687,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "zcode",
+        "callId": "call_adf1be6879af400292e14e0d",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "calc.mjs",
+          "language": "javascript",
+          "content": "1\texport function bump(value) {\n2\t  return value\n3\t}\n4"
+        }
+      ]
+    },
+    {
+      "id": "native-call_c286eb34184b42b48f4171ab",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 45611,
+      "endMs": 45666,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "zcode",
+        "callId": "call_c286eb34184b42b48f4171ab",
+        "timingKind": "observed",
+        "workspaceVerified": true,
+        "operation": "modify"
+      },
+      "artifacts": [
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value\n}",
+          "after": "export function bump(value) {\n  return value + 1\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "native-call_e8fa70b6fe134b1f9d95a228",
+      "type": "test",
+      "name": "cd /private/tmp/ar-zcode-160418 && node --test test.mjs",
+      "summary": "3/3 passed",
+      "startMs": 52361,
+      "endMs": 52660,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "zcode",
+        "callId": "call_e8fa70b6fe134b1f9d95a228",
+        "timingKind": "observed",
+        "command": "cd /private/tmp/ar-zcode-160418 && node --test test.mjs",
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "cd /private/tmp/ar-zcode-160418 && node --test test.mjs",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "TAP version 13\n# Subtest: bump 1\nok 1 - bump 1\n  ---\n  duration_ms: 0.309458\n  type: 'test'\n  ...\n# Subtest: bump 2\nok 2 - bump 2\n  ---\n  duration_ms: 0.088375\n  type: 'test'\n  ...\n# Subtest: bump 0\nok 3 - bump 0\n  ---\n  duration_ms: 0.036208\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 99.494875"
+        }
+      ]
+    },
+    {
+      "id": "message-52972-41355177",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "All tests pass. The fix was one line in `calc.mjs:2` — `bump` returned `value` unchanged, so I changed it to `return va…",
+      "startMs": 52972,
+      "endMs": 52972,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "zcode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "All tests pass. The fix was one line in `calc.mjs:2` — `bump` returned `value` unchanged, so I changed it to `return value + 1`. Running `node --test test.mjs` now reports **3 pass, 0 fail** (`bump 1`, `bump 2`, and `bump 0` all OK)."
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "startMs": 61405,
+      "endMs": 61605,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-zcode-160418"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 1 edit.",
+      "startMs": 61655,
+      "endMs": 61855,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": false,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit.\n\nAll tests pass. The fix was one line in `calc.mjs:2` — `bump` returned `value` unchanged, so I changed it to `return value + 1`. Running `node --test test.mjs` now reports **3 pass, 0 fail** (`bump 1`, `bump 2`, and `bump 0` all OK).\n- 1 test run\n- 1 edit across 1 file\n- duration 1m 02s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvgc86vl_0f518e",
+    "command": "zcode --json --no-color -p \"Fix calc.mjs so that 'node --test test.mjs' passes. Make the minimal edit, run that exact test command, and report the result.\" --model bigmodel-standard-api-2/GLM-5.3-Flash",
+    "cwd": "/private/tmp/ar-zcode-160418",
+    "repoRoot": "/private/tmp/ar-zcode-160418",
+    "baseCommit": "cf2fe84",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 61805,
+    "adapter": "zcode",
+    "nativeSessionId": "sess_4daafe14-00ab-4c1d-bd72-b5ab412af536",
+    "recoveryDetected": false,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T07:05:20.703Z"
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvgc4k8d_40ab32",
+  "task": {
+    "id": "free-opencode-beam-free",
+    "title": "free-opencode-beam-free",
+    "description": "Recorded OpenCode session in opencode-beam-free.",
+    "repo": "opencode-beam-free",
+    "baseCommit": "220f4c5"
+  },
+  "agent": {
+    "name": "OpenCode",
+    "model": "opencode/beam-free"
+  },
+  "status": "fail",
+  "termination": {
+    "kind": "provider_unavailable",
+    "message": "This model is not available in your country (HTTP 403)",
+    "code": 403
+  },
+  "environment": {
+    "isolation": "none",
+    "provider": "opencode",
+    "harnessVersion": "2.0.32",
+    "platform": "darwin-arm64",
+    "nodeVersion": "v22.22.2"
+  },
+  "startedAt": "2026-10-20T07:01:29.581Z",
+  "endedAt": "2026-10-20T07:01:32.914Z",
+  "durationMs": 3333,
+  "result": {
+    "summary": "Recorded 0 edits and 0 commands; no passing test run was observed.",
+    "exitCode": 1,
+    "filesChanged": []
+  },
+  "capture": {
+    "fidelity": "native-events",
+    "timing": "observed",
+    "adapter": "opencode",
+    "sources": [
+      "native:opencode"
+    ],
+    "workspaceVerified": 0,
+    "unverifiedEdits": 0,
+    "integrity": {
+      "nativeEdits": 0,
+      "workspaceEdits": 0,
+      "matchedEdits": 0,
+      "unverifiedEdits": 0,
+      "outsideWorkspaceEdits": 0,
+      "nativeTestRuns": 0,
+      "parsedTestRuns": 0,
+      "capturedTests": 0
+    }
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "220f4c5",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-beam-free"
+        }
+      ]
+    },
+    {
+      "id": "native-error-2882-936205089",
+      "type": "tool",
+      "name": "Agent error",
+      "summary": "This model is not available in your country (HTTP 403)",
+      "startMs": 2882,
+      "endMs": 2882,
+      "status": "error",
+      "attributes": {
+        "phase": "Work",
+        "tool": "native",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "agent error",
+          "output": "This model is not available in your country (HTTP 403)",
+          "exitCode": 1
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": "",
+      "startMs": 2883,
+      "endMs": 3083,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": "(no tracked changes)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/ar-matrix/opencode-beam-free"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Incomplete",
+      "summary": "Recorded 0 edits and 0 commands; no passing test run was observed.",
+      "startMs": 3133,
+      "endMs": 3333,
+      "status": "error",
+      "files": [],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": false,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded 0 edits and 0 commands; no passing test run was observed.\n- 0 test runs\n- 0 edits across 0 files\n- duration 3.2s\n- capture native-events · observed timing\nNative agent events; workspace changes were not observed."
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvgc4k8d_40ab32",
+    "command": "opencode run --standalone --format json --auto --model opencode/beam-free \"Fix calc.mjs so that 'node --test test.mjs' passes. Make the minimal edit, run that exact test command, and report the result.\"",
+    "cwd": "/private/tmp/ar-matrix/opencode-beam-free",
+    "repoRoot": "/private/tmp/ar-matrix/opencode-beam-free",
+    "baseCommit": "220f4c5",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 3192,
+    "adapter": "opencode",
+    "nativeSessionId": "ses_ea7e28301ffegVacnBhHstFE5p",
+    "recoveryDetected": false,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T07:01:32.774Z"
+  }
+}

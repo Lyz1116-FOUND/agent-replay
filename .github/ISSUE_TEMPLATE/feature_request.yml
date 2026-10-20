@@ -1,0 +1,35 @@
+name: Feature request
+description: Suggest a use case or improvement. The v1 beta prioritizes correctness and feedback over scope expansion.
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the debugging, review, or comparison workflow that is currently difficult.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would help?
+      description: Describe the smallest change that would address the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Existing workarounds, other tools, or why the current behavior is insufficient.
+  - type: input
+    id: agent
+    attributes:
+      label: Agent or format involved
+      description: e.g. Codex, OpenCode, SWE-agent, OTLP JSON.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope acknowledgement
+      options:
+        - label: I understand the v1 beta is frozen around the existing capture → verify → replay → compare loop, and new features may be deferred.
+          required: true

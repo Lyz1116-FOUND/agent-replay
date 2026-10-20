@@ -22,7 +22,7 @@ export function ReplayHeader({
   return (
     <div className="flex h-[58px] shrink-0 items-center gap-3 border-b border-line bg-canvas px-3">
       <Link
-        to="/"
+        to="/runs"
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-transparent text-muted transition-colors hover:border-line hover:bg-panel2 hover:text-ink"
         aria-label={t('replay.back')}
         title={t('replay.back')}
@@ -34,6 +34,14 @@ export function ReplayHeader({
         <div className="flex min-w-0 items-center gap-2">
           <h1 className="truncate text-[13px] font-medium text-ink">{trace.task.title}</h1>
           <StatusPill status={trace.status} />
+          {trace.metadata?.source === 'demo' ? (
+            <span
+              className="shrink-0 rounded-xs border border-line px-1 font-mono text-[9px] uppercase tracking-wide text-faint"
+              title={t('demo.badgeTitle')}
+            >
+              {t('demo.badge')}
+            </span>
+          ) : null}
           {recovery && onOverview ? (
             <button
               onClick={onOverview}

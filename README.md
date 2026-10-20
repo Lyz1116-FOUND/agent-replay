@@ -2,16 +2,26 @@
 
 **Record, replay, and compare how coding agents solve a task.**
 
+See what the agent reported doing — and what actually changed.
+
 [![CI](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml/badge.svg)](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml)
 [English](README.md) · [简体中文](README.zh-CN.md)
 
+[**Live Demo**](https://lyz1116-found.github.io/agent-replay/) · [Quick start](#quick-start) · [Features](#features) · [Record a session](#record-a-session) · [Import a trace](#import-a-trace) · [Documentation](#documentation)
+
 Agent Replay turns an agent session into a visual timeline. Follow the file reads, edits, terminal commands, and test runs; jump to the change that broke a test; then compare how another agent approached the same problem.
 
-Use it to debug a failed run, review an agent's changes, or walk someone through a solution. Start with the built-in demos, import an existing trace, or record your own CLI session.
+Use it to debug a failed run, review an agent's changes, or walk someone through a solution. Start with the live demo, import an existing trace, or record your own CLI session.
 
-![Agent Replay showing a run overview and its outcome story](docs/overview.png)
+![Built-in Codex LRU demo: failure, wrong fix, regression, recovery](docs/demo/replay.gif)
 
-[Quick start](#quick-start) · [Features](#features) · [Record a session](#record-a-session) · [Import a trace](#import-a-trace) · [Documentation](#documentation)
+`FAIL → EDIT → REGRESSION → EDIT → RECOVERED` · built-in Codex LRU demo, replayed at 4×. The live OpenCode capture is separate and labelled below.
+
+| Native capture | Verified evidence | Trace interoperability |
+|---|---|---|
+| Codex · Claude Code · OpenCode · ZCode · Qoder | Git · filesystem · parsed tests | SWE-agent · offline OpenTelemetry OTLP JSON |
+
+[**Live Demo**](https://lyz1116-found.github.io/agent-replay/) loads the built-in demos without an install, API key, or login. **No agent installation is needed to explore.**
 
 ## Quick start
 
@@ -60,6 +70,12 @@ The recorder combines native CLI events with git and filesystem observations. An
 ### Bring your existing traces
 
 Import native Agent Replay JSON, SWE-agent trajectories, or offline OpenTelemetry OTLP JSON. OTel imports preserve hierarchy and overlapping spans, including multiple traces in one file. Imported data stays in your browser; local recordings stay on disk.
+
+## Real capture, not only fixtures
+
+The beta ships with a fresh live recording from **OpenCode 2.0.32 + `opencode/glm-5.3-flash-free`**: 43.4 s, one edit, two test runs, 3/3 tests passing at the end, one edit verified against the workspace, zero unverified edits. The trace is [here](examples/beta-opencode.trace.json), and the [capture evidence](docs/demo/REAL_CAPTURE.md) records the command, baseline failure, test-file checksum, and sanitization.
+
+The built-in LRU animation above is a **demo** and is labelled as such in the UI. The OpenCode trace is a real recorder run. Import bugs and traces can be filed through [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues).
 
 ## Record a session
 
@@ -156,7 +172,8 @@ No. It shows observable tool activity and reasoning summaries exposed by the age
 - [Trace formats](docs/trace-formats.md) — native schema, SWE-agent mapping, and OTLP JSON import.
 - [Validation and measurement](docs/validation.md) — real recordings, task matrix, recall, coverage, and timing definitions.
 - [Architecture](docs/architecture.md) — adapters, event merger, trace builder, and replay UI.
-- [Changelog](CHANGELOG.md) · [Development plan](PLAN.md).
+- [Demo media](docs/demo/README.md) · [live capture evidence](docs/demo/REAL_CAPTURE.md).
+- [Release notes](docs/RELEASE_v1.0.0-beta.1.md) · [Changelog](CHANGELOG.md) · [Development plan](PLAN.md).
 
 ## Development
 
@@ -167,7 +184,7 @@ npm run lint       # Lint
 npm run build      # Type-check, web app, recorder CLI, and validation harness
 ```
 
-Bug reports and contributions are welcome through [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues) and pull requests. For import bugs, include the format, diagnostics, and a small sanitized trace that reproduces the issue.
+Bug reports and contributions are welcome through [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues), [Discussions](https://github.com/Lyz1116-FOUND/agent-replay/discussions), and pull requests. For import bugs, include the format, diagnostics, and a small sanitized trace that reproduces the issue.
 
 ## License
 

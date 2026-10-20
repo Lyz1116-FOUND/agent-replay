@@ -253,7 +253,14 @@ function RunRow({
       <div className="min-w-0">
         <div className="flex items-center gap-2">
           <span className="truncate text-[13px] font-medium text-ink">{run.task.title}</span>
-          {run.metadata?.source === 'recorder' ? (
+          {run.metadata?.source === 'demo' ? (
+            <span
+              className="shrink-0 rounded-xs border border-line px-1 font-mono text-[9px] uppercase tracking-wide text-faint"
+              title={t('demo.badgeTitle')}
+            >
+              {t('demo.badge')}
+            </span>
+          ) : run.metadata?.source === 'recorder' ? (
             <span className="shrink-0 rounded-xs border border-accent/30 px-1 font-mono text-[9px] uppercase tracking-wide text-accent/80">
               {t('runs.badge.recorded')}
             </span>

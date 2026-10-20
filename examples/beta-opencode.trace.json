@@ -1,0 +1,434 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvgye1ef_5d4396",
+  "task": {
+    "id": "beta-opencode",
+    "title": "Fix bump() off-by-one",
+    "description": "OpenCode live capture: make the three bump() tests pass with a minimal edit.",
+    "repo": "agent-replay-beta",
+    "baseCommit": "0789d44"
+  },
+  "agent": {
+    "name": "OpenCode",
+    "model": "opencode/glm-5.3-flash-free"
+  },
+  "status": "pass",
+  "termination": {
+    "kind": "completed"
+  },
+  "environment": {
+    "isolation": "host-config",
+    "provider": "opencode",
+    "model": "opencode/glm-5.3-flash-free",
+    "harnessVersion": "2.0.32",
+    "recorderVersion": "1.0.0-beta.1",
+    "platform": "darwin",
+    "arch": "arm64",
+    "nodeVersion": "v26.0.0",
+    "shell": "zsh",
+    "cwdRealpath": "/tmp/agent-replay-beta",
+    "agentCli": {
+      "name": "OpenCode",
+      "version": "2.0.32"
+    },
+    "network": {
+      "proxyConfigured": false
+    }
+  },
+  "startedAt": "2026-10-20T17:24:43.287Z",
+  "endedAt": "2026-10-20T17:25:26.714Z",
+  "durationMs": 43427,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 1 edit (recovered).",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "opencode",
+    "sources": [
+      "native:opencode",
+      "workspace"
+    ],
+    "workspaceVerified": 1,
+    "unverifiedEdits": 0,
+    "integrity": {
+      "nativeEdits": 1,
+      "failedEdits": 0,
+      "workspaceEdits": 1,
+      "matchedEdits": 1,
+      "confirmedEdits": 1,
+      "supersededEdits": 0,
+      "unverifiedEdits": 0,
+      "outsideWorkspaceEdits": 0,
+      "nativeTestRuns": 2,
+      "parsedTestRuns": 2,
+      "capturedTests": 2
+    }
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "2 pre-existing change(s)",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [
+        "baseline.log",
+        "test-before.sha"
+      ],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "0789d44",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "?? baseline.log\n?? test-before.sha",
+          "exitCode": 0,
+          "cwd": "/tmp/agent-replay-beta"
+        }
+      ]
+    },
+    {
+      "id": "native-chatcmpl-tool-ad4e95ca50710454",
+      "type": "search",
+      "name": "glob",
+      "summary": "glob",
+      "startMs": 9539,
+      "endMs": 9789,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "chatcmpl-tool-ad4e95ca50710454",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "glob",
+          "output": "/tmp/agent-replay-beta/calc.mjs\n/tmp/agent-replay-beta/test.mjs",
+          "exitCode": 0,
+          "cwd": "/tmp/agent-replay-beta"
+        }
+      ]
+    },
+    {
+      "id": "native-chatcmpl-tool-8aca416b183ee37a",
+      "type": "search",
+      "name": "glob",
+      "summary": "glob",
+      "startMs": 9540,
+      "endMs": 9790,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "chatcmpl-tool-8aca416b183ee37a",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "glob",
+          "output": "/tmp/agent-replay-beta/test.mjs",
+          "exitCode": 0,
+          "cwd": "/tmp/agent-replay-beta"
+        }
+      ]
+    },
+    {
+      "id": "native-chatcmpl-tool-b63907139062fc12",
+      "type": "read",
+      "name": "Read calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 15673,
+      "endMs": 15730,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "chatcmpl-tool-b63907139062fc12",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "calc.mjs",
+          "language": "javascript",
+          "content": "Read file calc.mjs, lines 1-3\n1: export function bump(value) {\n2:   return value\n3: }"
+        }
+      ]
+    },
+    {
+      "id": "native-chatcmpl-tool-931c6db33dead4c0",
+      "type": "read",
+      "name": "Read test.mjs",
+      "summary": "test.mjs",
+      "startMs": 15675,
+      "endMs": 15730,
+      "status": "ok",
+      "files": [
+        "test.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "chatcmpl-tool-931c6db33dead4c0",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "test.mjs",
+          "language": "javascript",
+          "content": "Read file test.mjs, lines 1-7\n1: import test from 'node:test'\n2: import assert from 'node:assert/strict'\n3: import { bump } from './calc.mjs'\n4: \n5: test('bump 1', () => assert.equal(bump(1), 2))\n6: test('bump 2', () => assert.equal(bump(2), 3))\n7: test('bump 0', () => assert.equal(bump(0), 1))"
+        }
+      ]
+    },
+    {
+      "id": "native-chatcmpl-tool-a4614a9b46ff0705",
+      "type": "test",
+      "name": "node --test",
+      "summary": "0/3 passed",
+      "startMs": 20704,
+      "endMs": 20986,
+      "status": "error",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "chatcmpl-tool-a4614a9b46ff0705",
+        "timingKind": "observed",
+        "command": "node --test",
+        "exitCode": 1,
+        "passed": 0,
+        "failed": 3,
+        "total": 3,
+        "error": "✖ bump 1 (1.069625ms)\n✖ bump 2 (0.261917ms)\n✖ bump 0 (0.173583ms)\nℹ tests 3\nℹ suites 0\nℹ pass 0\nℹ fail 3\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 75.585917\n\n✖ failing tests:\n\ntest at test.mjs:5:1\n✖ bump 1 (1.069625ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  1 !== 2\n  \n      at TestContext.<anonymous> (file:///tmp/agent-replay-beta/test.mjs:5:29)\n      at Test.runInAsyncScope (node:async_hooks:226:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 1,\n    expected: 2,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at test.mjs:6:1\n✖ bump 2 (0.261917ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  2 !== 3\n  \n      at TestContext.<anonymous> (file:///tmp/agent-replay-beta/test.mjs:6:29)\n      at Test.runInAsyncScope (node:async_hooks:226:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n      at Test.postRun (node:internal/test_runner/test:1330:19)\n      at Test.run (node:internal/test_runner/test:1258:12)\n      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 2,\n    expected: 3,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at test.mjs:7:1\n✖ bump 0 (0.173583ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  0 !== 1\n  \n      at TestContext.<anonymous> (file:///tmp/agent-replay-beta/test.mjs:7:29)\n      at Test.runInAsyncScope (node:async_hooks:226:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n      at Test.postRun (node:internal/test_runner/test:1330:19)\n      at Test.run (node:internal/test_runner/test:1258:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 0,\n    expected: 1,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }"
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node --test",
+          "passed": 0,
+          "failed": 3,
+          "total": 3,
+          "output": "✖ bump 1 (1.069625ms)\n✖ bump 2 (0.261917ms)\n✖ bump 0 (0.173583ms)\nℹ tests 3\nℹ suites 0\nℹ pass 0\nℹ fail 3\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 75.585917\n\n✖ failing tests:\n\ntest at test.mjs:5:1\n✖ bump 1 (1.069625ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  1 !== 2\n  \n      at TestContext.<anonymous> (file:///tmp/agent-replay-beta/test.mjs:5:29)\n      at Test.runInAsyncScope (node:async_hooks:226:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 1,\n    expected: 2,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at test.mjs:6:1\n✖ bump 2 (0.261917ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  2 !== 3\n  \n      at TestContext.<anonymous> (file:///tmp/agent-replay-beta/test.mjs:6:29)\n      at Test.runInAsyncScope (node:async_hooks:226:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n      at Test.postRun (node:internal/test_runner/test:1330:19)\n      at Test.run (node:internal/test_runner/test:1258:12)\n      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 2,\n    expected: 3,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at test.mjs:7:1\n✖ bump 0 (0.173583ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  0 !== 1\n  \n      at TestContext.<anonymous> (file:///tmp/agent-replay-beta/test.mjs:7:29)\n      at Test.runInAsyncScope (node:async_hooks:226:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n      at Test.postRun (node:internal/test_runner/test:1330:19)\n      at Test.run (node:internal/test_runner/test:1258:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 0,\n    expected: 1,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }",
+          "failedTests": [
+            "bump 1",
+            "bump 2",
+            "bump 0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "native-chatcmpl-tool-bdf7e4b5174772de",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 26809,
+      "endMs": 27020,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "chatcmpl-tool-bdf7e4b5174772de",
+        "timingKind": "observed",
+        "operation": "modify",
+        "workspaceVerified": true
+      },
+      "artifacts": [
+        {
+          "kind": "patch",
+          "diff": "Index: calc.mjs\n===================================================================\n--- calc.mjs\n+++ calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+        },
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value\n}",
+          "after": "export function bump(value) {\n  return value + 1\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "message-27014-736353974",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "All 3 tests fail — `bump` returns the value unchanged instead of incrementing it. Minimal fix:",
+      "startMs": 27014,
+      "endMs": 27014,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "All 3 tests fail — `bump` returns the value unchanged instead of incrementing it. Minimal fix:"
+        }
+      ]
+    },
+    {
+      "id": "native-chatcmpl-tool-9d9fb1d3c6412062",
+      "type": "test",
+      "name": "node --test",
+      "summary": "3/3 passed",
+      "startMs": 33326,
+      "endMs": 33591,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "chatcmpl-tool-9d9fb1d3c6412062",
+        "timingKind": "observed",
+        "command": "node --test",
+        "exitCode": 0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "node --test",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "✔ bump 1 (0.573958ms)\n✔ bump 2 (0.044833ms)\n✔ bump 0 (0.03725ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 69.4505"
+        }
+      ]
+    },
+    {
+      "id": "message-42976-1997009792",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "Done, all in this repo:",
+      "startMs": 42976,
+      "endMs": 42976,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 3",
+        "tool": "native",
+        "adapter": "opencode",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "Done, all in this repo:\n\n**Run 1 (`node --test`):** 3 failed — `bump` returned its input as-is (`1 !== 2`, `2 !== 3`, `0 !== 1`).\n\n**Fix in `calc.mjs`** (single line, `test.mjs` untouched):\n```diff\n  return value\n+ return value + 1\n```\n(offending line replaced with `return value + 1`)\n\n**Run 2 (`node --test`):** 3 pass, 0 fail, exit code 0."
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "startMs": 42977,
+      "endMs": 43177,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+          "exitCode": 0,
+          "cwd": "/tmp/agent-replay-beta"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 1 edit (recovered).",
+      "startMs": 43227,
+      "endMs": 43427,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": true,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit (recovered).\n- 2 test runs\n- 1 edit across 1 file\n- duration 43.3s\n- capture native+workspace · observed timing\n- recovery detected after 3 failing tests\nNative agent events verified against workspace diffs."
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvgye1ef_5d4396",
+    "command": "opencode run --format json --model opencode/glm-5.3-flash-free --auto \"Run node --test first, fix calc.mjs minimally without changing test.mjs, then run node --test again. Work only in this repository.\"",
+    "cwd": "/tmp/agent-replay-beta",
+    "repoRoot": "/tmp/agent-replay-beta",
+    "baseCommit": "0789d44",
+    "initialStatus": "?? baseline.log\n?? test-before.sha",
+    "gitAvailable": true,
+    "sessionDurationMs": 43290,
+    "adapter": "opencode",
+    "recoveryDetected": true,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T17:25:26.579Z"
+  }
+}

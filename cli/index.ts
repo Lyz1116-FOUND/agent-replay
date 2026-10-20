@@ -21,7 +21,7 @@ import { openTrace } from './lib/openServer.ts'
 import type { SessionMeta } from './lib/types.ts'
 import type { Trace } from '../src/schema/trace.ts'
 
-const VERSION = '0.3.0'
+const VERSION = '1.0.0-beta.1'
 
 const supportsColor = Boolean(process.stdout.isTTY) && process.env.NO_COLOR === undefined
 const paint = (code: string, text: string) => (supportsColor ? `\x1b[${code}m${text}\x1b[0m` : text)

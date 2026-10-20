@@ -32,6 +32,12 @@ export function ReplayPage() {
   }, [run, setTrace, stepId])
 
   useEffect(() => {
+    if (import.meta.env.MODE === 'demo' && runId === 'run_lru_codex_9f2a') {
+      useReplayStore.getState().setSpeed(4)
+    }
+  }, [runId])
+
+  useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
       const target = event.target as HTMLElement | null
       const tag = target?.tagName

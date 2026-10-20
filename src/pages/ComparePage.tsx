@@ -68,7 +68,7 @@ export function ComparePage() {
       <div className="flex h-full flex-col items-center justify-center">
         <GitCompare size={20} className="text-faint" />
         <p className="mt-3 text-[13px] text-ink">{t('compare.empty')}</p>
-        <Link to="/" className="mt-3 text-[12px] text-accent hover:underline">
+        <Link to="/runs" className="mt-3 text-[12px] text-accent hover:underline">
           {t('compare.back')}
         </Link>
       </div>
@@ -79,7 +79,7 @@ export function ComparePage() {
     <div className="h-full overflow-y-auto">
       <div className="mx-auto w-full max-w-[1120px] px-6 py-9">
         <Link
-          to="/"
+          to="/runs"
           className="mb-5 inline-flex items-center gap-1.5 text-[11px] text-faint transition-colors hover:text-muted"
         >
           <ArrowLeft size={12} />

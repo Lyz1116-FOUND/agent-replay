@@ -13,6 +13,8 @@ export const en = {
   // Shell
   'app.tagline': 'Visual debugger for coding agents',
   'app.import': 'Import trace',
+  'demo.badge': 'demo',
+  'demo.badgeTitle': 'Built-in demo trace, not a live agent recording',
   'nav.runs': 'Runs',
   'nav.compare': 'Compare',
   'lang.switch': 'Switch to Chinese',
@@ -413,6 +415,8 @@ export type MessageKey = keyof typeof en
 export const zh: Record<MessageKey, string> = {
   'app.tagline': '面向编码智能体的可视化调试器',
   'app.import': '导入 Trace',
+  'demo.badge': '演示',
+  'demo.badgeTitle': '内置演示轨迹，不是真实 Agent 录制',
   'nav.runs': '运行记录',
   'nav.compare': '对比',
   'lang.switch': '切换到英文',

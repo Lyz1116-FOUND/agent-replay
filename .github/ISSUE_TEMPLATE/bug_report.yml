@@ -1,0 +1,75 @@
+name: Bug report
+description: Report a reproducible bug in the viewer, recorder, or an import.
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make Agent Replay trustworthy. Please remove credentials, private source code, and personal paths from traces or logs before attaching them.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the actual behavior and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Include the exact command or click path. A minimal sanitized trace or export is ideal.
+      placeholder: |
+        1. Open ...
+        2. Select ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - Viewer / replay
+        - Recorder CLI
+        - Native import
+        - SWE-agent import
+        - OTLP JSON import
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: replay-version
+    attributes:
+      label: Agent Replay version
+      description: CLI version or commit SHA.
+      placeholder: 1.0.0-beta.1
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, architecture, Node version, browser, and whether the CLI viewer or the Pages demo is affected.
+      placeholder: macOS 15 arm64, Node 22, Chrome 140, CLI viewer
+    validations:
+      required: true
+  - type: input
+    id: agent
+    attributes:
+      label: Agent and model (if recording)
+      description: Agent CLI name/version and model identifier. Do not include credentials.
+      placeholder: OpenCode 2.0.32, opencode/glm-5.3-flash-free
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Trace or diagnostics
+      description: Paste import diagnostics or attach a minimal sanitized trace. Never attach tokens, cookies, or private source code.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I removed credentials and private data from anything I attached.
+          required: true
+        - label: I checked whether this is a known limitation in the README or docs.
+          required: true

@@ -2,16 +2,26 @@
 
 **录制、回放和对比 Coding Agent 完成任务的全过程。**
 
+看见 Agent 声称做了什么，也看见工作区实际发生了什么。
+
 [![CI](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml/badge.svg)](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml)
 [English](README.md) · [简体中文](README.zh-CN.md)
 
+[**在线演示**](https://lyz1116-found.github.io/agent-replay/) · [快速开始](#快速开始) · [功能](#功能) · [录制会话](#录制会话) · [导入轨迹](#导入轨迹) · [文档](#文档)
+
 Agent Replay 将一次 Agent 会话变成可播放的可视化时间线。沿着文件读取、代码编辑、终端命令和测试结果，找到导致失败的那次修改，再对比另一个 Agent 如何解决同一道题。
 
-你可以用它排查失败的运行、复查 Agent 的代码改动，或向他人演示一次完整的解题过程。先体验内置演示，再导入已有轨迹，或者录制自己的 CLI 会话。
+你可以用它排查失败的运行、复查 Agent 的代码改动，或向他人演示一次完整的解题过程。先体验在线演示，再导入已有轨迹，或者录制自己的 CLI 会话。
 
-![Agent Replay 的运行概览与结果故事](docs/overview.png)
+![内置 Codex LRU 演示：失败、错误修复、回归、恢复](docs/demo/replay.gif)
 
-[快速开始](#快速开始) · [功能](#功能) · [录制会话](#录制会话) · [导入轨迹](#导入轨迹) · [文档](#文档)
+`FAIL → EDIT → REGRESSION → EDIT → RECOVERED` · 内置 Codex LRU 演示，4× 回放；真实 OpenCode 录制见下。
+
+| 原生采集 | 工作区核验 | 轨迹互操作 |
+|---|---|---|
+| Codex · Claude Code · OpenCode · ZCode · Qoder | Git · 文件系统 · 解析后的测试 | SWE-agent · 离线 OpenTelemetry OTLP JSON |
+
+[**在线演示**](https://lyz1116-found.github.io/agent-replay/) 无需安装、API key 或登录即可打开内置演示。**只体验演示不需要安装任何 Agent。**
 
 ## 快速开始
 
@@ -60,6 +70,12 @@ npm run dev
 ### 直接使用已有轨迹
 
 支持原生 Agent Replay JSON、SWE-agent 轨迹和离线 OpenTelemetry OTLP JSON。OTel 导入保留父子层级、重叠 span，并支持一个文件中的多条 trace。导入数据留在浏览器，录制文件保存在本地磁盘。
+
+## 不只有内置演示
+
+这个 beta 附带一条新的真实录制：**OpenCode 2.0.32 + `opencode/glm-5.3-flash-free`**，43.4 秒、1 次编辑、2 次测试运行，最终 3/3 测试通过，1 次编辑得到工作区核验，0 次未核验。轨迹在[这里](examples/beta-opencode.trace.json)，[录制证据](docs/demo/REAL_CAPTURE.md)记录了命令、baseline 失败、测试文件校验值和脱敏说明。
+
+上面的 LRU 动画是**内置演示**，UI 中会明确标注；OpenCode 轨迹是录制器真实采集的结果。导入问题或轨迹可以通过 [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues) 提交。
 
 ## 录制会话
 
@@ -158,7 +174,8 @@ agent-replay open desktop-fix
 - [轨迹格式](docs/trace-formats.md)：原生 schema、SWE-agent 映射与 OTLP JSON 导入。
 - [验证与测量](docs/validation.md)：真实录制、任务矩阵、recall、覆盖率与延迟口径。
 - [架构](docs/architecture.md)：适配器、事件合并、trace 构建与回放界面。
-- [变更记录](CHANGELOG.md) · [开发计划](PLAN.md)。
+- [演示素材](docs/demo/README.md) · [真实录制证据](docs/demo/REAL_CAPTURE.md)。
+- [发布说明](docs/RELEASE_v1.0.0-beta.1.md) · [变更记录](CHANGELOG.md) · [开发计划](PLAN.md)。
 
 ## 开发
 
@@ -169,7 +186,7 @@ npm run lint       # 代码检查
 npm run build      # 类型检查、Web、录制 CLI 与验证 harness
 ```
 
-欢迎通过 [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues) 和 Pull Request 反馈问题或贡献代码。报告导入问题时，请附上格式、诊断信息和能复现问题的最小脱敏轨迹。
+欢迎通过 [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues)、[Discussions](https://github.com/Lyz1116-FOUND/agent-replay/discussions) 和 Pull Request 反馈问题或贡献代码。报告导入问题时，请附上格式、诊断信息和能复现问题的最小脱敏轨迹。
 
 ## 许可证
 

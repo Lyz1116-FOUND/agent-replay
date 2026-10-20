@@ -4,7 +4,7 @@ import type { Environment } from '../../src/schema/trace.ts'
 import type { SessionMeta } from './types.ts'
 
 /** Kept in sync with package.json by environment.test.ts. */
-export const RECORDER_VERSION = '0.3.0'
+export const RECORDER_VERSION = '1.0.0-beta.1'
 
 /** Never write a real home directory into a trace. */
 export function sanitizePath(value: string | undefined): string | undefined {

@@ -1,11 +1,15 @@
 # Changelog
 
-## Unreleased — M5 OpenTelemetry interoperability
+## 1.0.0-beta.1 — 2026-10-21
 
-Offline OTLP/JSON import. No collector, no backend, no realtime stream.
+First public beta. Capture, verification, replay, comparison, and OTLP JSON import now form the v1 core loop. This release is about shipping the existing loop, not adding another milestone.
 
 ### Added
 
+- **Hosted demo build.** `npm run build:demo` creates a GitHub Pages build with a `/agent-replay/` base and hash routing; `/` opens the Codex LRU failure step at 4× and `/runs` keeps the list reachable. Normal builds and the CLI viewer keep BrowserRouter.
+- **Presentation assets.** A 20-second replay GIF, an MP4 for the release page, six key-frame screenshots, a 1280×640 social preview, and a reproducible `scripts/record-demo.mjs`.
+- **Live OpenCode capture.** A fresh free-model run (`opencode/glm-5.3-flash-free`) is included as `examples/beta-opencode.trace.json`, with command, baseline, checksum, and sanitization evidence in `docs/demo/REAL_CAPTURE.md`. It is separate from the built-in demo.
+- **Feedback surfaces.** Issue templates for bugs and feature requests, Discussions enabled, and the version badge updated to `v1.0 β`.
 - **Bilingual UI (English / Chinese).** Interface copy lives in a typed catalog
   (`src/i18n/messages.ts`); the locale follows the browser on first visit, the
   top-bar toggle persists in `localStorage`, and `<html lang>` follows the
@@ -81,10 +85,21 @@ Offline OTLP/JSON import. No collector, no backend, no realtime stream.
   for `fidelity: otel`; native recordings keep the strict containment rule.
   Parent-chain cycles are now rejected for every trace.
 
+### Presentation and distribution
+
+- README and Chinese README lead with the live demo, a replay GIF, and the
+  "reported vs. actual" distinction; the built-in demo is labelled in the UI.
+- The npm package was evaluated but **not published**; installation remains
+  source-based (`git clone` + `npm link`) for this beta.
+- `package.json`, lockfile, CLI, recorder fingerprint, and top-bar badge are
+  versioned as `1.0.0-beta.1`; historical 0.3.0 traces are unchanged.
+- Cursor still has an adapter and fixtures but no live run; it is not presented
+  as live-verified.
+
 ## 0.3.0 — 2026-10-20
 
-First beta. The focus of this release is not more adapters — it is making a
-recorded trace trustworthy enough to argue about.
+First internal beta. The focus of this release is not more adapters — it is
+making a recorded trace trustworthy enough to argue about.
 
 ### Added
 

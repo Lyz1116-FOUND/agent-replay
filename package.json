@@ -1,8 +1,24 @@
 {
   "name": "agent-replay",
-  "version": "0.3.0",
-  "description": "A visual debugger for coding agents that replays native agent events against verified workspace facts.",
+  "version": "1.0.0-beta.1",
+  "description": "Open-source visual debugger for coding agents: replay native events against verified workspace facts.",
   "license": "MIT",
+  "homepage": "https://lyz1116-found.github.io/agent-replay/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lyz1116-FOUND/agent-replay.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Lyz1116-FOUND/agent-replay/issues"
+  },
+  "keywords": [
+    "coding-agents",
+    "agent-traces",
+    "observability",
+    "opentelemetry",
+    "debugger",
+    "replay"
+  ],
   "type": "module",
   "engines": {
     "node": ">=22.12"
@@ -10,9 +26,19 @@
   "bin": {
     "agent-replay": "dist-cli/agent-replay.mjs"
   },
+  "files": [
+    "dist",
+    "dist-cli",
+    "README.md",
+    "README.zh-CN.md",
+    "LICENSE"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "npm run typecheck && vite build && npm run build:cli",
+    "build:demo": "npm run typecheck && vite build --mode demo",
+    "preview:demo": "vite preview --mode demo --port 4173",
+    "demo:record": "node scripts/record-demo.mjs",
     "lint": "oxlint",
     "preview": "vite preview",
     "typecheck": "tsc -b && tsc -p tsconfig.cli.json",
@@ -20,7 +46,8 @@
     "build:cli": "esbuild cli/index.ts --bundle --platform=node --format=esm --target=node20 --outfile=dist-cli/agent-replay.mjs && npm run build:validate && chmod +x dist-cli/agent-replay.mjs",
     "cli": "node dist-cli/agent-replay.mjs",
     "build:validate": "esbuild cli/validation/main.ts --bundle --platform=node --format=esm --target=node20 --outfile=dist-cli/validate.mjs",
-    "validate": "node dist-cli/validate.mjs"
+    "validate": "node dist-cli/validate.mjs",
+    "prepack": "npm run build"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
@@ -43,6 +70,7 @@
     "@vitejs/plugin-react": "^6.1.2",
     "esbuild": "^0.28.2",
     "oxlint": "^1.88.0",
+    "playwright-core": "1.64.1",
     "tailwindcss": "^4.3.3",
     "typescript": "~7.0.2",
     "vite": "^8.3.4",

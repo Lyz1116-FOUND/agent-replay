@@ -6,7 +6,7 @@ import { useUiStore } from '../../store/ui'
 import { toggleLocale, useLocale, useT } from '../../i18n'
 
 const navItems = [
-  { to: '/', key: 'nav.runs', end: true },
+  { to: '/runs', key: 'nav.runs', end: false },
   { to: '/compare', key: 'nav.compare', end: false },
 ] as const
 
@@ -61,8 +61,11 @@ export function TopBar() {
           <Upload size={13} />
           {t('app.import')}
         </Button>
-        <span className="hidden rounded-xs border border-line px-1.5 py-0.5 font-mono text-[10px] text-faint sm:inline">
-          v0.3
+        <span
+          className="hidden rounded-xs border border-line px-1.5 py-0.5 font-mono text-[10px] text-faint sm:inline"
+          title="1.0.0-beta.1"
+        >
+          v1.0 β
         </span>
       </div>
     </header>

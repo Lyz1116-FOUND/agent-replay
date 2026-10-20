@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Navigate, Routes, Route } from 'react-router-dom'
 import { AppShell } from './components/shell/AppShell'
 import { useT } from './i18n'
 import { RunsPage } from './pages/RunsPage'
@@ -26,7 +26,17 @@ export default function App() {
   return (
     <Routes>
       <Route element={<AppShell />}>
-        <Route index element={<RunsPage />} />
+        <Route
+          index
+          element={
+            import.meta.env.MODE === 'demo' ? (
+              <Navigate to="/runs/run_lru_codex_9f2a?step=s06" replace />
+            ) : (
+              <RunsPage />
+            )
+          }
+        />
+        <Route path="runs" element={<RunsPage />} />
         <Route
           path="runs/:runId"
           element={

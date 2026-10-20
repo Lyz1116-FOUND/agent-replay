@@ -1,6 +1,6 @@
 import type { Artifact } from '../../src/schema/trace.ts'
 import type { TestOutcome } from './types.ts'
-import { truncate } from './fsutil.ts'
+import { normalizeEol, truncate } from './fsutil.ts'
 
 export function languageFor(file: string): string {
   const extension = file.split('.').pop()?.toLowerCase()
@@ -83,12 +83,12 @@ export function diffArtifact(
   return {
     kind: 'diff',
     path: file,
-    before,
-    after,
+    before: normalizeEol(before),
+    after: normalizeEol(after),
     language: languageFor(file),
   }
 }
 
 export function patchArtifact(patch: string): Artifact {
-  return { kind: 'patch', diff: truncate(patch, 300_000).text }
+  return { kind: 'patch', diff: normalizeEol(truncate(patch, 300_000).text) }
 }

@@ -29,6 +29,7 @@ import {
 } from './session.ts'
 import { captureBaseline, reconcileEdits, WorkspaceWatcher } from './workspace.ts'
 import { buildTrace } from './traceBuilder.ts'
+import { sanitizeTrace } from './sanitize.ts'
 import { createOutputScanner, displayCommand, isTestCommand, parseTestOutput } from './testParser.ts'
 import type { AgentEventRecord, CommandEvent, SessionMeta } from './types.ts'
 import type { AgentEvent, AgentStreamAdapter } from '../adapters/types.ts'
@@ -175,8 +176,10 @@ function readTraceSource(cwd: string): { meta: SessionMeta; events: ReturnType<t
 }
 
 function validateAndWrite(trace: Trace, meta: SessionMeta): void {
+  // Sanitize before validating so the file on disk is the sanitized one.
+  const clean = sanitizeTrace(trace)
   try {
-    traceSchema.parse(trace)
+    traceSchema.parse(clean)
   } catch (error) {
     if (error instanceof ZodError) {
       const issues = error.issues.map((issue) => `${issue.path.join('.') || '(root)'}: ${issue.message}`)
@@ -185,7 +188,7 @@ function validateAndWrite(trace: Trace, meta: SessionMeta): void {
     throw error
   }
   ensureDir(path.dirname(meta.tracePath))
-  writeJsonAtomic(meta.tracePath, trace)
+  writeJsonAtomic(meta.tracePath, clean)
 }
 
 export async function stopSession(cwd: string): Promise<{ trace: Trace; path: string; meta: SessionMeta }> {
@@ -225,7 +228,7 @@ export async function stopSession(cwd: string): Promise<{ trace: Trace; path: st
   })
   validateAndWrite(trace, meta)
   clearSession(cwd)
-  return { trace, path: meta.tracePath, meta }
+  return { trace: sanitizeTrace(trace), path: meta.tracePath, meta }
 }
 
 export async function recordSession(options: StartOptions & {

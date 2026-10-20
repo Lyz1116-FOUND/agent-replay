@@ -2,7 +2,8 @@ import { spawnSync } from 'node:child_process'
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import type { Trace } from '../../src/schema/trace.ts'
-import { taskResultOf } from './aggregate.ts'
+import { parseTestOutput } from '../lib/testParser.ts'
+import { resolveTaskResult, resolveTermination, type EndReason, type VerifyResult } from './outcome.ts'
 import type { CaptureIntegritySummary, RunRecord, ValidationTask } from './types.ts'
 import type { ValidationAgent } from './agents.ts'
 
@@ -64,6 +65,26 @@ function runVerify(cwd: string, command: string): { ok: boolean; output: string 
   }
 }
 
+/**
+ * The trusted verdict: run the task's own command in the final worktree and
+ * read the result from that output. Agent-reported tests never decide this.
+ */
+export function trustedVerify(cwd: string, task: ValidationTask): VerifyResult | null {
+  if (!existsSync(cwd)) return null
+  const result = runVerify(cwd, task.verify)
+  const parsed = parseTestOutput(result.output)
+  if (!parsed) {
+    return { command: task.verify, exitCode: result.ok ? 0 : 1, passed: 0, failed: 0, total: 0 }
+  }
+  return {
+    command: task.verify,
+    exitCode: result.ok ? 0 : 1,
+    passed: parsed.passed,
+    failed: parsed.failed,
+    total: parsed.total,
+  }
+}
+
 export type TaskCheck = { id: string; baselineFails: boolean; referencePasses: boolean; detail?: string }
 
 /**
@@ -113,6 +134,12 @@ function integrityOf(trace: Trace): CaptureIntegritySummary | null {
   }
 }
 
+/** Isolation dirs outlive a run unless they are removed; they hold no results. */
+export function cleanupIsolation(dir: string | undefined): void {
+  if (!dir) return
+  rmSync(dir, { recursive: true, force: true })
+}
+
 export type RunOptions = {
   task: ValidationTask
   agent: ValidationAgent
@@ -137,8 +164,10 @@ export function runTask(options: RunOptions): RunRecord {
     FORCE_COLOR: '0',
   }
   if (agent.pathPrefix) env.PATH = `${agent.pathPrefix}:${env.PATH ?? ''}`
+  let isoDir: string | undefined
   if (agent.isolate) {
     const iso = path.join(options.workRoot, 'iso', `${task.id}--${agent.id}--${run}`)
+    isoDir = iso
     for (const [key, sub] of [
       ['XDG_DATA_HOME', 'data'],
       ['XDG_CONFIG_HOME', 'config'],
@@ -166,25 +195,34 @@ export function runTask(options: RunOptions): RunRecord {
     { cwd: repo, env, encoding: 'utf8', timeout: options.timeoutMs, maxBuffer: 32 * 1024 * 1024 },
   )
   const elapsedMs = Date.now() - started
-  const timedOut = result.error !== undefined && result.error.name === 'Error' && /ETIMEDOUT|timed/i.test(String(result.error.message))
+  const timedOut = result.error !== undefined && /ETIMEDOUT|timed out/i.test(String(result.error.message))
+  const end: EndReason = {
+    exitCode: result.status,
+    signal: result.signal ?? null,
+    timedOut,
+    spawnError: result.error && !timedOut ? result.error.message : undefined,
+  }
 
   const tracePath = path.join(repo, 'replays', `${name}.trace.json`)
   let trace: Trace | null = null
   if (existsSync(tracePath)) trace = JSON.parse(readFileSync(tracePath, 'utf8')) as Trace
+
+  // Judge the task in the final worktree, after the agent stopped touching it.
+  const verify = trustedVerify(repo, task)
 
   const record: RunRecord = {
     task: task.id,
     taskKind: task.kind,
     agent: agent.id,
     run,
+    attempt: 1,
     timedOut,
     elapsedMs,
     exit: result.status,
-    taskResult: trace ? taskResultOf(trace) : { status: 'unknown' },
-    termination: trace?.termination ?? {
-      kind: timedOut ? 'timeout' : 'recorder_error',
-      message: timedOut ? 'run exceeded the harness timeout' : 'no trace was produced',
-    },
+    taskResult: resolveTaskResult(verify),
+    termination: resolveTermination(trace?.termination, end),
+    verify,
+    end,
     integrity: trace ? integrityOf(trace) : null,
     filesChanged: trace?.result.filesChanged ?? [],
     recovery: (trace?.metadata?.recoveryDetected as boolean | undefined) ?? null,
@@ -202,5 +240,6 @@ export function runTask(options: RunOptions): RunRecord {
   }
 
   rmSync(repo, { recursive: true, force: true })
+  cleanupIsolation(isoDir)
   return record
 }

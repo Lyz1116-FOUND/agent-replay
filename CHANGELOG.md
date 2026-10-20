@@ -63,6 +63,27 @@ recorded trace trustworthy enough to argue about.
   leading quote, so a passing run was recorded as `partial`. Quotes, parentheses
   and commas are now valid boundaries.
 
+### Fixed (review blockers)
+
+- **Task outcome is judged by the worktree.** The harness now runs the task's own
+  command in the final tree and reads the result from that output; an agent's
+  claim that it passed can no longer decide the verdict.
+- **End reasons are separate.** `exitCode`, `signal` and `timedOut` are recorded
+  independently. A green tree that the harness had to kill is `pass` + `timeout`,
+  and it never enters `completedAgentLatency`.
+- **Codex errors are classified.** 403 becomes `provider_unavailable`, 429 becomes
+  `rate_limited`, instead of a generic stream error.
+- **Edit recall can no longer exceed 100%.** `matchedEdits` counts native calls,
+  not workspace facts, so two diffs landing on one call cannot inflate recall.
+- **Retries append.** A retry is stored as a new `attempt`; the summary uses the
+  latest attempt per task/agent/run, and the failed attempt stays visible.
+- **A run with no available agent keeps the previous summary** and only refreshes
+  the availability map, instead of overwriting results with zeros.
+- **CRLF is normalized** in diff and patch artifacts, so stored diffs do not carry
+  stray carriage returns.
+- **XDG isolation dirs are removed** after each run.
+- **Home-directory paths are sanitized** to `~/...` before a trace is written.
+
 ### Changed
 
 - The free-model matrix is documented as **OpenCode Free-Model Capture

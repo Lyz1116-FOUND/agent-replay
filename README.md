@@ -223,10 +223,12 @@ Three tasks x N runs per agent, each run in a fresh git repo, recorded by the re
 
 Before anything is measured, `node dist-cli/validate.mjs --verify-tasks` proves every task is worth running: the baseline must fail and the task's own `reference/` overlay must turn the suite fully green.
 
+When a run finishes, the harness runs the task's command itself in the final worktree and judges the task on that result. An agent saying it passed is evidence; the worktree is the verdict.
+
 | Agent | Runs | Task pass | Median (completed) | p25 – p75 | Edit recall | Test recall |
 |---|---|---|---|---|---|---|
-| `opencode` / glm-5.3-flash-free | 9 | 9 | 48.3s | 40.8s – 51.0s | 16/16 | 15/15 |
-| `codex` 0.163.0 | 1 | 1 | 33.0s | — | 1/1 | 2/2 |
+| `opencode` / glm-5.3-flash-free | 9 | 9 | 43.6s | — | 19/21 | 13/13 |
+| `codex` 0.163.0 | 1 | 1 | 32.0s | — | 1/1 | 2/2 |
 
 Availability is recorded, not hidden: `cursor` reports `login_required` (it needs an interactive browser login), and `claude` is gated behind `--allow-paid` because it costs money. Neither is counted as a task failure, and neither blocks the matrix.
 

@@ -45,11 +45,16 @@ export type RunRecord = {
   taskKind: string
   agent: string
   run: number
+  /** 1 for the first try; a retry appends instead of replacing. */
+  attempt: number
   timedOut: boolean
   elapsedMs: number
   exit: number | null
   taskResult: TaskResult
   termination: Termination
+  /** Trusted verdict from running the task command in the final worktree. */
+  verify: import('./outcome.ts').VerifyResult | null
+  end: import('./outcome.ts').EndReason
   integrity: CaptureIntegritySummary | null
   filesChanged: string[]
   recovery: boolean | null

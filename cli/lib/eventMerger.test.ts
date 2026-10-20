@@ -110,4 +110,23 @@ describe('event merger path normalization', () => {
       outsideWorkspaceEdits: 1,
     })
   })
+
+  it('never reports more matched edits than the agent claimed', () => {
+    // Two workspace facts, one native edit call: the call matched twice, which
+    // must not push edit recall above 100%.
+    const second: EditEvent = { ...edit, atMs: 1_260, batch: 'b2', before: 'x', after: 'y', hashBefore: 'c', hashAfter: 'd' }
+    const merged = mergeEvents({
+      agentEvents: [completed('calc.mjs')],
+      editEvents: [edit, second],
+      commandEvents: [],
+      meta,
+      adapterId: 'opencode',
+      sessionEndMs: 2_000,
+    })
+    const integrity = merged.capture.integrity!
+    expect(integrity.workspaceEdits).toBe(2)
+    expect(integrity.nativeEdits).toBe(1)
+    expect(integrity.matchedEdits).toBe(1)
+    expect(integrity.confirmedEdits).toBeLessThanOrEqual(integrity.nativeEdits)
+  })
 })

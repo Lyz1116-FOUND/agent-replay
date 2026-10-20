@@ -126,6 +126,29 @@ describe('Codex exec adapter', () => {
     const final = events.find((event) => event.kind === 'final')
     expect(final).toMatchObject({ status: 'success', text: 'Fixed the cache bug.' })
   })
+
+  it('classifies provider failures instead of a generic stream error', () => {
+    const forbidden = adapter.parseLine(
+      JSON.stringify({
+        type: 'error',
+        message: 'unexpected status 403 Forbidden: This model is not available in your country',
+      }),
+      10,
+    )
+    expect(forbidden.find((event) => event.kind === 'error')).toMatchObject({
+      termination: 'provider_unavailable',
+      code: 403,
+    })
+
+    const limited = adapter.parseLine(
+      JSON.stringify({ type: 'error', message: 'rate limit exceeded, retry after 429' }),
+      20,
+    )
+    expect(limited.find((event) => event.kind === 'error')).toMatchObject({
+      termination: 'rate_limited',
+      code: 429,
+    })
+  })
 })
 
 describe('Claude stream adapter', () => {

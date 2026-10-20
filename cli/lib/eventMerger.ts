@@ -420,7 +420,9 @@ export function mergeEvents(options: {
   }
 
   const usedFacts = new Set<EditEvent>()
-  let workspaceVerified = 0
+  // Counted in native-call units: several workspace facts can land on one call,
+  // and recall is a property of the agent's claims, not of the watcher's batches.
+  const verifiedSpans = new Set<MergedSpan>()
 
   for (const fact of [...editEvents].sort((a, b) => a.atMs - b.atMs)) {
     let best: MergedSpan | null = null
@@ -442,7 +444,7 @@ export function mergeEvents(options: {
     if (!best) continue
 
     usedFacts.add(fact)
-    workspaceVerified += 1
+    verifiedSpans.add(best)
     const operation = operationOf(fact)
     best.span.artifacts = [
       ...(best.span.artifacts ?? []),
@@ -512,6 +514,7 @@ export function mergeEvents(options: {
     }
   }
 
+  const workspaceVerified = verifiedSpans.size
   const nativeTestSpans = merged.filter((item) => item.span.type === 'test')
   const nativeTestRuns = nativeTestSpans.length
   const parsedTestRuns = nativeTestSpans.filter((item) => {

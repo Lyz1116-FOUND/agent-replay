@@ -83,6 +83,11 @@ export function readTextFile(
   }
 }
 
+/** Stored diffs are rendered line by line; CRLF would leave stray carriage returns. */
+export function normalizeEol(text: string): string {
+  return text.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+}
+
 export function hashText(text: string): string {
   return createHash('sha1').update(text).digest('hex')
 }

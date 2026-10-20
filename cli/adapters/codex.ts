@@ -6,6 +6,7 @@ import type {
   EditOperation,
   ToolKind,
 } from './types.ts'
+import { classifyFailure, statusFromMessage } from '../lib/termination.ts'
 import {
   asNumber,
   asRecord,
@@ -108,11 +109,15 @@ export class CodexAdapter implements AgentStreamAdapter {
     }
 
     if (type === 'error') {
+      const message = firstString(event.message, 'Codex stream error') ?? 'Codex stream error'
+      const code = statusFromMessage(message)
       return [
         {
           kind: 'error',
           atMs: receivedAtMs,
-          message: firstString(event.message, 'Codex stream error') ?? 'Codex stream error',
+          message,
+          termination: classifyFailure({ message, status: code }).kind,
+          code,
         },
       ]
     }
@@ -259,11 +264,15 @@ export class CodexAdapter implements AgentStreamAdapter {
     }
 
     if (itemType === 'error') {
+      const message = firstString(item.message, 'Codex item error') ?? 'Codex item error'
+      const code = statusFromMessage(message)
       return [
         {
           kind: 'error',
           atMs,
-          message: firstString(item.message, 'Codex item error') ?? 'Codex item error',
+          message,
+          termination: classifyFailure({ message, status: code }).kind,
+          code,
         },
       ]
     }

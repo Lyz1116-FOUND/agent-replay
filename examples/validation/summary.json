@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T11:14:01.123Z",
+  "generatedAt": "2026-10-20T11:53:19.997Z",
   "runs": 10,
   "tasks": [
     "multi-file-bug",
@@ -47,33 +47,32 @@
       },
       "allRunsWallClock": {
         "count": 1,
-        "minMs": 32983,
-        "p25Ms": 32983,
-        "medianMs": 32983,
-        "p75Ms": 32983,
-        "maxMs": 32983
+        "minMs": 32025,
+        "p25Ms": 32025,
+        "medianMs": 32025,
+        "p75Ms": 32025,
+        "maxMs": 32025
       },
       "successfulTaskLatency": {
         "count": 1,
-        "minMs": 32983,
-        "p25Ms": 32983,
-        "medianMs": 32983,
-        "p75Ms": 32983,
-        "maxMs": 32983
+        "minMs": 32025,
+        "p25Ms": 32025,
+        "medianMs": 32025,
+        "p75Ms": 32025,
+        "maxMs": 32025
       },
       "completedAgentLatency": {
         "count": 1,
-        "minMs": 32983,
-        "p25Ms": 32983,
-        "medianMs": 32983,
-        "p75Ms": 32983,
-        "maxMs": 32983
+        "minMs": 32025,
+        "p25Ms": 32025,
+        "medianMs": 32025,
+        "p75Ms": 32025,
+        "maxMs": 32025
       }
     },
     "opencode": {
       "availability": {
-        "status": "ready",
-        "detail": "opencode v2.0.32"
+        "status": "ready"
       },
       "runs": 9,
       "attempted": 9,
@@ -84,49 +83,45 @@
       "agentError": 0,
       "passRate": 1,
       "captureIntegrity": {
-        "nativeEditEvents": 16,
-        "workspaceEditEvents": 16,
-        "matchedEdits": 16,
-        "confirmedEdits": 16,
+        "nativeEditEvents": 21,
+        "workspaceEditEvents": 19,
+        "matchedEdits": 19,
+        "confirmedEdits": 19,
         "supersededEdits": 0,
-        "unverifiedEdits": 0,
+        "unverifiedEdits": 2,
         "outsideWorkspaceEdits": 0,
-        "nativeTestRuns": 15,
-        "capturedTestRuns": 15,
-        "editConfirmationRecall": 1,
+        "nativeTestRuns": 13,
+        "capturedTestRuns": 13,
+        "editConfirmationRecall": 0.905,
         "testCaptureRecall": 1
       },
       "allRunsWallClock": {
         "count": 9,
-        "minMs": 37121,
-        "p25Ms": 40775,
-        "medianMs": 48259,
-        "p75Ms": 50999,
-        "maxMs": 117844
+        "minMs": 21080,
+        "p25Ms": 27229,
+        "medianMs": 43618,
+        "p75Ms": 66663,
+        "maxMs": 129834
       },
       "successfulTaskLatency": {
         "count": 9,
-        "minMs": 37121,
-        "p25Ms": 40775,
-        "medianMs": 48259,
-        "p75Ms": 50999,
-        "maxMs": 117844
+        "minMs": 21080,
+        "p25Ms": 27229,
+        "medianMs": 43618,
+        "p75Ms": 66663,
+        "maxMs": 129834
       },
       "completedAgentLatency": {
         "count": 9,
-        "minMs": 37121,
-        "p25Ms": 40775,
-        "medianMs": 48259,
-        "p75Ms": 50999,
-        "maxMs": 117844
+        "minMs": 21080,
+        "p25Ms": 27229,
+        "medianMs": 43618,
+        "p75Ms": 66663,
+        "maxMs": 129834
       }
     }
   },
   "availability": {
-    "opencode": {
-      "status": "ready",
-      "detail": "opencode v2.0.32"
-    },
     "codex": {
       "status": "ready",
       "detail": "codex-cli 0.163.0"

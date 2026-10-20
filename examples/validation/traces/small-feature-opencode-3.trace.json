@@ -1,12 +1,12 @@
 {
   "schemaVersion": "agent-replay/v1",
-  "id": "rec_mvgkwwbw_8747ac",
+  "id": "rec_mvgmfk5i_07a852",
   "task": {
     "id": "small-feature-opencode-3",
     "title": "small-feature-opencode-3",
     "description": "Recorded OpenCode session in small-feature--opencode--3.",
     "repo": "small-feature--opencode--3",
-    "baseCommit": "4323261"
+    "baseCommit": "b6e9c99"
   },
   "agent": {
     "name": "OpenCode",
@@ -35,11 +35,11 @@
       "proxyConfigured": true
     }
   },
-  "startedAt": "2026-10-20T11:07:28.556Z",
-  "endedAt": "2026-10-20T11:08:29.926Z",
-  "durationMs": 61370,
+  "startedAt": "2026-10-20T11:49:58.854Z",
+  "endedAt": "2026-10-20T11:50:42.404Z",
+  "durationMs": 43550,
   "result": {
-    "summary": "Recorded session: 4/4 tests pass after 3 edits.",
+    "summary": "Recorded session: 4/4 tests pass after 2 edits.",
     "exitCode": 0,
     "tests": {
       "passed": 4,
@@ -50,7 +50,7 @@
       "index.mjs",
       "lib/slug.mjs"
     ],
-    "patch": "diff --git a/index.mjs b/index.mjs\nindex 4bff70b..49b5415 100644\n--- a/index.mjs\n+++ b/index.mjs\n@@ -1 +1 @@\n-export { slugify } from './lib/slug.mjs'\n+export { slugify, uniqueSlug } from './lib/slug.mjs'\ndiff --git a/lib/slug.mjs b/lib/slug.mjs\nindex 30c170b..0635b44 100644\n--- a/lib/slug.mjs\n+++ b/lib/slug.mjs\n@@ -1,3 +1,26 @@\n+const SEPARATOR = '-'\n+const COMBINING_MARKS = /[\\u0300-\\u036f]/g\n+const NON_SLUG_CHARS = /[^a-z0-9]+/g\n+const EDGE_SEPARATORS = /^-+|-+$/g\n+\n export function slugify(input) {\n-  throw new Error('slugify is not implemented yet')\n+  if (input == null) return ''\n+  const normalized = String(input)\n+    .normalize('NFD')\n+    .replace(COMBINING_MARKS, '')\n+    .toLowerCase()\n+  return normalized\n+    .replace(NON_SLUG_CHARS, SEPARATOR)\n+    .replace(EDGE_SEPARATORS, '')\n+}\n+\n+export function uniqueSlug(input, taken = []) {\n+  const base = slugify(input) || 'item'\n+  const used = taken instanceof Set ? taken : new Set(taken)\n+  if (!used.has(base)) return base\n+  let suffix = 2\n+  while (used.has(`${base}-${suffix}`)) {\n+    suffix += 1\n+  }\n+  return `${base}-${suffix}`\n }"
+    "patch": "diff --git a/index.mjs b/index.mjs\nindex 4bff70b..49b5415 100644\n--- a/index.mjs\n+++ b/index.mjs\n@@ -1 +1 @@\n-export { slugify } from './lib/slug.mjs'\n+export { slugify, uniqueSlug } from './lib/slug.mjs'\ndiff --git a/lib/slug.mjs b/lib/slug.mjs\nindex 30c170b..7603efe 100644\n--- a/lib/slug.mjs\n+++ b/lib/slug.mjs\n@@ -1,3 +1,16 @@\n export function slugify(input) {\n-  throw new Error('slugify is not implemented yet')\n+  return String(input)\n+    .normalize('NFD')\n+    .replace(/\\p{Diacritic}/gu, '')\n+    .toLowerCase()\n+    .replace(/[^a-z0-9]+/g, '-')\n+    .replace(/^-+|-+$/g, '')\n+}\n+\n+export function uniqueSlug(base, taken = []) {\n+  const used = new Set(taken)\n+  if (!used.has(base)) return base\n+  let n = 2\n+  while (used.has(`${base}-${n}`)) n += 1\n+  return `${base}-${n}`\n }"
   },
   "capture": {
     "fidelity": "native+workspace",
@@ -60,13 +60,13 @@
       "native:opencode",
       "workspace"
     ],
-    "workspaceVerified": 3,
+    "workspaceVerified": 2,
     "unverifiedEdits": 0,
     "integrity": {
-      "nativeEdits": 3,
-      "workspaceEdits": 3,
-      "matchedEdits": 3,
-      "confirmedEdits": 3,
+      "nativeEdits": 2,
+      "workspaceEdits": 2,
+      "matchedEdits": 2,
+      "confirmedEdits": 2,
       "supersededEdits": 0,
       "unverifiedEdits": 0,
       "outsideWorkspaceEdits": 0,
@@ -88,7 +88,7 @@
       "attributes": {
         "phase": "Setup",
         "tool": "git",
-        "baseCommit": "4323261",
+        "baseCommit": "b6e9c99",
         "timingKind": "synthetic"
       },
       "artifacts": [
@@ -102,19 +102,19 @@
       ]
     },
     {
-      "id": "native-call_4e2929a20e644874bbeac372",
+      "id": "native-call_559f1625c49045b2826740a1",
       "type": "read",
       "name": "Read small-feature--opencode--3",
       "summary": "",
-      "startMs": 9807,
-      "endMs": 10168,
+      "startMs": 2931,
+      "endMs": 3662,
       "status": "ok",
       "files": [],
       "attributes": {
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_4e2929a20e644874bbeac372",
+        "callId": "call_559f1625c49045b2826740a1",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -128,64 +128,12 @@
       ]
     },
     {
-      "id": "native-call_d7d391703d5f4396ac1ee09b",
-      "type": "search",
-      "name": "glob",
-      "summary": "glob",
-      "startMs": 10090,
-      "endMs": 12903,
-      "status": "ok",
-      "attributes": {
-        "phase": "Attempt 1",
-        "tool": "native",
-        "adapter": "opencode",
-        "callId": "call_d7d391703d5f4396ac1ee09b",
-        "timingKind": "observed"
-      },
-      "artifacts": [
-        {
-          "kind": "terminal",
-          "command": "glob",
-          "output": "/private/tmp/agent-replay-validation/runs/small-feature--opencode--3/lib/slug.mjs\n/private/tmp/agent-replay-validation/runs/small-feature--opencode--3/index.mjs\n/private/tmp/agent-replay-validation/runs/small-feature--opencode--3/test.mjs",
-          "exitCode": 0,
-          "cwd": "/private/tmp/agent-replay-validation/runs/small-feature--opencode--3"
-        }
-      ]
-    },
-    {
-      "id": "native-call_4a9ad0be25c7417c8a523727",
-      "type": "read",
-      "name": "Read slug.mjs",
-      "summary": "lib/slug.mjs",
-      "startMs": 16097,
-      "endMs": 16780,
-      "status": "ok",
-      "files": [
-        "lib/slug.mjs"
-      ],
-      "attributes": {
-        "phase": "Attempt 1",
-        "tool": "native",
-        "adapter": "opencode",
-        "callId": "call_4a9ad0be25c7417c8a523727",
-        "timingKind": "observed"
-      },
-      "artifacts": [
-        {
-          "kind": "code",
-          "path": "lib/slug.mjs",
-          "language": "javascript",
-          "content": "Read file /private/tmp/agent-replay-validation/runs/small-feature--opencode--3/lib/slug.mjs, lines 1-3\n1: export function slugify(input) {\n2:   throw new Error('slugify is not implemented yet')\n3: }"
-        }
-      ]
-    },
-    {
-      "id": "native-call_32c231baa768487e80856747",
+      "id": "native-call_927b32b75b3342fbba0267f8",
       "type": "read",
       "name": "Read index.mjs",
       "summary": "index.mjs",
-      "startMs": 16329,
-      "endMs": 16767,
+      "startMs": 5781,
+      "endMs": 9147,
       "status": "ok",
       "files": [
         "index.mjs"
@@ -194,7 +142,7 @@
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_32c231baa768487e80856747",
+        "callId": "call_927b32b75b3342fbba0267f8",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -207,12 +155,12 @@
       ]
     },
     {
-      "id": "native-call_aaeb08caa3364dcb9b2b268f",
+      "id": "native-call_c7a07dcb7fa745b7a215a0c6",
       "type": "read",
       "name": "Read test.mjs",
       "summary": "test.mjs",
-      "startMs": 16581,
-      "endMs": 16777,
+      "startMs": 6377,
+      "endMs": 9144,
       "status": "ok",
       "files": [
         "test.mjs"
@@ -221,7 +169,7 @@
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_aaeb08caa3364dcb9b2b268f",
+        "callId": "call_c7a07dcb7fa745b7a215a0c6",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -234,12 +182,39 @@
       ]
     },
     {
-      "id": "native-call_de686d1891e84e5780aaee4b",
-      "type": "edit",
-      "name": "Edit slug.mjs",
+      "id": "native-call_28477631f2f8418493d67865",
+      "type": "read",
+      "name": "Read lib",
+      "summary": "lib",
+      "startMs": 8458,
+      "endMs": 9117,
+      "status": "ok",
+      "files": [
+        "lib"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call_28477631f2f8418493d67865",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "lib",
+          "language": "plaintext",
+          "content": "Read directory /private/tmp/agent-replay-validation/runs/small-feature--opencode--3/lib, entries 1-1\nslug.mjs"
+        }
+      ]
+    },
+    {
+      "id": "native-call_0cd33de97f574f26baa4cbb1",
+      "type": "read",
+      "name": "Read slug.mjs",
       "summary": "lib/slug.mjs",
-      "startMs": 39053,
-      "endMs": 41927,
+      "startMs": 11112,
+      "endMs": 11629,
       "status": "ok",
       "files": [
         "lib/slug.mjs"
@@ -248,7 +223,34 @@
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_de686d1891e84e5780aaee4b",
+        "callId": "call_0cd33de97f574f26baa4cbb1",
+        "timingKind": "observed"
+      },
+      "artifacts": [
+        {
+          "kind": "code",
+          "path": "lib/slug.mjs",
+          "language": "javascript",
+          "content": "Read file /private/tmp/agent-replay-validation/runs/small-feature--opencode--3/lib/slug.mjs, lines 1-3\n1: export function slugify(input) {\n2:   throw new Error('slugify is not implemented yet')\n3: }"
+        }
+      ]
+    },
+    {
+      "id": "native-call_c75c464b7f0247b39456db94",
+      "type": "edit",
+      "name": "Edit slug.mjs",
+      "summary": "lib/slug.mjs",
+      "startMs": 18900,
+      "endMs": 23401,
+      "status": "ok",
+      "files": [
+        "lib/slug.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "opencode",
+        "callId": "call_c75c464b7f0247b39456db94",
         "timingKind": "observed",
         "workspaceVerified": true,
         "operation": "modify"
@@ -258,18 +260,18 @@
           "kind": "diff",
           "path": "lib/slug.mjs",
           "before": "export function slugify(input) {\n  throw new Error('slugify is not implemented yet')\n}",
-          "after": "const SEPARATOR = '-'\nconst COMBINING_MARKS = /[\\u0300-\\u036f]/g\nconst NON_SLUG_CHARS = /[^a-z0-9]+/g\nconst EDGE_SEPARATORS = /^-+|-+$/g\n\nexport function slugify(input) {\n  if (input == null) return ''\n  const normalized = String(input)\n    .normalize('NFD')\n    .replace(COMBINING_MARKS, '')\n    .toLowerCase()\n  return normalized\n    .replace(NON_SLUG_CHARS, SEPARATOR)\n    .replace(EDGE_SEPARATORS, '')\n}\n\nexport function uniqueSlug(input, taken = []) {\n  const base = slugify(input) || 'item'\n  const used = taken instanceof Set ? taken : new Set(taken)\n  if (!used.has(base)) return base\n  let suffix = 2\n  while (used.has(`${base}-${SEPARATOR}${suffix}`.replace(SEPARATOR, ''))) {\n    suffix += 1\n  }\n  return `${base}-${suffix}`\n}\n",
+          "after": "export function slugify(input) {\n  return String(input)\n    .normalize('NFD')\n    .replace(/\\p{Diacritic}/gu, '')\n    .toLowerCase()\n    .replace(/[^a-z0-9]+/g, '-')\n    .replace(/^-+|-+$/g, '')\n}\n\nexport function uniqueSlug(base, taken = []) {\n  const used = new Set(taken)\n  if (!used.has(base)) return base\n  let n = 2\n  while (used.has(`${base}-${n}`)) n += 1\n  return `${base}-${n}`\n}\n",
           "language": "javascript"
         }
       ]
     },
     {
-      "id": "native-call_7c9be705269d4acf85e1a161",
+      "id": "native-call_80ac4d40c8074c129079854b",
       "type": "edit",
       "name": "Edit index.mjs",
       "summary": "index.mjs",
-      "startMs": 41268,
-      "endMs": 41783,
+      "startMs": 22106,
+      "endMs": 23389,
       "status": "ok",
       "files": [
         "index.mjs"
@@ -278,7 +280,7 @@
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_7c9be705269d4acf85e1a161",
+        "callId": "call_80ac4d40c8074c129079854b",
         "timingKind": "observed",
         "operation": "modify",
         "workspaceVerified": true
@@ -298,52 +300,18 @@
       ]
     },
     {
-      "id": "native-call_3b14cdb24d0f4217abdcb943",
-      "type": "edit",
-      "name": "Edit slug.mjs",
-      "summary": "lib/slug.mjs",
-      "startMs": 45959,
-      "endMs": 46548,
-      "status": "ok",
-      "files": [
-        "lib/slug.mjs"
-      ],
-      "attributes": {
-        "phase": "Attempt 1",
-        "tool": "native",
-        "adapter": "opencode",
-        "callId": "call_3b14cdb24d0f4217abdcb943",
-        "timingKind": "observed",
-        "operation": "modify",
-        "workspaceVerified": true
-      },
-      "artifacts": [
-        {
-          "kind": "patch",
-          "diff": "Index: lib/slug.mjs\n===================================================================\n--- lib/slug.mjs\n+++ lib/slug.mjs\n@@ -18,9 +18,9 @@\n   const base = slugify(input) || 'item'\n   const used = taken instanceof Set ? taken : new Set(taken)\n   if (!used.has(base)) return base\n   let suffix = 2\n-  while (used.has(`${base}-${SEPARATOR}${suffix}`.replace(SEPARATOR, ''))) {\n+  while (used.has(`${base}-${suffix}`)) {\n     suffix += 1\n   }\n   return `${base}-${suffix}`\n }\n"
-        },
-        {
-          "kind": "diff",
-          "path": "lib/slug.mjs",
-          "before": "const SEPARATOR = '-'\nconst COMBINING_MARKS = /[\\u0300-\\u036f]/g\nconst NON_SLUG_CHARS = /[^a-z0-9]+/g\nconst EDGE_SEPARATORS = /^-+|-+$/g\n\nexport function slugify(input) {\n  if (input == null) return ''\n  const normalized = String(input)\n    .normalize('NFD')\n    .replace(COMBINING_MARKS, '')\n    .toLowerCase()\n  return normalized\n    .replace(NON_SLUG_CHARS, SEPARATOR)\n    .replace(EDGE_SEPARATORS, '')\n}\n\nexport function uniqueSlug(input, taken = []) {\n  const base = slugify(input) || 'item'\n  const used = taken instanceof Set ? taken : new Set(taken)\n  if (!used.has(base)) return base\n  let suffix = 2\n  while (used.has(`${base}-${SEPARATOR}${suffix}`.replace(SEPARATOR, ''))) {\n    suffix += 1\n  }\n  return `${base}-${suffix}`\n}\n",
-          "after": "const SEPARATOR = '-'\nconst COMBINING_MARKS = /[\\u0300-\\u036f]/g\nconst NON_SLUG_CHARS = /[^a-z0-9]+/g\nconst EDGE_SEPARATORS = /^-+|-+$/g\n\nexport function slugify(input) {\n  if (input == null) return ''\n  const normalized = String(input)\n    .normalize('NFD')\n    .replace(COMBINING_MARKS, '')\n    .toLowerCase()\n  return normalized\n    .replace(NON_SLUG_CHARS, SEPARATOR)\n    .replace(EDGE_SEPARATORS, '')\n}\n\nexport function uniqueSlug(input, taken = []) {\n  const base = slugify(input) || 'item'\n  const used = taken instanceof Set ? taken : new Set(taken)\n  if (!used.has(base)) return base\n  let suffix = 2\n  while (used.has(`${base}-${suffix}`)) {\n    suffix += 1\n  }\n  return `${base}-${suffix}`\n}\n",
-          "language": "javascript"
-        }
-      ]
-    },
-    {
-      "id": "native-call_033b228f13d344569225fefd",
+      "id": "native-call_ec7e1ce73447409b9923a947",
       "type": "test",
       "name": "node --test",
       "summary": "4/4 passed",
-      "startMs": 50625,
-      "endMs": 51078,
+      "startMs": 37170,
+      "endMs": 37521,
       "status": "ok",
       "attributes": {
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_033b228f13d344569225fefd",
+        "callId": "call_ec7e1ce73447409b9923a947",
         "timingKind": "observed",
         "command": "node --test",
         "exitCode": 0,
@@ -358,17 +326,17 @@
           "passed": 4,
           "failed": 0,
           "total": 4,
-          "output": "TAP version 13\n# Subtest: slugify lowercases and joins words with dashes\nok 1 - slugify lowercases and joins words with dashes\n  ---\n  duration_ms: 0.529541\n  type: 'test'\n  ...\n# Subtest: slugify strips accents and punctuation\nok 2 - slugify strips accents and punctuation\n  ---\n  duration_ms: 0.103166\n  type: 'test'\n  ...\n# Subtest: slugify collapses repeated separators\nok 3 - slugify collapses repeated separators\n  ---\n  duration_ms: 0.089583\n  type: 'test'\n  ...\n# Subtest: uniqueSlug appends the next free suffix\nok 4 - uniqueSlug appends the next free suffix\n  ---\n  duration_ms: 0.071459\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 172.805792"
+          "output": "TAP version 13\n# Subtest: slugify lowercases and joins words with dashes\nok 1 - slugify lowercases and joins words with dashes\n  ---\n  duration_ms: 0.353417\n  type: 'test'\n  ...\n# Subtest: slugify strips accents and punctuation\nok 2 - slugify strips accents and punctuation\n  ---\n  duration_ms: 0.112375\n  type: 'test'\n  ...\n# Subtest: slugify collapses repeated separators\nok 3 - slugify collapses repeated separators\n  ---\n  duration_ms: 0.041041\n  type: 'test'\n  ...\n# Subtest: uniqueSlug appends the next free suffix\nok 4 - uniqueSlug appends the next free suffix\n  ---\n  duration_ms: 0.039541\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 103.809709"
         }
       ]
     },
     {
-      "id": "message-60848-702582859",
+      "id": "message-43018-992575522",
       "type": "reasoning",
       "name": "Assistant message",
-      "summary": "All 4 tests pass (`node --test`: 4 pass, 0 fail).",
-      "startMs": 60848,
-      "endMs": 60848,
+      "summary": "All 4 tests pass.",
+      "startMs": 43018,
+      "endMs": 43018,
       "status": "ok",
       "attributes": {
         "phase": "Attempt 2",
@@ -381,7 +349,7 @@
       "artifacts": [
         {
           "kind": "reasoning",
-          "content": "All 4 tests pass (`node --test`: 4 pass, 0 fail).\n\nWhat I implemented:\n\n- `lib/slug.mjs`\n  - `slugify(input)`: normalizes to NFD and strips combining marks (accent removal → `Héllo` → `hello`), lowercases, replaces any run of non-alphanumeric characters with `-` (punctuation and repeated/leading/trailing separators collapse naturally → `a --  b` → `a-b`), and returns `''` for nullish input.\n  - `uniqueSlug(input, taken)`: slugifies the base, returns it when unused, otherwise walks `-2`, `-3`, … until it finds a free suffix.\n- `index.mjs`: added the missing `uniqueSlug` export (the test imports it from `./index.mjs`, so it failed at import before)."
+          "content": "All 4 tests pass.\n\nWhat I did:\n- `lib/slug.mjs`: implemented `slugify` (NFD-normalize + strip diacritics, lowercase, collapse non-alphanumerics to `-`, trim leading/trailing dashes) and `uniqueSlug` (returns `base` if free, otherwise the smallest free `base-N` suffix starting at 2).\n- `index.mjs`: exported `uniqueSlug` alongside `slugify`, since the test imports it from there."
         }
       ]
     },
@@ -389,9 +357,9 @@
       "id": "rec-checkpoint",
       "type": "checkpoint",
       "name": "git diff --stat",
-      "summary": " 2 files changed, 25 insertions(+), 2 deletions(-)",
-      "startMs": 60920,
-      "endMs": 61120,
+      "summary": " 2 files changed, 15 insertions(+), 2 deletions(-)",
+      "startMs": 43100,
+      "endMs": 43300,
       "status": "ok",
       "files": [
         "index.mjs",
@@ -406,13 +374,13 @@
         {
           "kind": "terminal",
           "command": "git diff --stat",
-          "output": " index.mjs    |  2 +-\n lib/slug.mjs | 25 ++++++++++++++++++++++++-\n 2 files changed, 25 insertions(+), 2 deletions(-)",
+          "output": " index.mjs    |  2 +-\n lib/slug.mjs | 15 ++++++++++++++-\n 2 files changed, 15 insertions(+), 2 deletions(-)",
           "exitCode": 0,
           "cwd": "/private/tmp/agent-replay-validation/runs/small-feature--opencode--3"
         },
         {
           "kind": "patch",
-          "diff": "diff --git a/index.mjs b/index.mjs\nindex 4bff70b..49b5415 100644\n--- a/index.mjs\n+++ b/index.mjs\n@@ -1 +1 @@\n-export { slugify } from './lib/slug.mjs'\n+export { slugify, uniqueSlug } from './lib/slug.mjs'\ndiff --git a/lib/slug.mjs b/lib/slug.mjs\nindex 30c170b..0635b44 100644\n--- a/lib/slug.mjs\n+++ b/lib/slug.mjs\n@@ -1,3 +1,26 @@\n+const SEPARATOR = '-'\n+const COMBINING_MARKS = /[\\u0300-\\u036f]/g\n+const NON_SLUG_CHARS = /[^a-z0-9]+/g\n+const EDGE_SEPARATORS = /^-+|-+$/g\n+\n export function slugify(input) {\n-  throw new Error('slugify is not implemented yet')\n+  if (input == null) return ''\n+  const normalized = String(input)\n+    .normalize('NFD')\n+    .replace(COMBINING_MARKS, '')\n+    .toLowerCase()\n+  return normalized\n+    .replace(NON_SLUG_CHARS, SEPARATOR)\n+    .replace(EDGE_SEPARATORS, '')\n+}\n+\n+export function uniqueSlug(input, taken = []) {\n+  const base = slugify(input) || 'item'\n+  const used = taken instanceof Set ? taken : new Set(taken)\n+  if (!used.has(base)) return base\n+  let suffix = 2\n+  while (used.has(`${base}-${suffix}`)) {\n+    suffix += 1\n+  }\n+  return `${base}-${suffix}`\n }"
+          "diff": "diff --git a/index.mjs b/index.mjs\nindex 4bff70b..49b5415 100644\n--- a/index.mjs\n+++ b/index.mjs\n@@ -1 +1 @@\n-export { slugify } from './lib/slug.mjs'\n+export { slugify, uniqueSlug } from './lib/slug.mjs'\ndiff --git a/lib/slug.mjs b/lib/slug.mjs\nindex 30c170b..7603efe 100644\n--- a/lib/slug.mjs\n+++ b/lib/slug.mjs\n@@ -1,3 +1,16 @@\n export function slugify(input) {\n-  throw new Error('slugify is not implemented yet')\n+  return String(input)\n+    .normalize('NFD')\n+    .replace(/\\p{Diacritic}/gu, '')\n+    .toLowerCase()\n+    .replace(/[^a-z0-9]+/g, '-')\n+    .replace(/^-+|-+$/g, '')\n+}\n+\n+export function uniqueSlug(base, taken = []) {\n+  const used = new Set(taken)\n+  if (!used.has(base)) return base\n+  let n = 2\n+  while (used.has(`${base}-${n}`)) n += 1\n+  return `${base}-${n}`\n }"
         }
       ]
     },
@@ -420,9 +388,9 @@
       "id": "rec-final",
       "type": "final",
       "name": "Done",
-      "summary": "Recorded session: 4/4 tests pass after 3 edits.",
-      "startMs": 61170,
-      "endMs": 61370,
+      "summary": "Recorded session: 4/4 tests pass after 2 edits.",
+      "startMs": 43350,
+      "endMs": 43550,
       "status": "ok",
       "files": [
         "index.mjs",
@@ -438,29 +406,29 @@
       "artifacts": [
         {
           "kind": "markdown",
-          "content": "## Recorded session\nRecorded session: 4/4 tests pass after 3 edits.\n- 1 test run\n- 3 edits across 2 files\n- duration 1m 01s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
+          "content": "## Recorded session\nRecorded session: 4/4 tests pass after 2 edits.\n- 1 test run\n- 2 edits across 2 files\n- duration 43.5s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
         },
         {
           "kind": "patch",
-          "diff": "diff --git a/index.mjs b/index.mjs\nindex 4bff70b..49b5415 100644\n--- a/index.mjs\n+++ b/index.mjs\n@@ -1 +1 @@\n-export { slugify } from './lib/slug.mjs'\n+export { slugify, uniqueSlug } from './lib/slug.mjs'\ndiff --git a/lib/slug.mjs b/lib/slug.mjs\nindex 30c170b..0635b44 100644\n--- a/lib/slug.mjs\n+++ b/lib/slug.mjs\n@@ -1,3 +1,26 @@\n+const SEPARATOR = '-'\n+const COMBINING_MARKS = /[\\u0300-\\u036f]/g\n+const NON_SLUG_CHARS = /[^a-z0-9]+/g\n+const EDGE_SEPARATORS = /^-+|-+$/g\n+\n export function slugify(input) {\n-  throw new Error('slugify is not implemented yet')\n+  if (input == null) return ''\n+  const normalized = String(input)\n+    .normalize('NFD')\n+    .replace(COMBINING_MARKS, '')\n+    .toLowerCase()\n+  return normalized\n+    .replace(NON_SLUG_CHARS, SEPARATOR)\n+    .replace(EDGE_SEPARATORS, '')\n+}\n+\n+export function uniqueSlug(input, taken = []) {\n+  const base = slugify(input) || 'item'\n+  const used = taken instanceof Set ? taken : new Set(taken)\n+  if (!used.has(base)) return base\n+  let suffix = 2\n+  while (used.has(`${base}-${suffix}`)) {\n+    suffix += 1\n+  }\n+  return `${base}-${suffix}`\n }"
+          "diff": "diff --git a/index.mjs b/index.mjs\nindex 4bff70b..49b5415 100644\n--- a/index.mjs\n+++ b/index.mjs\n@@ -1 +1 @@\n-export { slugify } from './lib/slug.mjs'\n+export { slugify, uniqueSlug } from './lib/slug.mjs'\ndiff --git a/lib/slug.mjs b/lib/slug.mjs\nindex 30c170b..7603efe 100644\n--- a/lib/slug.mjs\n+++ b/lib/slug.mjs\n@@ -1,3 +1,16 @@\n export function slugify(input) {\n-  throw new Error('slugify is not implemented yet')\n+  return String(input)\n+    .normalize('NFD')\n+    .replace(/\\p{Diacritic}/gu, '')\n+    .toLowerCase()\n+    .replace(/[^a-z0-9]+/g, '-')\n+    .replace(/^-+|-+$/g, '')\n+}\n+\n+export function uniqueSlug(base, taken = []) {\n+  const used = new Set(taken)\n+  if (!used.has(base)) return base\n+  let n = 2\n+  while (used.has(`${base}-${n}`)) n += 1\n+  return `${base}-${n}`\n }"
         }
       ]
     }
   ],
   "metadata": {
     "source": "recorder",
-    "sessionId": "rec_mvgkwwbw_8747ac",
+    "sessionId": "rec_mvgmfk5i_07a852",
     "command": "opencode run --standalone --format json --auto \"Implement the missing feature so the tests pass. Run `node --test` to verify. Work only inside the current working directory.\"",
     "cwd": "/private/tmp/agent-replay-validation/runs/small-feature--opencode--3",
     "repoRoot": "/private/tmp/agent-replay-validation/runs/small-feature--opencode--3",
-    "baseCommit": "4323261",
+    "baseCommit": "b6e9c99",
     "initialStatus": "",
     "gitAvailable": true,
-    "sessionDurationMs": 61320,
+    "sessionDurationMs": 43500,
     "adapter": "opencode",
-    "nativeSessionId": "ses_ea7014edefferj375oWDH4PNLo",
+    "nativeSessionId": "ses_ea6da64ceffetZo1agkNLUvPRs",
     "recoveryDetected": false,
     "regressionDetected": false,
-    "recordedAt": "2026-10-20T11:08:29.877Z"
+    "recordedAt": "2026-10-20T11:50:42.356Z"
   }
 }

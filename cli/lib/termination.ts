@@ -69,6 +69,12 @@ export function classifyFailure(input: {
   return { kind: 'agent_error', message, code }
 }
 
+/** Pull an HTTP-ish status out of a free-form CLI message, when there is one. */
+export function statusFromMessage(message: string | undefined): number | undefined {
+  const match = message?.match(/\b([45]\d{2})\b/)
+  return match ? Number(match[1]) : undefined
+}
+
 export function completed(): Termination {
   return { kind: 'completed' }
 }

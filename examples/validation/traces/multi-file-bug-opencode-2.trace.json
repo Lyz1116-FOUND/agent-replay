@@ -1,12 +1,12 @@
 {
   "schemaVersion": "agent-replay/v1",
-  "id": "rec_mvgkohgf_26a7d5",
+  "id": "rec_mvgm7i8u_156525",
   "task": {
     "id": "multi-file-bug-opencode-2",
     "title": "multi-file-bug-opencode-2",
     "description": "Recorded OpenCode session in multi-file-bug--opencode--2.",
     "repo": "multi-file-bug--opencode--2",
-    "baseCommit": "4b71115"
+    "baseCommit": "80774b3"
   },
   "agent": {
     "name": "OpenCode",
@@ -35,9 +35,9 @@
       "proxyConfigured": true
     }
   },
-  "startedAt": "2026-10-20T11:00:56.031Z",
-  "endedAt": "2026-10-20T11:01:36.722Z",
-  "durationMs": 40691,
+  "startedAt": "2026-10-20T11:43:43.134Z",
+  "endedAt": "2026-10-20T11:44:16.988Z",
+  "durationMs": 33854,
   "result": {
     "summary": "Recorded session: 4/4 tests pass after 2 edits (recovered).",
     "exitCode": 0,
@@ -50,7 +50,7 @@
       "lib/cart.mjs",
       "lib/discount.mjs"
     ],
-    "patch": "diff --git a/lib/cart.mjs b/lib/cart.mjs\nindex fb5dc48..c893e08 100644\n--- a/lib/cart.mjs\n+++ b/lib/cart.mjs\n@@ -1,3 +1,5 @@\n+import { lineTotal } from './pricing.mjs'\n+\n export function cartTotal(items) {\n-  return items.reduce((sum, item) => sum + item.price, 0)\n+  return items.reduce((sum, item) => sum + lineTotal(item), 0)\n }\ndiff --git a/lib/discount.mjs b/lib/discount.mjs\nindex 9ddd6f9..cd18237 100644\n--- a/lib/discount.mjs\n+++ b/lib/discount.mjs\n@@ -1,3 +1,3 @@\n export function applyDiscount(total, percent) {\n-  return total - percent\n+  return total - (total * percent) / 100\n }"
+    "patch": "diff --git a/lib/cart.mjs b/lib/cart.mjs\nindex fb5dc48..333a7d3 100644\n--- a/lib/cart.mjs\n+++ b/lib/cart.mjs\n@@ -1,3 +1,3 @@\n export function cartTotal(items) {\n-  return items.reduce((sum, item) => sum + item.price, 0)\n+  return items.reduce((sum, item) => sum + item.price * item.qty, 0)\n }\ndiff --git a/lib/discount.mjs b/lib/discount.mjs\nindex 9ddd6f9..cd18237 100644\n--- a/lib/discount.mjs\n+++ b/lib/discount.mjs\n@@ -1,3 +1,3 @@\n export function applyDiscount(total, percent) {\n-  return total - percent\n+  return total - (total * percent) / 100\n }"
   },
   "capture": {
     "fidelity": "native+workspace",
@@ -88,7 +88,7 @@
       "attributes": {
         "phase": "Setup",
         "tool": "git",
-        "baseCommit": "4b71115",
+        "baseCommit": "80774b3",
         "timingKind": "synthetic"
       },
       "artifacts": [
@@ -102,19 +102,19 @@
       ]
     },
     {
-      "id": "native-call_a37f4e3ee30b43c4bb2e27a4",
+      "id": "native-call_4418ca87acce4e1388b23c2b",
       "type": "read",
       "name": "Read multi-file-bug--opencode--2",
       "summary": "",
-      "startMs": 4782,
-      "endMs": 5312,
+      "startMs": 7890,
+      "endMs": 8356,
       "status": "ok",
       "files": [],
       "attributes": {
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_a37f4e3ee30b43c4bb2e27a4",
+        "callId": "call_4418ca87acce4e1388b23c2b",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -128,18 +128,18 @@
       ]
     },
     {
-      "id": "native-call_b831316ab48549bba207c893",
+      "id": "native-call_1fd1691e22364430bf53c760",
       "type": "test",
       "name": "node --test 2>&1 | tail -50",
       "summary": "1/4 passed",
-      "startMs": 4995,
-      "endMs": 5569,
+      "startMs": 8193,
+      "endMs": 8574,
       "status": "error",
       "attributes": {
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_b831316ab48549bba207c893",
+        "callId": "call_1fd1691e22364430bf53c760",
         "timingKind": "observed",
         "command": "node --test 2>&1 | tail -50",
         "exitCode": 0,
@@ -154,17 +154,17 @@
           "passed": 1,
           "failed": 3,
           "total": 4,
-          "output": "code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 35\n  actual: 15\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/agent-replay-validation/runs/multi-file-bug--opencode--2/test.mjs:16:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: applyDiscount treats percent as a percentage\nnot ok 4 - applyDiscount treats percent as a percentage\n  ---\n  duration_ms: 0.191166\n  type: 'test'\n  location: '/private/tmp/agent-replay-validation/runs/multi-file-bug--opencode--2/test.mjs:25:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    190 !== 180\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 180\n  actual: 190\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/agent-replay-validation/runs/multi-file-bug--opencode--2/test.mjs:26:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 1\n# fail 3\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 202.793542"
+          "output": "code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 35\n  actual: 15\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/agent-replay-validation/runs/multi-file-bug--opencode--2/test.mjs:16:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n# Subtest: applyDiscount treats percent as a percentage\nnot ok 4 - applyDiscount treats percent as a percentage\n  ---\n  duration_ms: 0.107959\n  type: 'test'\n  location: '/private/tmp/agent-replay-validation/runs/multi-file-bug--opencode--2/test.mjs:25:1'\n  failureType: 'testCodeFailure'\n  error: |-\n    Expected values to be strictly equal:\n    \n    190 !== 180\n    \n  code: 'ERR_ASSERTION'\n  name: 'AssertionError'\n  expected: 180\n  actual: 190\n  operator: 'strictEqual'\n  stack: |-\n    TestContext.<anonymous> (file:///private/tmp/agent-replay-validation/runs/multi-file-bug--opencode--2/test.mjs:26:10)\n    Test.runInAsyncScope (node:async_hooks:214:14)\n    Test.run (node:internal/test_runner/test:1047:25)\n    Test.processPendingSubtests (node:internal/test_runner/test:744:18)\n    Test.postRun (node:internal/test_runner/test:1173:19)\n    Test.run (node:internal/test_runner/test:1101:12)\n    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 1\n# fail 3\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 170.204625"
         }
       ]
     },
     {
-      "id": "native-call_eea4c70d47db49e08e91bd4d",
+      "id": "native-call_78f67f765cd0411791361038",
       "type": "read",
       "name": "Read test.mjs",
       "summary": "test.mjs",
-      "startMs": 8986,
-      "endMs": 9860,
+      "startMs": 10315,
+      "endMs": 10681,
       "status": "ok",
       "files": [
         "test.mjs"
@@ -173,7 +173,7 @@
         "phase": "Attempt 2",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_eea4c70d47db49e08e91bd4d",
+        "callId": "call_78f67f765cd0411791361038",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -186,18 +186,18 @@
       ]
     },
     {
-      "id": "native-call_0f6b63ab00f841b7aceb0239",
+      "id": "native-call_782a4d0f9da54afe847dd4ff",
       "type": "search",
       "name": "glob",
       "summary": "glob",
-      "startMs": 9497,
-      "endMs": 12858,
+      "startMs": 10604,
+      "endMs": 10713,
       "status": "ok",
       "attributes": {
         "phase": "Attempt 2",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_0f6b63ab00f841b7aceb0239",
+        "callId": "call_782a4d0f9da54afe847dd4ff",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -211,12 +211,12 @@
       ]
     },
     {
-      "id": "native-call_574f5abfc24a4812984ff401",
+      "id": "native-call_63c377ab00c4485a83e03691",
       "type": "read",
       "name": "Read cart.mjs",
       "summary": "lib/cart.mjs",
-      "startMs": 17540,
-      "endMs": 18573,
+      "startMs": 14862,
+      "endMs": 15806,
       "status": "ok",
       "files": [
         "lib/cart.mjs"
@@ -225,7 +225,7 @@
         "phase": "Attempt 2",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_574f5abfc24a4812984ff401",
+        "callId": "call_63c377ab00c4485a83e03691",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -238,12 +238,12 @@
       ]
     },
     {
-      "id": "native-call_99a4b3cec7894c18a9782433",
+      "id": "native-call_0bb111285e1e4512af41eb8f",
       "type": "read",
       "name": "Read discount.mjs",
       "summary": "lib/discount.mjs",
-      "startMs": 17830,
-      "endMs": 18551,
+      "startMs": 15207,
+      "endMs": 15817,
       "status": "ok",
       "files": [
         "lib/discount.mjs"
@@ -252,7 +252,7 @@
         "phase": "Attempt 2",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_99a4b3cec7894c18a9782433",
+        "callId": "call_0bb111285e1e4512af41eb8f",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -265,12 +265,12 @@
       ]
     },
     {
-      "id": "native-call_5052037639fc4460b2530169",
+      "id": "native-call_7aaab15109a14cddbebf6ecc",
       "type": "read",
       "name": "Read pricing.mjs",
       "summary": "lib/pricing.mjs",
-      "startMs": 18220,
-      "endMs": 18559,
+      "startMs": 15523,
+      "endMs": 15814,
       "status": "ok",
       "files": [
         "lib/pricing.mjs"
@@ -279,7 +279,7 @@
         "phase": "Attempt 2",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_5052037639fc4460b2530169",
+        "callId": "call_7aaab15109a14cddbebf6ecc",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -292,12 +292,12 @@
       ]
     },
     {
-      "id": "native-call_c82132298bd24caab81b803a",
+      "id": "native-call_f784a1b937264226a6f5ad57",
       "type": "edit",
       "name": "Edit cart.mjs",
       "summary": "lib/cart.mjs",
-      "startMs": 29676,
-      "endMs": 30901,
+      "startMs": 23830,
+      "endMs": 25208,
       "status": "ok",
       "files": [
         "lib/cart.mjs"
@@ -306,7 +306,7 @@
         "phase": "Attempt 2",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_c82132298bd24caab81b803a",
+        "callId": "call_f784a1b937264226a6f5ad57",
         "timingKind": "observed",
         "operation": "modify",
         "workspaceVerified": true
@@ -314,24 +314,24 @@
       "artifacts": [
         {
           "kind": "patch",
-          "diff": "Index: lib/cart.mjs\n===================================================================\n--- lib/cart.mjs\n+++ lib/cart.mjs\n@@ -1,3 +1,5 @@\n+import { lineTotal } from './pricing.mjs'\n+\n export function cartTotal(items) {\n-  return items.reduce((sum, item) => sum + item.price, 0)\n+  return items.reduce((sum, item) => sum + lineTotal(item), 0)\n }\n"
+          "diff": "Index: lib/cart.mjs\n===================================================================\n--- lib/cart.mjs\n+++ lib/cart.mjs\n@@ -1,3 +1,3 @@\n export function cartTotal(items) {\n-  return items.reduce((sum, item) => sum + item.price, 0)\n+  return items.reduce((sum, item) => sum + item.price * item.qty, 0)\n }\n"
         },
         {
           "kind": "diff",
           "path": "lib/cart.mjs",
           "before": "export function cartTotal(items) {\n  return items.reduce((sum, item) => sum + item.price, 0)\n}",
-          "after": "import { lineTotal } from './pricing.mjs'\n\nexport function cartTotal(items) {\n  return items.reduce((sum, item) => sum + lineTotal(item), 0)\n}\n",
+          "after": "export function cartTotal(items) {\n  return items.reduce((sum, item) => sum + item.price * item.qty, 0)\n}\n",
           "language": "javascript"
         }
       ]
     },
     {
-      "id": "native-call_4885579d45164b5583b8160d",
+      "id": "native-call_4c56586b0e56448999360463",
       "type": "edit",
       "name": "Edit discount.mjs",
       "summary": "lib/discount.mjs",
-      "startMs": 30406,
-      "endMs": 30897,
+      "startMs": 24579,
+      "endMs": 25201,
       "status": "ok",
       "files": [
         "lib/discount.mjs"
@@ -340,7 +340,7 @@
         "phase": "Attempt 2",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_4885579d45164b5583b8160d",
+        "callId": "call_4c56586b0e56448999360463",
         "timingKind": "observed",
         "operation": "modify",
         "workspaceVerified": true
@@ -360,43 +360,20 @@
       ]
     },
     {
-      "id": "message-30700-932195467",
-      "type": "reasoning",
-      "name": "Assistant message",
-      "summary": "Two bugs found: `cartTotal` ignores `qty`, and `applyDiscount` subtracts the percent as a flat amount instead of a perc…",
-      "startMs": 30700,
-      "endMs": 30700,
-      "status": "ok",
-      "attributes": {
-        "phase": "Attempt 2",
-        "tool": "native",
-        "adapter": "opencode",
-        "timingKind": "observed",
-        "instant": true,
-        "visualDurationMs": 250
-      },
-      "artifacts": [
-        {
-          "kind": "reasoning",
-          "content": "Two bugs found: `cartTotal` ignores `qty`, and `applyDiscount` subtracts the percent as a flat amount instead of a percentage."
-        }
-      ]
-    },
-    {
-      "id": "native-call_137320202ae2462d8957c123",
+      "id": "native-call_2fcc72c4b489422791261d44",
       "type": "test",
-      "name": "node --test 2>&1 | tail -20",
+      "name": "node --test 2>&1 | tail -15",
       "summary": "4/4 passed",
-      "startMs": 33315,
-      "endMs": 33690,
+      "startMs": 28365,
+      "endMs": 28754,
       "status": "ok",
       "attributes": {
         "phase": "Attempt 2",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_137320202ae2462d8957c123",
+        "callId": "call_2fcc72c4b489422791261d44",
         "timingKind": "observed",
-        "command": "node --test 2>&1 | tail -20",
+        "command": "node --test 2>&1 | tail -15",
         "exitCode": 0,
         "passed": 4,
         "failed": 0,
@@ -405,21 +382,21 @@
       "artifacts": [
         {
           "kind": "test",
-          "command": "node --test 2>&1 | tail -20",
+          "command": "node --test 2>&1 | tail -15",
           "passed": 4,
           "failed": 0,
           "total": 4,
-          "output": "ok 3 - cartTotal sums several lines\n  ---\n  duration_ms: 0.040208\n  type: 'test'\n  ...\n# Subtest: applyDiscount treats percent as a percentage\nok 4 - applyDiscount treats percent as a percentage\n  ---\n  duration_ms: 0.04225\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 152.366708"
+          "output": "# Subtest: applyDiscount treats percent as a percentage\nok 4 - applyDiscount treats percent as a percentage\n  ---\n  duration_ms: 0.041\n  type: 'test'\n  ...\n1..4\n# tests 4\n# suites 0\n# pass 4\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 161.430542"
         }
       ]
     },
     {
-      "id": "message-40147-1097014923",
+      "id": "message-33278-1329491296",
       "type": "reasoning",
       "name": "Assistant message",
-      "summary": "All 4 tests pass (`# pass 4 / # fail 0`).",
-      "startMs": 40147,
-      "endMs": 40147,
+      "summary": "All 4 tests pass now.",
+      "startMs": 33278,
+      "endMs": 33278,
       "status": "ok",
       "attributes": {
         "phase": "Attempt 3",
@@ -432,7 +409,7 @@
       "artifacts": [
         {
           "kind": "reasoning",
-          "content": "All 4 tests pass (`# pass 4 / # fail 0`).\n\n**Minimal edits, two modules:**\n\n1. `lib/cart.mjs` — `cartTotal` summed only `item.price`, ignoring quantity. Now it reuses `lineTotal` from `./pricing.mjs`:\n```js\nimport { lineTotal } from './pricing.mjs'\n\nexport function cartTotal(items) {\n  return items.reduce((sum, item) => sum + lineTotal(item), 0)\n}\n```\n\n2. `lib/discount.mjs` — `applyDiscount` subtracted the percent as a flat amount (`200 - 10 = 190`). Now it applies it as a percentage:\n```js\nreturn total - (total * percent) / 100\n```\n\n`lib/pricing.mjs` and `test.mjs` were left untouched."
+          "content": "All 4 tests pass now.\n\nTwo modules were buggy, each fixed minimally:\n\n1. **`lib/cart.mjs`** — `cartTotal` summed only `item.price`, ignoring quantity (a single line `{price:10, qty:2}` returned 10, and several lines returned 15 instead of 35). Fixed the reduce to `sum + item.price * item.qty`.\n\n2. **`lib/discount.mjs`** — `applyDiscount` subtracted the raw percent value (`200 - 10 = 190`) instead of that percentage of the total. Fixed to `total - (total * percent) / 100`.\n\n`lib/pricing.mjs` was already correct. `node --test`: **tests 4, pass 4, fail 0**."
         }
       ]
     },
@@ -440,9 +417,9 @@
       "id": "rec-checkpoint",
       "type": "checkpoint",
       "name": "git diff --stat",
-      "summary": " 2 files changed, 4 insertions(+), 2 deletions(-)",
-      "startMs": 40241,
-      "endMs": 40441,
+      "summary": " 2 files changed, 2 insertions(+), 2 deletions(-)",
+      "startMs": 33404,
+      "endMs": 33604,
       "status": "ok",
       "files": [
         "lib/cart.mjs",
@@ -457,13 +434,13 @@
         {
           "kind": "terminal",
           "command": "git diff --stat",
-          "output": " lib/cart.mjs     | 4 +++-\n lib/discount.mjs | 2 +-\n 2 files changed, 4 insertions(+), 2 deletions(-)",
+          "output": " lib/cart.mjs     | 2 +-\n lib/discount.mjs | 2 +-\n 2 files changed, 2 insertions(+), 2 deletions(-)",
           "exitCode": 0,
           "cwd": "/private/tmp/agent-replay-validation/runs/multi-file-bug--opencode--2"
         },
         {
           "kind": "patch",
-          "diff": "diff --git a/lib/cart.mjs b/lib/cart.mjs\nindex fb5dc48..c893e08 100644\n--- a/lib/cart.mjs\n+++ b/lib/cart.mjs\n@@ -1,3 +1,5 @@\n+import { lineTotal } from './pricing.mjs'\n+\n export function cartTotal(items) {\n-  return items.reduce((sum, item) => sum + item.price, 0)\n+  return items.reduce((sum, item) => sum + lineTotal(item), 0)\n }\ndiff --git a/lib/discount.mjs b/lib/discount.mjs\nindex 9ddd6f9..cd18237 100644\n--- a/lib/discount.mjs\n+++ b/lib/discount.mjs\n@@ -1,3 +1,3 @@\n export function applyDiscount(total, percent) {\n-  return total - percent\n+  return total - (total * percent) / 100\n }"
+          "diff": "diff --git a/lib/cart.mjs b/lib/cart.mjs\nindex fb5dc48..333a7d3 100644\n--- a/lib/cart.mjs\n+++ b/lib/cart.mjs\n@@ -1,3 +1,3 @@\n export function cartTotal(items) {\n-  return items.reduce((sum, item) => sum + item.price, 0)\n+  return items.reduce((sum, item) => sum + item.price * item.qty, 0)\n }\ndiff --git a/lib/discount.mjs b/lib/discount.mjs\nindex 9ddd6f9..cd18237 100644\n--- a/lib/discount.mjs\n+++ b/lib/discount.mjs\n@@ -1,3 +1,3 @@\n export function applyDiscount(total, percent) {\n-  return total - percent\n+  return total - (total * percent) / 100\n }"
         }
       ]
     },
@@ -472,8 +449,8 @@
       "type": "final",
       "name": "Done",
       "summary": "Recorded session: 4/4 tests pass after 2 edits (recovered).",
-      "startMs": 40491,
-      "endMs": 40691,
+      "startMs": 33654,
+      "endMs": 33854,
       "status": "ok",
       "files": [
         "lib/cart.mjs",
@@ -489,29 +466,29 @@
       "artifacts": [
         {
           "kind": "markdown",
-          "content": "## Recorded session\nRecorded session: 4/4 tests pass after 2 edits (recovered).\n- 2 test runs\n- 2 edits across 2 files\n- duration 40.6s\n- capture native+workspace · observed timing\n- recovery detected after 3 failing tests\nNative agent events verified against workspace diffs."
+          "content": "## Recorded session\nRecorded session: 4/4 tests pass after 2 edits (recovered).\n- 2 test runs\n- 2 edits across 2 files\n- duration 33.8s\n- capture native+workspace · observed timing\n- recovery detected after 3 failing tests\nNative agent events verified against workspace diffs."
         },
         {
           "kind": "patch",
-          "diff": "diff --git a/lib/cart.mjs b/lib/cart.mjs\nindex fb5dc48..c893e08 100644\n--- a/lib/cart.mjs\n+++ b/lib/cart.mjs\n@@ -1,3 +1,5 @@\n+import { lineTotal } from './pricing.mjs'\n+\n export function cartTotal(items) {\n-  return items.reduce((sum, item) => sum + item.price, 0)\n+  return items.reduce((sum, item) => sum + lineTotal(item), 0)\n }\ndiff --git a/lib/discount.mjs b/lib/discount.mjs\nindex 9ddd6f9..cd18237 100644\n--- a/lib/discount.mjs\n+++ b/lib/discount.mjs\n@@ -1,3 +1,3 @@\n export function applyDiscount(total, percent) {\n-  return total - percent\n+  return total - (total * percent) / 100\n }"
+          "diff": "diff --git a/lib/cart.mjs b/lib/cart.mjs\nindex fb5dc48..333a7d3 100644\n--- a/lib/cart.mjs\n+++ b/lib/cart.mjs\n@@ -1,3 +1,3 @@\n export function cartTotal(items) {\n-  return items.reduce((sum, item) => sum + item.price, 0)\n+  return items.reduce((sum, item) => sum + item.price * item.qty, 0)\n }\ndiff --git a/lib/discount.mjs b/lib/discount.mjs\nindex 9ddd6f9..cd18237 100644\n--- a/lib/discount.mjs\n+++ b/lib/discount.mjs\n@@ -1,3 +1,3 @@\n export function applyDiscount(total, percent) {\n-  return total - percent\n+  return total - (total * percent) / 100\n }"
         }
       ]
     }
   ],
   "metadata": {
     "source": "recorder",
-    "sessionId": "rec_mvgkohgf_26a7d5",
+    "sessionId": "rec_mvgm7i8u_156525",
     "command": "opencode run --standalone --format json --auto \"Fix the failing tests. The bug spans more than one module; make the minimal edits and run `node --test` to verify. Work only inside the current working directory.\"",
     "cwd": "/private/tmp/agent-replay-validation/runs/multi-file-bug--opencode--2",
     "repoRoot": "/private/tmp/agent-replay-validation/runs/multi-file-bug--opencode--2",
-    "baseCommit": "4b71115",
+    "baseCommit": "80774b3",
     "initialStatus": "",
     "gitAvailable": true,
-    "sessionDurationMs": 40641,
+    "sessionDurationMs": 33804,
     "adapter": "opencode",
-    "nativeSessionId": "ses_ea7074c47ffe87kpyU1EIyFGrW",
+    "nativeSessionId": "ses_ea6e0203bffev90XRfQRM5Kc7O",
     "recoveryDetected": true,
     "regressionDetected": false,
-    "recordedAt": "2026-10-20T11:01:36.674Z"
+    "recordedAt": "2026-10-20T11:44:16.939Z"
   }
 }

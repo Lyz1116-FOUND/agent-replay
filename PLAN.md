@@ -521,6 +521,15 @@ Agent：Codex / gpt-5-codex，59.2s，16 steps，1 个变更文件（另读取 3
 - 任务自带 `reference/` 覆盖层，`--verify-tasks` 自动证明「基线必红、参考必绿」。
 - agent 抽象：opencode / codex / zcode / qoder 可直接跑；claude / cursor 标记 `requiresConsent`，必须显式 `--allow-paid`，否则记为不可用并跳过。
 
+### M4.8 复审修复（5 个 blocker）
+
+1. 任务判定改为**最终工作树真跑**：`trustedVerify` 在 agent 停止后执行 `task.verify`，`taskResult` 只认这个结果，agent 自报不算。
+2. 结束原因分离：`exitCode` / `signal` / `timedOut` 独立记录；绿灯超时 = `pass` + `termination.timeout`，不进 `completedAgentLatency`。
+3. Codex 错误分类：`403 → provider_unavailable`、`429 → rate_limited`，不再落成通用 stream error。
+4. Capture 单位统一：`matchedEdits` 按 native call 计数（不是 workspace fact），recall 不可能 > 1。
+5. 账本：重试追加 `attempt`，汇总只取每个 (task,agent,run) 的最新 attempt；无 runnable agent 时保留既有 summary，只刷新 availability。
+6. 附带：diff/patch 归一 CRLF；XDG 隔离目录跑完即删；trace 落盘前把 home 路径脱敏为 `~/`。
+
 ### 下一阶段（未开始）
 
 3 task × 4 agent × 3 runs = 36 次验证，任务为单文件 bug / 多文件 bug / 小功能，记录 task outcome、availability outcome、tool calls、verified/unverified/outside edits、test runs、recovery、wall clock、capture fidelity，用来发现 Agent Replay 自身的系统性漏录。

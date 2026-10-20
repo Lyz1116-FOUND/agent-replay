@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { summarize } from './aggregate.ts'
+import { appendRun, latestPerKey, mergeAvailability } from './ledger.ts'
 import { DEFAULT_AGENTS, VALIDATION_AGENTS } from './agents.ts'
 import { REPO_ROOT, loadTasks, runTask, verifyTask } from './harness.ts'
 import type { Availability, RunRecord } from './types.ts'
@@ -39,7 +40,7 @@ if (flag('reindex')) {
   for (const id of new Set(loaded.map((record) => record.agent))) {
     availabilityNow[id] = VALIDATION_AGENTS[id]?.availability() ?? { status: 'error' }
   }
-  const rebuilt = summarize(loaded, availabilityNow)
+  const rebuilt = summarize(latestPerKey(loaded), availabilityNow)
   writeFileSync(path.join(outDir, 'summary.json'), `${JSON.stringify(rebuilt, null, 2)}\n`)
   console.log(JSON.stringify(rebuilt.totals, null, 2))
   process.exit(0)
@@ -81,11 +82,19 @@ for (const id of agentIds) {
 }
 
 if (runnable.length === 0) {
-  console.log('no runnable agents; nothing to do')
-  writeFileSync(
-    path.join(outDir, 'summary.json'),
-    `${JSON.stringify(summarize([], availability), null, 2)}\n`,
-  )
+  // Nothing ran: keep the previous results, only refresh availability.
+  const summaryPath = path.join(outDir, 'summary.json')
+  const previous = existsSync(summaryPath)
+    ? (JSON.parse(readFileSync(summaryPath, 'utf8')) as { availability?: Record<string, Availability> })
+    : undefined
+  if (previous) {
+    previous.availability = mergeAvailability(previous.availability, availability)
+    writeFileSync(summaryPath, `${JSON.stringify(previous, null, 2)}\n`)
+    console.log('no runnable agents; kept the existing summary and refreshed availability')
+  } else {
+    writeFileSync(summaryPath, `${JSON.stringify(summarize([], availability), null, 2)}\n`)
+    console.log('no runnable agents; nothing to do')
+  }
   process.exit(0)
 }
 
@@ -98,7 +107,7 @@ if (!flag('reset') && existsSync(ledgerPath)) {
     if (line.trim()) records.push(JSON.parse(line) as RunRecord)
   }
 }
-const keyOf = (record: RunRecord) => `${record.task}--${record.agent}--${record.run}`
+
 for (const task of tasks) {
   for (const id of runnable) {
     for (let run = 1; run <= runs; run += 1) {
@@ -117,9 +126,9 @@ for (const task of tasks) {
             }
           : undefined,
       })
-      const existing = records.findIndex((item) => keyOf(item) === keyOf(record))
-      if (existing >= 0) records[existing] = record
-      else records.push(record)
+      const merged = appendRun(records, record)
+      records.length = 0
+      records.push(...merged)
       writeFileSync(ledgerPath, records.map((item) => `${JSON.stringify(item)}\n`).join(''))
       const integrity = record.integrity
       console.log(
@@ -133,6 +142,6 @@ for (const task of tasks) {
   }
 }
 
-const summary = summarize(records, availability)
+const summary = summarize(latestPerKey(records), availability)
 writeFileSync(path.join(outDir, 'summary.json'), `${JSON.stringify(summary, null, 2)}\n`)
 console.log(JSON.stringify(summary.totals, null, 2))

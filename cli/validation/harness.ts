@@ -12,7 +12,7 @@ import {
   type EndReason,
   type VerifyResult,
 } from './outcome.ts'
-import type { CaptureIntegritySummary, RunRecord, ValidationTask } from './types.ts'
+import type { CaptureIntegritySummary, RunRecord, TaskResult, ValidationTask } from './types.ts'
 import type { ValidationAgent } from './agents.ts'
 
 // The bundle lives in dist-cli/, so resolve from the working directory (the
@@ -175,6 +175,33 @@ export function testsWereModified(
   return Object.entries(before).some(([file, digest]) => hashFile(path.join(repo, file)) !== digest)
 }
 
+export type Evaluation = {
+  verify: VerifyResult | null
+  taskResult: TaskResult
+  tampered: boolean
+}
+
+/**
+ * Order matters: a replaced test file must be refused *before* it runs. A test
+ * that restores the original while executing would otherwise pass a post-hoc
+ * hash check, so the hash is taken twice and the run only proceeds if the tree
+ * is still the task the agent was given.
+ */
+export function evaluateTask(
+  repo: string,
+  task: ValidationTask,
+  baselineHashes: Record<string, string>,
+): Evaluation {
+  if (testsWereModified(repo, baselineHashes)) {
+    return { verify: null, taskResult: resolveTaskResult(null, true), tampered: true }
+  }
+  const verify = trustedVerify(repo, task)
+  if (testsWereModified(repo, baselineHashes)) {
+    return { verify, taskResult: resolveTaskResult(verify, true), tampered: true }
+  }
+  return { verify, taskResult: resolveTaskResult(verify, false), tampered: false }
+}
+
 export type RunOptions = {
   task: ValidationTask
   agent: ValidationAgent
@@ -245,8 +272,8 @@ export function runTask(options: RunOptions): RunRecord {
   if (existsSync(tracePath)) trace = JSON.parse(readFileSync(tracePath, 'utf8')) as Trace
 
   // Judge the task in the final worktree, after the agent stopped touching it.
-  const verify = trustedVerify(repo, task)
-  const tampered = testsWereModified(repo, baselineHashes)
+  const evaluation = evaluateTask(repo, task, baselineHashes)
+  const { verify, taskResult } = evaluation
   const termination = resolveTermination(trace?.termination, end)
 
   const record: RunRecord = {
@@ -258,7 +285,7 @@ export function runTask(options: RunOptions): RunRecord {
     timedOut,
     elapsedMs,
     exit: result.status,
-    taskResult: resolveTaskResult(verify, tampered),
+    taskResult,
     termination,
     verify,
     end,

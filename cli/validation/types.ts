@@ -87,6 +87,8 @@ export type AgentSummary = {
   agentError: number
   passRate: number | null
   captureIntegrity: CaptureIntegritySummary
+  /** Recall is only defined over runs that produced a trace; say how many did. */
+  captureCoverage: { runs: number; withTrace: number; withIntegrity: number }
   allRunsWallClock: LatencyStats | null
   successfulTaskLatency: LatencyStats | null
   completedAgentLatency: LatencyStats | null

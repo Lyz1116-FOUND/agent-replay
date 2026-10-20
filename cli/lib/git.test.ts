@@ -32,4 +32,24 @@ describe('diffPatch', () => {
     expect(`${check.stderr ?? ''}`).toBe('')
     expect(check.status).toBe(0)
   })
+
+  it('keeps trailing blank context lines intact', () => {
+    const repo = mkdtempSync(path.join(tmpdir(), 'patch-blank-'))
+    git(repo, ['init', '-q'])
+    git(repo, ['config', 'user.email', 'dev@example.com'])
+    git(repo, ['config', 'user.name', 'Dev'])
+    // The file ends with a blank line; the diff ends with a " " context line.
+    writeFileSync(path.join(repo, 'notes.txt'), 'first\n\n')
+    git(repo, ['add', '.'])
+    git(repo, ['commit', '-qm', 'init'])
+
+    writeFileSync(path.join(repo, 'notes.txt'), 'second\n\n')
+    const patch = diffPatch(repo)
+    git(repo, ['checkout', '--', '.'])
+    const patchFile = path.join(repo, 'blank.patch')
+    writeFileSync(patchFile, patch)
+    const check = spawnSync('git', ['apply', '--check', patchFile], { cwd: repo, encoding: 'utf8' })
+    expect(`${check.stderr ?? ''}`).toBe('')
+    expect(check.status).toBe(0)
+  })
 })

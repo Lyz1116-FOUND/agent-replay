@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T12:51:49.593Z",
+  "generatedAt": "2026-10-20T13:09:41.425Z",
   "runs": 10,
   "tasks": [
     "multi-file-bug",
@@ -45,6 +45,11 @@
         "editConfirmationRecall": 1,
         "testCaptureRecall": 1
       },
+      "captureCoverage": {
+        "runs": 1,
+        "withTrace": 1,
+        "withIntegrity": 1
+      },
       "allRunsWallClock": {
         "count": 1,
         "minMs": 38439,
@@ -72,7 +77,8 @@
     },
     "opencode": {
       "availability": {
-        "status": "ready"
+        "status": "ready",
+        "detail": "opencode v2.0.32"
       },
       "runs": 9,
       "attempted": 9,
@@ -94,6 +100,11 @@
         "capturedTestRuns": 9,
         "editConfirmationRecall": 1,
         "testCaptureRecall": 1
+      },
+      "captureCoverage": {
+        "runs": 9,
+        "withTrace": 8,
+        "withIntegrity": 8
       },
       "allRunsWallClock": {
         "count": 9,
@@ -122,6 +133,10 @@
     }
   },
   "availability": {
+    "opencode": {
+      "status": "ready",
+      "detail": "opencode v2.0.32"
+    },
     "codex": {
       "status": "ready",
       "detail": "codex-cli 0.163.0"

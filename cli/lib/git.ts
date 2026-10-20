@@ -107,13 +107,18 @@ export function diffStat(cwd: string): string {
 }
 
 export function diffPatch(cwd: string): string {
-  const result = git(cwd, ['diff', 'HEAD', '--no-color', '--no-ext-diff'])
-  const text = result.ok ? result.stdout : ''
-  if (!text.trim()) return ''
-  // `git()` trims trailing whitespace, and a patch without its final newline is
-  // rejected by `git apply` as corrupt.
-  const body = truncate(text, 300_000).text
-  return body.endsWith('\n') ? body : `${body}\n`
+  // A patch is byte-exact: `git()` trims trailing whitespace, which silently
+  // deletes trailing blank context lines and makes `git apply` reject the patch
+  // as corrupt. Read the raw stdout instead.
+  const result = spawnSync('git', ['diff', 'HEAD', '--no-color', '--no-ext-diff'], {
+    cwd,
+    encoding: 'utf8',
+    maxBuffer: 20 * 1024 * 1024,
+  })
+  if (result.status !== 0) return ''
+  const raw = result.stdout ?? ''
+  if (!raw.trim()) return ''
+  return truncate(raw, 300_000).text
 }
 
 export function gitSnapshot(cwd: string) {

@@ -22,15 +22,17 @@ export type EndReason = {
  * the verdict.
  */
 export function resolveTaskResult(verify: VerifyResult | null, testsModified = false): TaskResult {
-  if (!verify || verify.total <= 0) return { status: 'unknown' }
+  // A rewritten task is a failed run even if no tests ran: there is nothing
+  // left to measure.
   if (testsModified) {
     return {
       status: 'fail',
       reason: 'tests_modified',
-      passedTests: verify.passed,
-      totalTests: verify.total,
+      passedTests: verify?.passed,
+      totalTests: verify?.total,
     }
   }
+  if (!verify || verify.total <= 0) return { status: 'unknown' }
   // A green summary is not enough: the command itself must have succeeded.
   const green = verify.exitCode === 0 && verify.failed === 0 && verify.passed > 0
   return {

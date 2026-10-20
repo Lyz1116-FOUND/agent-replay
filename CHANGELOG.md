@@ -105,6 +105,19 @@ recorded trace trustworthy enough to argue about.
   requires; the regression test round-trips a real repository.
 - **Historical traces are sanitized** as well, not just new ones.
 
+### Fixed (review blockers, round 3)
+
+- **The tamper check runs before the tests, not after.** A test file that
+  restores its original while executing used to slip past a post-hoc hash; the
+  hash is now taken before the command runs, and a modified tree is refused
+  without executing anything.
+- **Patches keep their raw bytes.** `diffPatch` no longer goes through `git()`,
+  which trims trailing whitespace and silently deletes trailing blank context
+  lines; a file ending in a blank line now round-trips through `git apply`.
+- **Capture coverage is reported.** `captureCoverage` states how many runs
+  produced a trace, so a 100% recall over 8 of 9 runs cannot be read as full
+  coverage.
+
 ### Changed
 
 - The free-model matrix is documented as **OpenCode Free-Model Capture

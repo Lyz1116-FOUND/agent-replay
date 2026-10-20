@@ -171,4 +171,17 @@ describe('availability', () => {
     expect(summary.availability.claude.status).toBe('cli_missing')
     expect(summary.perAgent.claude).toBeUndefined()
   })
+
+  it('reports capture coverage instead of implying every run was recorded', () => {
+    const summary = summarizeAgent(
+      [
+        run({ elapsedMs: 1, integrity: emptyIntegrity(), trace: 'examples/validation/traces/x.trace.json' }),
+        run({ elapsedMs: 2, integrity: null, trace: null, termination: { kind: 'timeout' } }),
+      ],
+      { status: 'ready' },
+    )
+    expect(summary.captureCoverage).toEqual({ runs: 2, withTrace: 1, withIntegrity: 1 })
+    // Recall is computed over the run that has integrity, not over both.
+    expect(summary.captureIntegrity.nativeEditEvents).toBe(0)
+  })
 })

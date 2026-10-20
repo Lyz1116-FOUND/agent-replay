@@ -125,6 +125,11 @@ export function summarizeAgent(runs: RunRecord[], availability: Availability): A
     agentError: runs.filter((run) => run.termination.kind === 'agent_error').length,
     passRate: attempted.length > 0 ? round3(taskPass.length / attempted.length) : null,
     captureIntegrity: sumIntegrity(runs),
+    captureCoverage: {
+      runs: runs.length,
+      withTrace: runs.filter((run) => run.trace !== null).length,
+      withIntegrity: runs.filter((run) => run.integrity !== null).length,
+    },
     // Every run, including the ones that never reached the model.
     allRunsWallClock: latencyStats(runs.map((run) => run.elapsedMs)),
     // Only runs that actually solved the task, whatever happened afterwards.

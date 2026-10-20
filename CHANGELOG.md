@@ -17,9 +17,13 @@ recorded trace trustworthy enough to argue about.
   worked yesterday" can be answered from the trace alone. Set with
   `--isolation`, `--provider`, `--harness-version`.
 - **Capture integrity.** `capture.integrity` reports `nativeEdits`,
-  `workspaceEdits`, `matchedEdits`, `unverifiedEdits`, `outsideWorkspaceEdits`,
-  `nativeTestRuns`, `parsedTestRuns`, `capturedTests`. The replay UI shows edit
-  and test recall next to the fidelity badge.
+  `workspaceEdits`, `matchedEdits`, `confirmedEdits`, `supersededEdits`,
+  `unverifiedEdits`, `outsideWorkspaceEdits`, `nativeTestRuns`,
+  `parsedTestRuns`, `capturedTests`. The replay UI shows edit and test recall
+  next to the fidelity badge.
+- **Validation matrix.** `scripts/validation-matrix.py` runs tasks x agents x
+  runs with a fresh repo per run and a ledger that separates task outcome from
+  availability outcome. Tasks live in `examples/tasks/`.
 - **ZCode CLI adapter** (`zcode`). `zcode --json` prints one summary object, so
   the adapter buffers stdout, takes the session id, and replays the parts ZCode
   persisted. Requires Node >= 22.5 (`node:sqlite`).
@@ -46,6 +50,14 @@ recorded trace trustworthy enough to argue about.
 - **Error fidelity.** OpenCode's error events kept only a generic message. The
   adapter now reads `error.message` and `error.status`, so traces contain
   `This model is not available in your country (HTTP 403)`.
+- **A solved task stays solved.** `status` was downgraded to `fail` whenever the
+  agent emitted a trailing error, even if the last test run passed 4/4. Status is
+  now decided by the last test result; a post-test transport error is reported as
+  `termination.kind: agent_error` instead.
+- **Repeated edits to one file are no longer miscounted as unverified.** A file
+  edited four times between two watcher polls produces fewer diffs than calls;
+  the extra calls are now `supersededEdits` (file confirmed, diff already
+  claimed) rather than `unverifiedEdits`.
 - **Shell-wrapped test commands were not recognised.** Agents run
   `sh -lc 'node --test test.mjs'`, and the test-command matcher rejected the
   leading quote, so a passing run was recorded as `partial`. Quotes, parentheses

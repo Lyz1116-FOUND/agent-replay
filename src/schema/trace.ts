@@ -61,7 +61,11 @@ export type Environment = z.infer<typeof environmentSchema>
 export const captureIntegritySchema = z.object({
   nativeEdits: z.number().int().nonnegative(),
   workspaceEdits: z.number().int().nonnegative(),
+  /** One-to-one: this exact call claimed a workspace diff. */
   matchedEdits: z.number().int().nonnegative(),
+  /** File-level: the named file changed nearby, even if the diff was taken. */
+  confirmedEdits: z.number().int().nonnegative().optional(),
+  supersededEdits: z.number().int().nonnegative().optional(),
   unverifiedEdits: z.number().int().nonnegative(),
   outsideWorkspaceEdits: z.number().int().nonnegative(),
   nativeTestRuns: z.number().int().nonnegative(),

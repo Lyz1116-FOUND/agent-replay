@@ -72,4 +72,24 @@ describe('event merger path normalization', () => {
     expect(merged.capture.workspaceVerified).toBe(0)
     expect(merged.capture.unverifiedEdits).toBe(1)
   })
+
+  it('counts repeated edits to one file as confirmed, not unverified', () => {
+    const first = { ...completed('calc.mjs'), callId: 'call_1', atMs: 1_100, startedAtMs: 1_100 }
+    const second = { ...completed('calc.mjs'), callId: 'call_2', atMs: 1_180, startedAtMs: 1_180 }
+    const merged = mergeEvents({
+      agentEvents: [first, second],
+      editEvents: [edit],
+      commandEvents: [],
+      meta,
+      adapterId: 'opencode',
+      sessionEndMs: 2_000,
+    })
+    expect(merged.capture.integrity).toMatchObject({
+      nativeEdits: 2,
+      matchedEdits: 1,
+      confirmedEdits: 2,
+      supersededEdits: 1,
+      unverifiedEdits: 0,
+    })
+  })
 })

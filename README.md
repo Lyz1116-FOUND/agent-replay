@@ -210,6 +210,22 @@ What it does not establish: that one model is faster than another. The latency c
 
 `beam-free` is region-blocked by the provider. It is recorded as `status: fail` **and** `termination.kind: provider_unavailable`, and it is excluded from the capability denominator. `minimax` and `beam` were re-run with `isolation: none`, because an empty XDG config has no provider routing for them and returns `provider.no-route` instead of reaching the model.
 
+## Task validation matrix
+
+Three tasks, three runs each, one agent so far — a small but strict check that the recorder does not lose events as the task gets harder (ledger in [`examples/validation/summary.json`](examples/validation/summary.json)):
+
+| Task | Runs | Result | Notes |
+|---|---|---|---|
+| `single-file-bug` | 3 | 3 pass | 24.6s – 60.2s, edit recall 3/3 |
+| `multi-file-bug` | 3 | 2 pass, 1 agent_error | one run hung and was stopped at 241s; both passing runs had one unconfirmed edit on `lib/cart.mjs` |
+| `small-feature` | 3 | 3 pass | 44.1s – 48.3s, edit recall 6/6 |
+
+Aggregate for `opencode/glm-5.3-flash-free`: 9 runs, 8 passed, 0 unavailable, median 47.4s, edit recall 0.867.
+
+The two unconfirmed edits are reported as they are, not smoothed away: the agent edited `lib/cart.mjs` twice and only one change was corroborated by a workspace diff. That is either a no-op edit or a batch that the next edit overwrote before a poll — both are worth seeing, and neither justifies a looser matcher.
+
+Run it yourself with `python3 scripts/validation-matrix.py --agents opencode --runs 3`.
+
 ## Measurement integrity
 
 A trace answers three different questions, and mixing them up is how benchmarks lie:
@@ -220,7 +236,7 @@ A trace answers three different questions, and mixing them up is how benchmarks 
 | Fidelity | did the environment confirm it? | `capture.fidelity`, `capture.integrity` |
 | Evaluation integrity | did the run get a fair attempt? | `termination` |
 
-**`termination`** is separate from `status`. `status` stays `pass | fail | partial` and only reflects the task's own tests. `termination.kind` is one of `completed`, `task_failure`, `provider_unavailable`, `rate_limited`, `permission_denied`, `timeout`, `agent_error`, `recorder_error`. When aggregating, exclude unavailable kinds from the capability denominator and report them as an availability metric — otherwise five provider 403s quietly become a 75% success rate.
+**`termination`** is separate from `status`. `status` stays `pass | fail | partial` and is decided by the last observed test result: a task whose tests passed is `pass` even if the agent's process died afterwards — that failure mode lives in `termination` instead of silently rewriting the task outcome. `termination.kind` is one of `completed`, `task_failure`, `provider_unavailable`, `rate_limited`, `permission_denied`, `timeout`, `agent_error`, `recorder_error`. When aggregating, exclude unavailable kinds from the capability denominator and report them as an availability metric — otherwise five provider 403s quietly become a 75% success rate.
 
 **`environment`** stamps the run: `isolation`, `provider`, `harnessVersion`, `platform`, `nodeVersion`. Without it, "this model worked yesterday" is unanswerable.
 
@@ -228,13 +244,16 @@ A trace answers three different questions, and mixing them up is how benchmarks 
 
 ```json
 "integrity": {
-  "nativeEdits": 1, "workspaceEdits": 1, "matchedEdits": 1,
+  "nativeEdits": 1, "workspaceEdits": 1,
+  "matchedEdits": 1, "confirmedEdits": 1, "supersededEdits": 0,
   "unverifiedEdits": 0, "outsideWorkspaceEdits": 0,
   "nativeTestRuns": 1, "parsedTestRuns": 1, "capturedTests": 1
 }
 ```
 
-Edit recall is `matchedEdits / nativeEdits`; test recall is `parsedTestRuns / nativeTestRuns`. Recall is absent when there was nothing to match — never 100% by default.
+`matchedEdits` is one-to-one: this exact call claimed a workspace diff. `confirmedEdits` is file-level: the file it names changed within the match window, even if a neighbouring call had already claimed that diff (`supersededEdits`). Edit recall uses `confirmedEdits`, because an agent that edits the same file four times between two watcher polls loses nothing when only three diffs exist. `unverifiedEdits` is the real gap: the agent claimed a change and no workspace diff corroborates it at all.
+
+Test recall is `parsedTestRuns / nativeTestRuns`. Recall is absent when there was nothing to match — never 100% by default.
 
 ## Adapter status
 

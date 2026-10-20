@@ -205,4 +205,26 @@ describe('recorded trace builder', () => {
     expect(trace.environment?.nodeVersion).toBe(process.version)
     expect(() => traceSchema.parse(trace)).not.toThrow()
   })
+
+  it('keeps a solved task solved when the agent errors afterwards', () => {
+    const trace = buildTrace({
+      meta,
+      events: [command(500, 900, 4, 0)],
+      agentEvents: [
+        {
+          kind: 'error',
+          atMs: 5_000,
+          message: 'Transport: The socket connection was closed unexpectedly',
+          termination: 'agent_error',
+        },
+      ],
+      baseline: { contents: {} },
+      git: { available: true, statusShort: '', diffStat: '', patch: '' },
+      commandExitCode: 1,
+      nowMs: 1_006_000,
+    })
+    expect(trace.status).toBe('pass')
+    expect(trace.termination).toMatchObject({ kind: 'agent_error' })
+    expect(() => traceSchema.parse(trace)).not.toThrow()
+  })
 })

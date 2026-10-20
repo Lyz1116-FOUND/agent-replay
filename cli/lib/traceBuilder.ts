@@ -46,10 +46,12 @@ function statusFor(
   merge: MergeResult,
 ): 'pass' | 'fail' | 'partial' {
   const last = records[records.length - 1]
+  // The task's own tests decide `status`. A transport error after the tests
+  // passed does not un-solve the task; it shows up in `termination` instead.
   if (last && last.failed > 0) return 'fail'
+  if (last && last.failed === 0 && last.passed > 0) return 'pass'
   if (options.commandExitCode !== undefined && options.commandExitCode !== 0) return 'fail'
   if (merge.finalStatus === 'error') return 'fail'
-  if (last && last.failed === 0 && last.passed > 0) return 'pass'
   return 'partial'
 }
 
@@ -64,11 +66,27 @@ function terminationFor(
   merge: MergeResult,
   status: 'pass' | 'fail' | 'partial',
 ): Termination {
-  if (status === 'pass') return completed()
-
   const classified = merge.errors.find(
     (error) => error.termination && error.termination !== 'agent_error',
   )
+  const trailing = merge.errors.find(
+    (error) => !error.termination || error.termination === 'agent_error' || error.termination === 'timeout',
+  )
+
+  if (status === 'pass') {
+    // A task that passed but whose process then died did not end cleanly, and
+    // saying "completed" would hide a real failure mode. A transient provider
+    // blip that the agent recovered from does not deserve that label.
+    if (trailing) {
+      return {
+        kind: trailing.termination ?? 'agent_error',
+        message: trailing.message,
+        code: trailing.code,
+      }
+    }
+    return completed()
+  }
+
   if (classified?.termination) {
     return {
       kind: classified.termination,

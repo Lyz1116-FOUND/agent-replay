@@ -1,0 +1,9 @@
+{
+  "id": "small-feature",
+  "title": "Small feature",
+  "kind": "feature",
+  "prompt": "Implement the missing feature so the tests pass. Run `node --test` to verify. Work only inside the current working directory.",
+  "verify": "node --test",
+  "expectedFiles": ["lib/slug.mjs", "index.mjs"],
+  "baseline": { "pass": 0, "fail": 1 }
+}

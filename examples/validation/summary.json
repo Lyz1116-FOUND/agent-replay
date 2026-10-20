@@ -1,0 +1,23 @@
+{
+  "generated_at": "2026-10-20T08:19:29Z",
+  "runs": 9,
+  "tasks": [
+    "multi-file-bug",
+    "single-file-bug",
+    "small-feature"
+  ],
+  "agents": [
+    "opencode"
+  ],
+  "per_agent": {
+    "opencode": {
+      "runs": 9,
+      "attempted": 9,
+      "passed": 8,
+      "unavailable": 0,
+      "pass_rate": 0.889,
+      "edit_recall": 0.867,
+      "median_elapsed_s": 47.4
+    }
+  }
+}

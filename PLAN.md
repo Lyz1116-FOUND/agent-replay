@@ -505,6 +505,13 @@ Agent：Codex / gpt-5-codex，59.2s，16 steps，1 个变更文件（另读取 3
 - 真机暴露并修掉一个测试识别缺口：`isTestCommand` 的边界字符类不含引号，导致 `sh -lc 'node --test test.mjs'` 这类包装命令不被识别为测试，整条 run 被记成 `partial`。已把 `'"`(` 与 `)` `,` 纳入边界，并补 4 条断言。
 - Cursor CLI 2026.10.19 已安装（`~/.local/bin/cursor-agent`），但 `cursor-agent -p` 直接返回 `Authentication required`，需要 `agent login` 浏览器授权；登录流程已启动，等用户确认。
 
+### 3 task × N agent × 3 run 验证（本次启动）
+
+- 任务集 `examples/tasks/`：`single-file-bug`（基线 0/3 失败）、`multi-file-bug`（基线 1/4，需改 `lib/cart.mjs` + `lib/discount.mjs`）、`small-feature`（基线 0/4，需实现 `slugify`/`uniqueSlug` 并在 `index.mjs` 导出）。
+- 每个任务都验证过「参考修复后全绿」，避免任务本身不可解。
+- `scripts/validation-matrix.py`：每 (task, agent, run) 一个全新 git repo，`task.json` 不进入 agent 可见目录，输出 `examples/validation/runs.jsonl` + `summary.json` + 全部 trace。
+- 指标口径修正：`matchedEdits` 是一对一，`confirmedEdits` 是文件级（同名文件在窗口内确实变了）。首次跑 `small-feature` 时 agent 对 `lib/slug.mjs` 连改 4 次、watcher 只产出 3 个批次，旧口径把 2 次记成 unverified——文件没丢，是指标把「批次被前一次吃掉」误判成漏录。recall 改用 `confirmedEdits`，`unverifiedEdits` 只统计「声称改了但窗口内该文件根本没变」。
+
 ### 下一阶段（未开始）
 
 3 task × 4 agent × 3 runs = 36 次验证，任务为单文件 bug / 多文件 bug / 小功能，记录 task outcome、availability outcome、tool calls、verified/unverified/outside edits、test runs、recovery、wall clock、capture fidelity，用来发现 Agent Replay 自身的系统性漏录。

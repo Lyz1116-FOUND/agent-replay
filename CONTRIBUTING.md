@@ -82,6 +82,31 @@ Then check the trace before trusting it:
 If `matchedEdits` is 0 while the agent reported edits, that is a capture bug —
 open an issue with the trace, not just a screenshot.
 
+## Validation matrix
+
+`scripts/validation-matrix.py` runs tasks x agents x runs and writes a ledger.
+Each run gets a fresh git repo and its own trace; `task.json` is harness metadata
+and is never copied into the repo the agent sees.
+
+```bash
+npm run build:cli
+python3 scripts/validation-matrix.py --agents opencode --runs 3
+python3 scripts/validation-matrix.py --agents opencode,claude,zcode,qoder --runs 3
+```
+
+Tasks live in `examples/tasks/`: a single-file bug, a multi-file bug, and a small
+feature. Each has a baseline that must fail before the agent starts, and a
+reference fix that must turn it fully green — check both when adding a task.
+
+The ledger (`examples/validation/summary.json`) keeps task outcome and
+availability outcome apart:
+
+- `pass_rate` uses only attempted runs; unavailable runs are excluded
+- `unavailable` counts provider outages, rate limits and recorder errors
+- `edit_recall` is matched native edits over reported native edits
+
+`AGENT_MATRIX_PROXY` is forwarded as `HTTPS_PROXY` for agents that need it.
+
 ## Repository hygiene
 
 Do not commit `node_modules/`, `dist/`, `dist-cli/`, `replays/`, or `.agent-replay/`.

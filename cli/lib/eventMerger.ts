@@ -459,6 +459,7 @@ export function mergeEvents(options: {
   }
 
   let unverifiedEdits = 0
+  let supersededEdits = 0
   for (const native of nativeEditSpans) {
     const verifiedCount = (native.span.artifacts ?? []).filter(
       (artifact) => artifact.kind === 'diff',
@@ -466,21 +467,48 @@ export function mergeEvents(options: {
     if (verifiedCount > 0) {
       if (!native.span.attributes) native.span.attributes = {}
       native.span.attributes.workspaceVerified = true
-    } else {
-      unverifiedEdits += 1
-      if (!native.span.attributes) native.span.attributes = {}
-      native.span.attributes.workspaceVerified = false
-      if (native.span.status === 'ok') native.span.status = 'warning'
+      continue
+    }
+
+    // A file can be edited several times between two watcher polls, so only one
+    // of those calls can claim the diff. If the same file did change within the
+    // window, the call is corroborated even though it has no diff of its own.
+    const files = native.span.files ?? []
+    const corroborated = editEvents.some(
+      (fact) =>
+        files.includes(fact.path) &&
+        distanceToWindow(fact.atMs, native.span.startMs, native.span.endMs) <= MATCH_WINDOW_MS,
+    )
+    if (!native.span.attributes) native.span.attributes = {}
+    native.span.attributes.workspaceVerified = false
+
+    if (corroborated) {
+      supersededEdits += 1
+      native.span.attributes.workspaceConfirmed = true
       if (!native.span.artifacts || native.span.artifacts.length === 0) {
         native.span.artifacts = [
           terminalArtifact(
             native.span.name,
             meta.cwd,
-            'The agent reported a file change, but the workspace watcher observed no diff. This may be an ignored file, a no-op edit, or a fidelity gap.',
+            'The same file changed in the workspace within the match window, but the diff was already attributed to an earlier call.',
             0,
           ),
         ]
       }
+      continue
+    }
+
+    unverifiedEdits += 1
+    if (native.span.status === 'ok') native.span.status = 'warning'
+    if (!native.span.artifacts || native.span.artifacts.length === 0) {
+      native.span.artifacts = [
+        terminalArtifact(
+          native.span.name,
+          meta.cwd,
+          'The agent reported a file change, but the workspace watcher observed no diff. This may be an ignored file, a no-op edit, or a fidelity gap.',
+          0,
+        ),
+      ]
     }
   }
 
@@ -558,6 +586,8 @@ export function mergeEvents(options: {
         nativeEdits: nativeEditSpans.length,
         workspaceEdits: editEvents.length,
         matchedEdits: workspaceVerified,
+        confirmedEdits: workspaceVerified + supersededEdits,
+        supersededEdits,
         unverifiedEdits,
         outsideWorkspaceEdits,
         nativeTestRuns,

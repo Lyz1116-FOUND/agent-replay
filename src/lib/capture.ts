@@ -26,7 +26,11 @@ function recallLine(trace: Trace): string {
   if (!integrity) return ''
   const parts: string[] = []
   if (integrity.nativeEdits > 0) {
-    parts.push(`edit recall ${integrity.matchedEdits}/${integrity.nativeEdits}`)
+    const confirmed = integrity.confirmedEdits ?? integrity.matchedEdits
+    parts.push(`edit recall ${confirmed}/${integrity.nativeEdits}`)
+    if ((integrity.supersededEdits ?? 0) > 0) {
+      parts.push(`${integrity.supersededEdits} superseded`)
+    }
   }
   if (integrity.nativeTestRuns > 0) {
     parts.push(`test recall ${integrity.parsedTestRuns}/${integrity.nativeTestRuns}`)

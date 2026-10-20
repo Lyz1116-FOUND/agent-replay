@@ -20,7 +20,7 @@ This is the first public beta of Agent Replay, an open-source visual debugger fo
 - **Import what you have.** Native Agent Replay JSON, SWE-agent `.traj`, and offline OpenTelemetry OTLP JSON. OTel imports preserve hierarchy and overlapping spans, and are explicitly not workspace-verified.
 - **Bilingual UI.** English and Chinese, switchable in the top bar.
 - **Live capture included.** A fresh OpenCode 2.0.32 + `opencode/glm-5.3-flash-free` run: 43.4 s, 1 edit, 2 test runs, 3/3 passing, 1 verified edit, 0 unverified. See [the capture evidence](https://github.com/Lyz1116-FOUND/agent-replay/blob/main/docs/demo/REAL_CAPTURE.md).
-- **Demo media.** A 20-second replay GIF and MP4 are attached to this release and embedded in the README. The built-in demo is labelled in the UI; it is not presented as a live capture.
+- **Demo media.** A 20-second replay GIF is embedded in the README, and a 1440×900 MP4 is attached to this release. The built-in demo is labelled in the UI; it is not presented as a live capture.
 
 ## Verified during beta development
 
@@ -32,7 +32,7 @@ This is the first public beta of Agent Replay, an open-source visual debugger fo
 
 ![Agent Replay demo](https://raw.githubusercontent.com/Lyz1116-FOUND/agent-replay/v1.0.0-beta.1/docs/demo/replay.gif)
 
-The `replay.mp4` asset attached to this release is a 1440×900, 20-second version. The animation uses the built-in Codex LRU demo, replays at 4×, and is trimmed at the start/end; the four intermediate frames and the overview are real UI states.
+The `replay.mp4` asset attached to this release is a 1440×900, 20-second version. The animation uses the built-in Codex LRU demo, replays at 4×, and is trimmed at the start/end; the key frames and the overview are real UI states.
 
 ## Known limits
 

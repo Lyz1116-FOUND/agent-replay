@@ -92,4 +92,22 @@ describe('event merger path normalization', () => {
       unverifiedEdits: 0,
     })
   })
+
+  it('marks an edit outside the workspace as outside, not verified', () => {
+    const merged = mergeEvents({
+      agentEvents: [completed('/somewhere/else/calc.mjs')],
+      editEvents: [edit],
+      commandEvents: [],
+      meta,
+      adapterId: 'opencode',
+      sessionEndMs: 2_000,
+    })
+    expect(merged.capture.integrity).toMatchObject({
+      nativeEdits: 1,
+      matchedEdits: 0,
+      confirmedEdits: 0,
+      unverifiedEdits: 1,
+      outsideWorkspaceEdits: 1,
+    })
+  })
 })

@@ -101,10 +101,10 @@ function flag(args: string[], name: string): boolean {
   return true
 }
 
-function parseIsolation(raw: string | undefined): 'xdg' | 'host-config' | 'none' | undefined {
+function parseIsolation(raw: string | undefined): 'none' | 'xdg' | 'host-config' | 'custom' | undefined {
   if (raw === undefined) return undefined
-  if (raw === 'xdg' || raw === 'host-config' || raw === 'none') return raw
-  throw new Error('--isolation must be one of: xdg, host-config, none.')
+  if (raw === 'none' || raw === 'xdg' || raw === 'host-config' || raw === 'custom') return raw
+  throw new Error('--isolation must be one of: none, xdg, host-config, custom.')
 }
 
 function resolveCwd(args: string[]): string {

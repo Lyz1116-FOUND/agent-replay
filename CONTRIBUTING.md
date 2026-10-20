@@ -84,26 +84,51 @@ open an issue with the trace, not just a screenshot.
 
 ## Validation matrix
 
-`scripts/validation-matrix.py` runs tasks x agents x runs and writes a ledger.
-Each run gets a fresh git repo and its own trace; `task.json` is harness metadata
-and is never copied into the repo the agent sees.
+`dist-cli/validate.mjs` runs tasks x agents x runs and writes a ledger. Each run
+gets a fresh git repo; `task.json` and `reference/` are harness metadata and are
+never copied into the repo the agent sees.
 
 ```bash
 npm run build:cli
-python3 scripts/validation-matrix.py --agents opencode --runs 3
-python3 scripts/validation-matrix.py --agents opencode,claude,zcode,qoder --runs 3
+node dist-cli/validate.mjs --verify-tasks          # baseline must fail, reference must pass
+node dist-cli/validate.mjs --agents opencode --runs 3
+node dist-cli/validate.mjs --agents codex --tasks single-file-bug --runs 1
 ```
 
-Tasks live in `examples/tasks/`: a single-file bug, a multi-file bug, and a small
-feature. Each has a baseline that must fail before the agent starts, and a
-reference fix that must turn it fully green — check both when adding a task.
+Tasks live in `examples/tasks/`. Every task ships a `reference/` overlay that must
+turn the suite fully green; `--verify-tasks` proves both ends before anything is
+measured, and exits non-zero if a task is broken.
 
-The ledger (`examples/validation/summary.json`) keeps task outcome and
-availability outcome apart:
+### Result semantics
 
-- `pass_rate` uses only attempted runs; unavailable runs are excluded
-- `unavailable` counts provider outages, rate limits and recorder errors
-- `edit_recall` is matched native edits over reported native edits
+Four things are kept apart, because collapsing them is how a benchmark lies:
+
+| Field | Question |
+|---|---|
+| `taskResult.status` | did the task's own tests pass? (`pass` / `fail` / `unknown`) |
+| `termination.kind` | how did the run end? |
+| `availability` | could the agent even be invoked? |
+| `captureIntegrity` | how much of the agent's report did the workspace confirm? |
+
+A run whose tests passed and whose socket then died is `taskResult: pass` with
+`termination: agent_error`. A provider 403 is `provider_unavailable` and is
+excluded from the pass-rate denominator. A missing CLI or a login prompt is
+`availability`, never a task failure.
+
+### Latency
+
+Three buckets, never one:
+
+- `allRunsWallClock` — every run, including the ones that never reached a model
+- `successfulTaskLatency` — only runs that solved the task, whatever happened after
+- `completedAgentLatency` — solved the task and ended cleanly; the fairest signal
+
+### Agents
+
+`opencode` and `codex` run by default. `zcode` and `qoder` run when their local
+config is present. `claude` and `cursor` require `--allow-paid`: Claude costs
+money, and Cursor needs an interactive browser login the harness cannot perform.
+When an agent is unavailable the matrix records the reason and continues.
 
 `AGENT_MATRIX_PROXY` is forwarded as `HTTPS_PROXY` for agents that need it.
 

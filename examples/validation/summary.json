@@ -1,23 +1,130 @@
 {
-  "generated_at": "2026-10-20T08:19:29Z",
-  "runs": 9,
+  "generatedAt": "2026-10-20T11:11:08.209Z",
+  "runs": 10,
   "tasks": [
     "multi-file-bug",
     "single-file-bug",
     "small-feature"
   ],
   "agents": [
+    "codex",
     "opencode"
   ],
-  "per_agent": {
+  "totals": {
+    "runs": 10,
+    "taskPass": 10,
+    "taskFail": 0,
+    "taskUnknown": 0,
+    "unavailable": 0,
+    "agentError": 0
+  },
+  "perAgent": {
+    "codex": {
+      "availability": {
+        "status": "ready",
+        "detail": "codex-cli 0.163.0"
+      },
+      "runs": 1,
+      "attempted": 1,
+      "taskPass": 1,
+      "taskFail": 0,
+      "taskUnknown": 0,
+      "unavailable": 0,
+      "agentError": 0,
+      "passRate": 1,
+      "captureIntegrity": {
+        "nativeEditEvents": 1,
+        "workspaceEditEvents": 1,
+        "matchedEdits": 1,
+        "confirmedEdits": 1,
+        "supersededEdits": 0,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 2,
+        "capturedTestRuns": 2,
+        "editConfirmationRecall": 1,
+        "testCaptureRecall": 1
+      },
+      "allRunsWallClock": {
+        "count": 1,
+        "minMs": 32983,
+        "p25Ms": 32983,
+        "medianMs": 32983,
+        "p75Ms": 32983,
+        "maxMs": 32983
+      },
+      "successfulTaskLatency": {
+        "count": 1,
+        "minMs": 32983,
+        "p25Ms": 32983,
+        "medianMs": 32983,
+        "p75Ms": 32983,
+        "maxMs": 32983
+      },
+      "completedAgentLatency": {
+        "count": 1,
+        "minMs": 32983,
+        "p25Ms": 32983,
+        "medianMs": 32983,
+        "p75Ms": 32983,
+        "maxMs": 32983
+      }
+    },
     "opencode": {
+      "availability": {
+        "status": "ready"
+      },
       "runs": 9,
       "attempted": 9,
-      "passed": 8,
+      "taskPass": 9,
+      "taskFail": 0,
+      "taskUnknown": 0,
       "unavailable": 0,
-      "pass_rate": 0.889,
-      "edit_recall": 0.867,
-      "median_elapsed_s": 47.4
+      "agentError": 0,
+      "passRate": 1,
+      "captureIntegrity": {
+        "nativeEditEvents": 16,
+        "workspaceEditEvents": 16,
+        "matchedEdits": 16,
+        "confirmedEdits": 16,
+        "supersededEdits": 0,
+        "unverifiedEdits": 0,
+        "outsideWorkspaceEdits": 0,
+        "nativeTestRuns": 15,
+        "capturedTestRuns": 15,
+        "editConfirmationRecall": 1,
+        "testCaptureRecall": 1
+      },
+      "allRunsWallClock": {
+        "count": 9,
+        "minMs": 37121,
+        "p25Ms": 40775,
+        "medianMs": 48259,
+        "p75Ms": 50999,
+        "maxMs": 117844
+      },
+      "successfulTaskLatency": {
+        "count": 9,
+        "minMs": 37121,
+        "p25Ms": 40775,
+        "medianMs": 48259,
+        "p75Ms": 50999,
+        "maxMs": 117844
+      },
+      "completedAgentLatency": {
+        "count": 9,
+        "minMs": 37121,
+        "p25Ms": 40775,
+        "medianMs": 48259,
+        "p75Ms": 50999,
+        "maxMs": 117844
+      }
+    }
+  },
+  "availability": {
+    "codex": {
+      "status": "ready",
+      "detail": "codex-cli 0.163.0"
     }
   }
 }

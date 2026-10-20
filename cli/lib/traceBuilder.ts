@@ -4,6 +4,7 @@ import { mergeEvents, type MergeResult } from './eventMerger.ts'
 import { formatDuration, plural } from './fsutil.ts'
 import { patchArtifact, terminalArtifact } from './artifacts.ts'
 import { completed, taskFailure } from './termination.ts'
+import { buildEnvironment } from './environment.ts'
 
 type TestRecord = {
   span: Span
@@ -317,13 +318,7 @@ export function buildTrace(options: BuildOptions): Trace {
     },
     status,
     termination: terminationFor(options, records, merge, status),
-    environment: {
-      isolation: meta.isolation,
-      provider: meta.provider,
-      harnessVersion: meta.harnessVersion,
-      platform: `${process.platform}-${process.arch}`,
-      nodeVersion: process.version,
-    },
+    environment: buildEnvironment(meta),
     startedAt: meta.startedAt,
     endedAt: new Date(meta.startedAtMs + durationMs).toISOString(),
     durationMs,

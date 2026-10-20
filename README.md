@@ -145,6 +145,11 @@ The generic wrapper tees stdout/stderr and uses the test-output parser as a best
 
 ### Capture fidelity
 
+Two sources exist, and they are not interchangeable:
+
+- **Agent event** — what the agent reported doing (its own tool stream).
+- **Workspace fact** — what actually changed on disk (git status, file hashes).
+
 | Fidelity | Meaning |
 |---|---|
 | `native+workspace` | Native tool events, with edit tools verified against real workspace diffs |
@@ -152,7 +157,9 @@ The generic wrapper tees stdout/stderr and uses the test-output parser as a best
 | `wrapped-output` | Workspace facts + wrapped stdout; tool semantics are heuristic |
 | `workspace` | Passive filesystem/git capture only; no agent tool stream |
 
-The Overview shows this label next to the agent, along with `observed`, `mixed`, or `estimated` timing.
+Timing is labelled the same way: `observed` comes from the agent's own clock, `estimated` is derived, and `mixed` means both appear in one trace. The Overview shows both labels next to the agent.
+
+The distinction matters most for edits. A trace can say *the agent claimed an edit* (`native-events`) without being able to say *the file changed* — and when it can say both, `capture.integrity` reports how many claims the workspace confirmed.
 
 ### Real timing
 
@@ -212,19 +219,24 @@ What it does not establish: that one model is faster than another. The latency c
 
 ## Task validation matrix
 
-Three tasks, three runs each, one agent so far — a small but strict check that the recorder does not lose events as the task gets harder (ledger in [`examples/validation/summary.json`](examples/validation/summary.json)):
+Three tasks x N runs per agent, each run in a fresh git repo, recorded by the recorder itself. Ledger: [`examples/validation/summary.json`](examples/validation/summary.json).
 
-| Task | Runs | Result | Notes |
-|---|---|---|---|
-| `single-file-bug` | 3 | 3 pass | 24.6s – 60.2s, edit recall 3/3 |
-| `multi-file-bug` | 3 | 2 pass, 1 agent_error | one run hung and was stopped at 241s; both passing runs had one unconfirmed edit on `lib/cart.mjs` |
-| `small-feature` | 3 | 3 pass | 44.1s – 48.3s, edit recall 6/6 |
+Before anything is measured, `node dist-cli/validate.mjs --verify-tasks` proves every task is worth running: the baseline must fail and the task's own `reference/` overlay must turn the suite fully green.
 
-Aggregate for `opencode/glm-5.3-flash-free`: 9 runs, 8 passed, 0 unavailable, median 47.4s, edit recall 0.867.
+| Agent | Runs | Task pass | Median (completed) | p25 – p75 | Edit recall | Test recall |
+|---|---|---|---|---|---|---|
+| `opencode` / glm-5.3-flash-free | 9 | 9 | 48.3s | 40.8s – 51.0s | 16/16 | 15/15 |
+| `codex` 0.163.0 | 1 | 1 | 33.0s | — | 1/1 | 2/2 |
 
-The two unconfirmed edits are reported as they are, not smoothed away: the agent edited `lib/cart.mjs` twice and only one change was corroborated by a workspace diff. That is either a no-op edit or a batch that the next edit overwrote before a poll — both are worth seeing, and neither justifies a looser matcher.
+Availability is recorded, not hidden: `cursor` reports `login_required` (it needs an interactive browser login), and `claude` is gated behind `--allow-paid` because it costs money. Neither is counted as a task failure, and neither blocks the matrix.
 
-Run it yourself with `python3 scripts/validation-matrix.py --agents opencode --runs 3`.
+Timing is end-to-end wall-clock, never "model speed". The harness reports three buckets, because they answer different questions:
+
+- `allRunsWallClock` — every run, including ones that never reached a model
+- `successfulTaskLatency` — only runs that solved the task, whatever happened afterwards
+- `completedAgentLatency` — solved the task and ended cleanly
+
+An earlier batch produced 8/9 with one `agent_error` (a transport timeout at 241s) on the same three tasks. That run is not in this ledger — it was re-run — but it is the reason the buckets exist: a pass that ended in a crash should not be averaged into "how long a solved task takes" without saying so.
 
 ## Measurement integrity
 

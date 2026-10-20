@@ -39,7 +39,7 @@ export type StartOptions = {
   agent?: string
   model?: string
   outputDir?: string
-  isolation?: 'xdg' | 'host-config' | 'none'
+  isolation?: 'none' | 'xdg' | 'host-config' | 'custom'
   provider?: string
   harnessVersion?: string
 }

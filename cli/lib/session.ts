@@ -113,7 +113,7 @@ export function createSessionMeta(options: {
   model?: string
   command?: string
   outputDir?: string
-  isolation?: 'xdg' | 'host-config' | 'none'
+  isolation?: 'none' | 'xdg' | 'host-config' | 'custom'
   provider?: string
   harnessVersion?: string
 }): SessionMeta {

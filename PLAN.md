@@ -512,6 +512,15 @@ Agent：Codex / gpt-5-codex，59.2s，16 steps，1 个变更文件（另读取 3
 - `scripts/validation-matrix.py`：每 (task, agent, run) 一个全新 git repo，`task.json` 不进入 agent 可见目录，输出 `examples/validation/runs.jsonl` + `summary.json` + 全部 trace。
 - 指标口径修正：`matchedEdits` 是一对一，`confirmedEdits` 是文件级（同名文件在窗口内确实变了）。首次跑 `small-feature` 时 agent 对 `lib/slug.mjs` 连改 4 次、watcher 只产出 3 个批次，旧口径把 2 次记成 unverified——文件没丢，是指标把「批次被前一次吃掉」误判成漏录。recall 改用 `confirmedEdits`，`unverifiedEdits` 只统计「声称改了但窗口内该文件根本没变」。
 
+### M4.8 收口（本次）
+
+- 结果语义四分：`taskResult`（任务测试）/ `termination`（进程怎么结束）/ `availability`（能不能调用）/ `captureIntegrity`（环境印证了多少）。validation 账本不再用单一 status 表达全部。
+- 延迟三分：`allRunsWallClock` / `successfulTaskLatency` / `completedAgentLatency`，provider 故障与 CLI 缺失不进成功延迟统计。
+- environment 指纹补齐：platform / arch / nodeVersion / shell / cwdRealpath（home 替换为 `~`）/ agentCli / recorderVersion / network.proxyConfigured / isolation / provider / model。
+- harness 改为 TypeScript（`cli/validation/`），`dist-cli/validate.mjs` 运行，自带 11 条单测（聚合、分位、recall 分母、availability 跳过）。
+- 任务自带 `reference/` 覆盖层，`--verify-tasks` 自动证明「基线必红、参考必绿」。
+- agent 抽象：opencode / codex / zcode / qoder 可直接跑；claude / cursor 标记 `requiresConsent`，必须显式 `--allow-paid`，否则记为不可用并跳过。
+
 ### 下一阶段（未开始）
 
 3 task × 4 agent × 3 runs = 36 次验证，任务为单文件 bug / 多文件 bug / 小功能，记录 task outcome、availability outcome、tool calls、verified/unverified/outside edits、test runs、recovery、wall clock、capture fidelity，用来发现 Agent Replay 自身的系统性漏录。

@@ -44,13 +44,23 @@ export type Termination = z.infer<typeof terminationSchema>
 /**
  * Enough context to explain "the same model worked yesterday" later on.
  * Nothing here is inferred; fields stay absent when the recorder was not told.
+ * Paths are sanitized: the user's home directory is replaced with `~`.
  */
 export const environmentSchema = z.object({
-  isolation: z.enum(['xdg', 'host-config', 'none']).optional(),
+  isolation: z.enum(['none', 'xdg', 'host-config', 'custom']).optional(),
   provider: z.string().optional(),
+  model: z.string().optional(),
   harnessVersion: z.string().optional(),
+  recorderVersion: z.string().optional(),
   platform: z.string().optional(),
+  arch: z.string().optional(),
   nodeVersion: z.string().optional(),
+  shell: z.string().optional(),
+  cwdRealpath: z.string().optional(),
+  agentCli: z
+    .object({ name: z.string(), version: z.string().optional() })
+    .optional(),
+  network: z.object({ proxyConfigured: z.boolean() }).optional(),
 })
 export type Environment = z.infer<typeof environmentSchema>
 

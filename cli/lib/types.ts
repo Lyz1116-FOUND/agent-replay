@@ -62,7 +62,7 @@ export type SessionMeta = {
   outputDir: string
   tracePath: string
   /** Run-environment fingerprint; only what the recorder was told or can observe. */
-  isolation?: 'xdg' | 'host-config' | 'none'
+  isolation?: 'none' | 'xdg' | 'host-config' | 'custom'
   provider?: string
   harnessVersion?: string
 }

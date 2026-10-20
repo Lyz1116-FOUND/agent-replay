@@ -1,5 +1,7 @@
 # Agent Replay
 
+[English](README.md) | [简体中文](README.zh-CN.md)
+
 **A visual debugger for coding agents that replays native agent events against verified workspace facts.**
 
 Agent Replay is an interactive, time-based visual debugger for coding-agent trajectories. It lets you scrub through a run and see how an agent read the codebase, formed a hypothesis, edited files, failed tests, recovered, and finished — and it tells you how much of that story the environment actually confirms.
@@ -53,7 +55,7 @@ npm run dev
 Open the printed URL. The app starts with four demo runs and requires no backend, API key, or agent installation.
 
 ```bash
-npm test       # 95 schema, adapter, recorder, story, and demo-data tests
+npm test       # schema, adapter, recorder, story, and UI translation tests
 npm run build  # type-check + web build + CLI bundle
 npm run dev    # web app only
 ```
@@ -459,8 +461,9 @@ Key decisions:
 | M4.5 — Overview / recovery / outcome story | done |
 | M4.6 — Native Codex / Cursor / Claude / OpenCode / Qoder capture | done |
 | M4.6 — Real time + capture fidelity + delete/rename | done |
-| M4.7 — Real-agent validation matrix | in progress · OpenCode + Claude + Qoder + GLM done; Codex/Cursor pending |
-| M5 — OpenTelemetry / OTLP import | next |
+| M4.7 — Real-agent validation matrix | OpenCode, Claude, Qoder, ZCode, and Codex validated live; Cursor pending |
+| M4.8 — Measurement integrity + task validation harness | done · coverage and availability reported separately |
+| M5 — OpenTelemetry / OTLP import | done · offline OTLP JSON import |
 
 The full product and technical plan is in [`PLAN.md`](PLAN.md).
 

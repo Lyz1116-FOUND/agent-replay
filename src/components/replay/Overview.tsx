@@ -62,6 +62,7 @@ export function Overview({
                       'rounded-xs border px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-wide',
                       capture.tone === 'native' && 'border-accent/30 bg-accent/[0.05] text-accent/90',
                       capture.tone === 'wrapped' && 'border-warn/30 bg-warn/[0.04] text-warn/90',
+                      capture.tone === 'otel' && 'border-line-strong bg-panel2 text-muted',
                       capture.tone === 'workspace' && 'border-line text-muted',
                     )}
                   >
@@ -71,7 +72,8 @@ export function Overview({
                     title={capture.description}
                     className={clsx(
                       'rounded-xs border px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-wide',
-                      capture.timingLabel === 'OBSERVED TIMING'
+                      capture.timingLabel === 'OBSERVED TIMING' ||
+                        capture.timingLabel === 'EXPORTER TIMING'
                         ? 'border-line text-faint'
                         : 'border-warn/35 text-warn',
                     )}
@@ -98,8 +100,8 @@ export function Overview({
           <Stat label="Duration" value={formatDuration(trace.durationMs)} />
           <Stat label="Steps" value={String(stats.steps)} />
           <Stat label="Edits" value={String(stats.edits)} />
-          <Stat label="Test runs" value={String(tests.length)} />
-          <Stat label="Files changed" value={String(stats.files)} />
+          <Stat label="Test runs" value={String(stats.testRuns)} />
+          <Stat label="Files changed" value={stats.files === null ? '—' : String(stats.files)} />
         </div>
 
         {recovery ? (

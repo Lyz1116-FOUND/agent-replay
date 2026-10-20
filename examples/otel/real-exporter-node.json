@@ -1,0 +1,213 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "otel-export-smoke"
+            }
+          },
+          {
+            "key": "service.version",
+            "value": {
+              "stringValue": "0.0.1"
+            }
+          }
+        ],
+        "droppedAttributesCount": 0
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "agent-replay-smoke",
+            "version": "0.0.1"
+          },
+          "spans": [
+            {
+              "traceId": "f5b3c412c8e973f74c2660e26e1d01d5",
+              "spanId": "26e4ddd0f7a83304",
+              "parentSpanId": "9dcc857f53371141",
+              "name": "execute_tool bash",
+              "kind": 1,
+              "startTimeUnixNano": "1792503571336000000",
+              "endTimeUnixNano": "1792503571362075708",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "execute_tool"
+                  }
+                },
+                {
+                  "key": "gen_ai.tool.name",
+                  "value": {
+                    "stringValue": "bash"
+                  }
+                }
+              ],
+              "droppedAttributesCount": 0,
+              "events": [
+                {
+                  "attributes": [
+                    {
+                      "key": "exception.type",
+                      "value": {
+                        "stringValue": "CommandError"
+                      }
+                    }
+                  ],
+                  "name": "exception",
+                  "timeUnixNano": "1792503571362026958",
+                  "droppedAttributesCount": 0
+                }
+              ],
+              "droppedEventsCount": 0,
+              "status": {
+                "code": 2,
+                "message": "command failed with exit code 1"
+              },
+              "links": [],
+              "droppedLinksCount": 0,
+              "flags": 257
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "otel-export-smoke"
+            }
+          },
+          {
+            "key": "service.version",
+            "value": {
+              "stringValue": "0.0.1"
+            }
+          }
+        ],
+        "droppedAttributesCount": 0
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "agent-replay-smoke",
+            "version": "0.0.1"
+          },
+          "spans": [
+            {
+              "traceId": "f5b3c412c8e973f74c2660e26e1d01d5",
+              "spanId": "9dcc857f53371141",
+              "parentSpanId": "3a15ed6bc6c2230a",
+              "name": "chat gpt-5-mini",
+              "kind": 1,
+              "startTimeUnixNano": "1792503571336000000",
+              "endTimeUnixNano": "1792503571362942542",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "gpt-5-mini"
+                  }
+                },
+                {
+                  "key": "gen_ai.usage.input_tokens",
+                  "value": {
+                    "intValue": 512
+                  }
+                }
+              ],
+              "droppedAttributesCount": 0,
+              "events": [],
+              "droppedEventsCount": 0,
+              "status": {
+                "code": 0
+              },
+              "links": [],
+              "droppedLinksCount": 0,
+              "flags": 257
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "otel-export-smoke"
+            }
+          },
+          {
+            "key": "service.version",
+            "value": {
+              "stringValue": "0.0.1"
+            }
+          }
+        ],
+        "droppedAttributesCount": 0
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "agent-replay-smoke",
+            "version": "0.0.1"
+          },
+          "spans": [
+            {
+              "traceId": "f5b3c412c8e973f74c2660e26e1d01d5",
+              "spanId": "3a15ed6bc6c2230a",
+              "name": "invoke_agent",
+              "kind": 1,
+              "startTimeUnixNano": "1792503571336000000",
+              "endTimeUnixNano": "1792503571374097083",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "invoke_agent"
+                  }
+                },
+                {
+                  "key": "gen_ai.provider.name",
+                  "value": {
+                    "stringValue": "openai"
+                  }
+                },
+                {
+                  "key": "gen_ai.request.model",
+                  "value": {
+                    "stringValue": "gpt-5-mini"
+                  }
+                }
+              ],
+              "droppedAttributesCount": 0,
+              "events": [],
+              "droppedEventsCount": 0,
+              "status": {
+                "code": 0
+              },
+              "links": [],
+              "droppedLinksCount": 0,
+              "flags": 257
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

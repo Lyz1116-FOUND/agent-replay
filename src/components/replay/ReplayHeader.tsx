@@ -64,7 +64,7 @@ export function ReplayHeader({
       <div className="hidden shrink-0 items-center gap-4 md:flex">
         <HeaderStat icon={<Clock size={11} />} value={formatDuration(trace.durationMs)} />
         <HeaderStat icon={<ListTree size={11} />} value={`${stats.steps} steps`} />
-        <HeaderStat icon={<FileCode2 size={11} />} value={`${stats.files} changed`} />
+        <HeaderStat icon={<FileCode2 size={11} />} value={stats.files === null ? 'files n/a' : `${stats.files} changed`} />
       </div>
 
       {onOverview ? (

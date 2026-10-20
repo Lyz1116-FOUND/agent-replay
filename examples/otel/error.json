@@ -1,0 +1,106 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "demo-agent"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "agent-sdk",
+            "version": "1.0.0"
+          },
+          "spans": [
+            {
+              "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+              "spanId": "ccccccccccccccc1",
+              "name": "agent.run",
+              "kind": 1,
+              "startTimeUnixNano": "1760864400000000000",
+              "endTimeUnixNano": "1760864403000000000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "invoke_agent"
+                  }
+                }
+              ],
+              "status": {
+                "code": 0
+              }
+            },
+            {
+              "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+              "spanId": "ccccccccccccccc2",
+              "parentSpanId": "ccccccccccccccc1",
+              "name": "run_tests",
+              "kind": 1,
+              "startTimeUnixNano": "1760864400100000000",
+              "endTimeUnixNano": "1760864401200000000",
+              "attributes": [
+                {
+                  "key": "tool.name",
+                  "value": {
+                    "stringValue": "run_tests"
+                  }
+                }
+              ],
+              "status": {
+                "code": 2,
+                "message": "Command failed with exit code 1"
+              },
+              "events": [
+                {
+                  "timeUnixNano": "1760864401150000000",
+                  "name": "exception",
+                  "attributes": [
+                    {
+                      "key": "exception.type",
+                      "value": {
+                        "stringValue": "CommandError"
+                      }
+                    },
+                    {
+                      "key": "exception.message",
+                      "value": {
+                        "stringValue": "1 failing"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+              "spanId": "ccccccccccccccc3",
+              "parentSpanId": "ccccccccccccccc1",
+              "name": "run_tests",
+              "kind": 1,
+              "startTimeUnixNano": "1760864401500000000",
+              "endTimeUnixNano": "1760864402600000000",
+              "attributes": [
+                {
+                  "key": "tool.name",
+                  "value": {
+                    "stringValue": "run_tests"
+                  }
+                }
+              ],
+              "status": {
+                "code": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

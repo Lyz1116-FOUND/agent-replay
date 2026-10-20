@@ -2,6 +2,7 @@ import { z } from 'zod'
 
 export const SPAN_TYPES = [
   'agent',
+  'generation',
   'reasoning',
   'read',
   'search',
@@ -10,6 +11,7 @@ export const SPAN_TYPES = [
   'test',
   'browser',
   'tool',
+  'unknown',
   'checkpoint',
   'final',
 ] as const
@@ -17,7 +19,11 @@ export const SPAN_TYPES = [
 export const spanTypeSchema = z.enum(SPAN_TYPES)
 export type SpanType = z.infer<typeof spanTypeSchema>
 
-export const spanStatusSchema = z.enum(['ok', 'error', 'warning', 'running'])
+/**
+ * `unset` exists because OTel spans may carry no status at all. It is not a
+ * success value: the UI renders it as neutral and the inspector says so.
+ */
+export const spanStatusSchema = z.enum(['ok', 'error', 'warning', 'running', 'unset'])
 export type SpanStatus = z.infer<typeof spanStatusSchema>
 
 export const traceStatusSchema = z.enum(['pass', 'fail', 'partial', 'running'])
@@ -189,6 +195,12 @@ export const spanSchema = z
     files: z.array(z.string()).optional(),
     attributes: z.record(z.string(), attributeValueSchema).optional(),
     artifacts: z.array(artifactSchema).optional(),
+    /**
+     * Untouched input fields that the normalized model cannot represent, kept
+     * verbatim so an import never silently drops data. OTel imports use
+     * `raw.otlp`; nothing here is rendered as a first-class field.
+     */
+    raw: z.record(z.string(), z.unknown()).optional(),
   })
   .refine((span) => span.endMs >= span.startMs, {
     message: 'endMs must be greater than or equal to startMs',
@@ -234,10 +246,22 @@ export const traceSchema = z
     }),
     capture: z
       .object({
-        fidelity: z.enum(['workspace', 'wrapped-output', 'native-events', 'native+workspace']),
+        /**
+         * `otel` means: spans were exported by an instrumented agent, not
+         * observed by this recorder. It is a source, not a strength grade.
+         */
+        fidelity: z.enum([
+          'workspace',
+          'wrapped-output',
+          'native-events',
+          'native+workspace',
+          'otel',
+        ]),
         timing: z.enum(['observed', 'mixed', 'estimated']),
         adapter: z.string().optional(),
         sources: z.array(z.string()).optional(),
+        /** Whether file edits were corroborated by an observed workspace. */
+        workspaceVerification: z.enum(['verified', 'partial', 'unavailable']).optional(),
         workspaceVerified: z.number().int().nonnegative().optional(),
         unverifiedEdits: z.number().int().nonnegative().optional(),
         integrity: captureIntegritySchema.optional(),
@@ -267,6 +291,13 @@ export const traceSchema = z
     }
 
     const byId = new Map(trace.spans.map((span) => [span.id, span]))
+    /**
+     * A trace imported from an exporter is a partial view: the parent span may
+     * have been dropped, and OTel explicitly allows a child to keep running
+     * after its parent ended. Native recordings keep the stricter rule because
+     * a broken hierarchy there means the recorder produced bad data.
+     */
+    const partialExport = trace.capture?.fidelity === 'otel'
     for (const [index, span] of trace.spans.entries()) {
       if (!span.parentId) continue
       if (span.parentId === span.id) {
@@ -279,19 +310,40 @@ export const traceSchema = z
       }
       const parent = byId.get(span.parentId)
       if (!parent) {
-        ctx.addIssue({
-          code: 'custom',
-          path: ['spans', index, 'parentId'],
-          message: `Parent span "${span.parentId}" does not exist.`,
-        })
+        if (!partialExport) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['spans', index, 'parentId'],
+            message: `Parent span "${span.parentId}" does not exist.`,
+          })
+        }
         continue
       }
-      if (span.startMs < parent.startMs || span.endMs > parent.endMs) {
+      if (!partialExport && (span.startMs < parent.startMs || span.endMs > parent.endMs)) {
         ctx.addIssue({
           code: 'custom',
           path: ['spans', index],
           message: `Child span "${span.id}" must fall within parent "${parent.id}".`,
         })
+      }
+    }
+
+    const indexById = new Map(trace.spans.map((span, index) => [span.id, index]))
+    for (const span of trace.spans) {
+      if (!span.parentId || span.parentId === span.id) continue
+      const seen = new Set<string>([span.id])
+      let cursor: string | undefined = span.parentId
+      while (cursor) {
+        if (seen.has(cursor)) {
+          ctx.addIssue({
+            code: 'custom',
+            path: ['spans', indexById.get(span.id) ?? 0, 'parentId'],
+            message: `Parent chain of "${span.id}" contains a cycle through "${cursor}".`,
+          })
+          break
+        }
+        seen.add(cursor)
+        cursor = byId.get(cursor)?.parentId
       }
     }
 

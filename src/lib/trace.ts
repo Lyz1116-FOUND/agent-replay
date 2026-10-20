@@ -2,6 +2,7 @@ import type { Span, SpanType, Trace } from '../schema/trace'
 
 export const SPAN_LABELS: Record<SpanType, string> = {
   agent: 'Agent',
+  generation: 'LLM',
   reasoning: 'Reasoning',
   read: 'Read',
   search: 'Search',
@@ -10,12 +11,14 @@ export const SPAN_LABELS: Record<SpanType, string> = {
   test: 'Test',
   browser: 'Browser',
   tool: 'Tool',
+  unknown: 'Span',
   checkpoint: 'Checkpoint',
   final: 'Final',
 }
 
 export const SPAN_COLORS: Record<SpanType, string> = {
   agent: '#8f98a6',
+  generation: '#d2a8ff',
   reasoning: '#d29922',
   read: '#4d9bff',
   search: '#39c5cf',
@@ -24,11 +27,13 @@ export const SPAN_COLORS: Record<SpanType, string> = {
   test: '#3fb950',
   browser: '#db6d28',
   tool: '#7d8590',
+  unknown: '#5d6675',
   checkpoint: '#6e7681',
   final: '#3fb950',
 }
 
 export const TIMELINE_LANES: SpanType[] = [
+  'generation',
   'reasoning',
   'read',
   'search',
@@ -46,6 +51,55 @@ export function leafSpans(trace: Trace): Span[] {
   const parentIds = new Set(trace.spans.map((span) => span.parentId).filter(Boolean))
   const leaves = trace.spans.filter((span) => !parentIds.has(span.id))
   return orderSpans(leaves.length > 0 ? leaves : trace.spans)
+}
+
+/**
+ * Everything the playhead can stop on, parents included. `leafSpans` answers
+ * "which steps actually did something"; this answers "which spans exist", so a
+ * nested import keeps its containers selectable instead of only its leaves.
+ */
+export function playbackSpans(trace: Trace): Span[] {
+  return orderSpans(trace.spans)
+}
+
+/** Depth in the parent chain. Missing parents count as roots. */
+export function spanDepths(spans: Span[]): Map<string, number> {
+  const byId = new Map(spans.map((span) => [span.id, span]))
+  const depths = new Map<string, number>()
+  for (const span of spans) {
+    let depth = 0
+    const seen = new Set<string>([span.id])
+    let cursor = span.parentId
+    while (cursor && !seen.has(cursor)) {
+      const parent = byId.get(cursor)
+      if (!parent) break
+      seen.add(cursor)
+      depth += 1
+      cursor = parent.parentId
+    }
+    depths.set(span.id, depth)
+  }
+  return depths
+}
+
+export function spanParent(span: Span, spans: Span[]): Span | undefined {
+  if (!span.parentId) return undefined
+  return spans.find((item) => item.id === span.parentId)
+}
+
+/**
+ * Greedy interval packing. Overlapping spans (same type or not) land on
+ * separate rows so the flame view never hides one behind another; the spans
+ * themselves keep their real start/end.
+ */
+export function packSpanRows(spans: Span[]): Span[][] {
+  const rows: Span[][] = []
+  for (const span of orderSpans(spans)) {
+    const row = rows.find((candidate) => candidate[candidate.length - 1].endMs <= span.startMs)
+    if (row) row.push(span)
+    else rows.push([span])
+  }
+  return rows
 }
 
 export function spanAtTime(spans: Span[], ms: number): Span {
@@ -188,4 +242,5 @@ export const STATUS_COLORS = {
   ok: 'var(--color-pass)',
   error: 'var(--color-fail)',
   warning: 'var(--color-warn)',
+  unset: 'var(--color-faint)',
 } as const

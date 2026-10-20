@@ -1,20 +1,41 @@
 import { ZodError } from 'zod'
 import { parseNativeTrace, type Trace } from '../schema/trace'
+import { TraceImportError } from './errors'
+import { adaptOtlpJson, isOtlpTraceJson } from './otel'
 import { adaptSweAgent, isSweAgentTrajectory } from './sweAgent'
 
-export class TraceImportError extends Error {
-  issues: string[]
+export { TraceImportError } from './errors'
 
-  constructor(message: string, issues: string[] = []) {
-    super(message)
-    this.name = 'TraceImportError'
-    this.issues = issues
-  }
+export type ImportFormat = 'native' | 'swe-agent' | 'otlp'
+
+export type ImportDiagnostic = {
+  level: 'info' | 'warning'
+  message: string
 }
 
-export type ImportFormat = 'native' | 'swe-agent'
+export type ImportResult = {
+  format: ImportFormat
+  /** One file can hold several OTel traceIds; native and SWE-agent yield exactly one. */
+  traces: Trace[]
+  diagnostics: ImportDiagnostic[]
+}
 
-export function importTraceText(text: string): { trace: Trace; format: ImportFormat } {
+const MAX_IMPORT_CHARS = 32 * 1024 * 1024
+
+function zodIssues(error: ZodError): string[] {
+  return error.issues.map((issue) => {
+    const path = issue.path.length > 0 ? issue.path.join('.') : '(root)'
+    return `${path}: ${issue.message}`
+  })
+}
+
+export function importTraceFile(text: string): ImportResult {
+  if (text.length > MAX_IMPORT_CHARS) {
+    throw new TraceImportError('This file is too large to import in the browser.', [
+      `${text.length.toLocaleString()} characters exceed the ${MAX_IMPORT_CHARS.toLocaleString()} character limit.`,
+    ])
+  }
+
   let json: unknown
   try {
     json = JSON.parse(text)
@@ -25,7 +46,7 @@ export function importTraceText(text: string): { trace: Trace; format: ImportFor
 
   if (isSweAgentTrajectory(json)) {
     try {
-      return { trace: adaptSweAgent(json), format: 'swe-agent' }
+      return { format: 'swe-agent', traces: [adaptSweAgent(json)], diagnostics: [] }
     } catch (error) {
       throw new TraceImportError(
         'Could not convert this SWE-agent trajectory.',
@@ -34,16 +55,18 @@ export function importTraceText(text: string): { trace: Trace; format: ImportFor
     }
   }
 
+  if (isOtlpTraceJson(json)) {
+    const result = adaptOtlpJson(json)
+    return { format: 'otlp', traces: result.traces, diagnostics: result.diagnostics }
+  }
+
   try {
-    return { trace: parseNativeTrace(json), format: 'native' }
+    return { format: 'native', traces: [parseNativeTrace(json)], diagnostics: [] }
   } catch (error) {
     if (error instanceof ZodError) {
       throw new TraceImportError(
         'Trace does not match the agent-replay/v1 schema.',
-        error.issues.map((issue) => {
-          const path = issue.path.length > 0 ? issue.path.join('.') : '(root)'
-          return `${path}: ${issue.message}`
-        }),
+        zodIssues(error),
       )
     }
     throw error

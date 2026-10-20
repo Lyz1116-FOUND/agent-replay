@@ -212,7 +212,9 @@ function metrics(run: Trace) {
     steps: spans.length,
     edits: spans.filter((span) => span.type === 'edit').length,
     testRuns: spans.filter((span) => span.type === 'test').length,
-    files: (run.result.filesChanged ?? traceFiles(run)).length,
+    files:
+      run.result.filesChanged?.length ??
+      (run.capture?.fidelity === 'otel' ? null : traceFiles(run).length),
     tests: run.result.tests,
     tokens: spans.reduce((total, span) => {
       const tokens = span.attributes?.tokens
@@ -306,7 +308,7 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
           columns={columns}
           values={metricsByRun.map((item, index) => ({
             key: runs[index].id,
-            content: String(item.files),
+            content: item.files === null ? '—' : String(item.files),
             tone: 'default',
           }))}
         />

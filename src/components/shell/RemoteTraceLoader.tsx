@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AlertTriangle, Loader2, X } from 'lucide-react'
-import { importTraceText, TraceImportError } from '../../adapters/import'
+import { importTraceFile, TraceImportError } from '../../adapters/import'
 import { useRunsStore } from '../../store/runs'
 
 type LoadState =
@@ -35,10 +35,11 @@ export function RemoteTraceLoader() {
       })
       .then((text) => {
         if (cancelled) return
-        const { trace } = importTraceText(text)
-        addTransient(trace)
+        const { traces } = importTraceFile(text)
+        for (const trace of traces) addTransient(trace)
         setState({ status: 'idle' })
-        navigate({ pathname: `/runs/${trace.id}`, search: location.search }, { replace: true })
+        const first = traces[0]
+        navigate({ pathname: `/runs/${first.id}`, search: location.search }, { replace: true })
       })
       .catch((error: unknown) => {
         if (cancelled) return

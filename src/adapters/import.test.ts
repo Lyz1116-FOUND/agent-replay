@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import nativeSample from '../../examples/native-sample.trace.json'
-import { importTraceText, TraceImportError } from './import'
+import { importTraceFile, TraceImportError } from './import'
 import { adaptSweAgent } from './sweAgent'
 import { sampleSweAgentTrajectory } from '../data/sampleTraj'
 import { leafSpans, spanEnd } from '../lib/trace'
@@ -57,22 +57,22 @@ describe('SWE-agent adapter', () => {
 
 describe('trace import', () => {
   it('detects a SWE-agent trajectory', () => {
-    const result = importTraceText(JSON.stringify(sampleSweAgentTrajectory))
+    const result = importTraceFile(JSON.stringify(sampleSweAgentTrajectory))
     expect(result.format).toBe('swe-agent')
-    expect(result.trace.agent.name).toBe('SWE-agent')
+    expect(result.traces[0].agent.name).toBe('SWE-agent')
   })
 
   it('imports the native example trace', () => {
-    const result = importTraceText(JSON.stringify(nativeSample))
+    const result = importTraceFile(JSON.stringify(nativeSample))
     expect(result.format).toBe('native')
-    expect(result.trace.spans).toHaveLength(3)
-    expect(result.trace.result.tests).toEqual({ passed: 14, failed: 0, total: 14 })
+    expect(result.traces[0].spans).toHaveLength(3)
+    expect(result.traces[0].result.tests).toEqual({ passed: 14, failed: 0, total: 14 })
   })
 
   it('reports schema issues instead of throwing raw Zod errors', () => {
     let caught: unknown
     try {
-      importTraceText('{"schemaVersion":"wrong"}')
+      importTraceFile('{"schemaVersion":"wrong"}')
     } catch (error) {
       caught = error
     }
@@ -84,6 +84,6 @@ describe('trace import', () => {
   })
 
   it('reports invalid JSON', () => {
-    expect(() => importTraceText('not json')).toThrow(TraceImportError)
+    expect(() => importTraceFile('not json')).toThrow(TraceImportError)
   })
 })

@@ -4,7 +4,7 @@ export type CaptureInfo = {
   label: string
   description: string
   timingLabel: string
-  tone: 'native' | 'wrapped' | 'workspace'
+  tone: 'native' | 'wrapped' | 'workspace' | 'otel'
   sourceLine: string
 }
 
@@ -62,6 +62,20 @@ export function captureInfo(trace: Trace): CaptureInfo | null {
         : 'OBSERVED TIMING'
   const recall = recallLine(trace)
 
+  if (capture.fidelity === 'otel') {
+    const verified = capture.workspaceVerification === 'verified'
+    return {
+      label: 'OTEL TRACE',
+      description: verified
+        ? 'Spans exported over OpenTelemetry, plus a workspace recording that corroborates the edits.'
+        : 'Spans exported over OpenTelemetry. The workspace was not observed, so edits are unverified and span status is not a task outcome.',
+      timingLabel: 'EXPORTER TIMING',
+      tone: 'otel',
+      sourceLine: verified
+        ? 'OpenTelemetry export + workspace verification'
+        : 'OpenTelemetry export · not workspace verified · task outcome not evaluated',
+    }
+  }
   if (capture.fidelity === 'native+workspace') {
     return {
       label: 'NATIVE + WORKSPACE',

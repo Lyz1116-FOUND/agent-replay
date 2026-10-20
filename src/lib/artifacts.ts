@@ -2,6 +2,7 @@ import type { Artifact, ArtifactKind, SpanType } from '../schema/trace'
 
 export const PREFERRED_ARTIFACTS: Record<SpanType, ArtifactKind[]> = {
   agent: ['markdown', 'reasoning', 'terminal'],
+  generation: ['markdown', 'reasoning'],
   reasoning: ['reasoning', 'markdown'],
   read: ['code', 'markdown', 'terminal'],
   search: ['search', 'terminal'],
@@ -10,6 +11,7 @@ export const PREFERRED_ARTIFACTS: Record<SpanType, ArtifactKind[]> = {
   test: ['test', 'terminal'],
   browser: ['browser', 'markdown'],
   tool: ['terminal', 'code', 'markdown'],
+  unknown: ['terminal', 'markdown'],
   checkpoint: ['patch', 'terminal', 'diff'],
   final: ['markdown', 'patch', 'test'],
 }

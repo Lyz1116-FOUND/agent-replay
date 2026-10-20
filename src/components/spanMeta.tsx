@@ -1,6 +1,7 @@
 import type { ComponentType, SVGProps } from 'react'
 import {
   Bot,
+  Box,
   Brain,
   FileText,
   Flag,
@@ -9,6 +10,7 @@ import {
   Globe,
   Pencil,
   Search,
+  Sparkles,
   Terminal,
   Wrench,
 } from 'lucide-react'
@@ -18,6 +20,7 @@ type IconProps = SVGProps<SVGSVGElement> & { size?: number | string }
 
 const SPAN_ICONS: Record<SpanType, ComponentType<IconProps>> = {
   agent: Bot,
+  generation: Sparkles,
   reasoning: Brain,
   read: FileText,
   search: Search,
@@ -26,6 +29,7 @@ const SPAN_ICONS: Record<SpanType, ComponentType<IconProps>> = {
   test: FlaskConical,
   browser: Globe,
   tool: Wrench,
+  unknown: Box,
   checkpoint: GitCommitHorizontal,
   final: Flag,
 }

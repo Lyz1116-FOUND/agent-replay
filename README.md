@@ -28,10 +28,10 @@ It is not another LLM observability dashboard. Langfuse and Phoenix answer *“w
 - **Stage renderers** — Monaco code/diff, terminal output, test summaries, search hits, patches, reasoning summaries, and final reports.
 - **Workspace replay** — files are shown with read/edit markers over time, so you can see which parts of the repo the agent actually touched.
 - **Inspector** — event type, timing, tool, attributes, artifacts, raw span JSON, plus *why this step* and *what followed*.
-- **Import** — native `agent-replay/v1` JSON and SWE-agent `.traj` files. Imported traces stay in your browser.
+- **Import** — native `agent-replay/v1` JSON, SWE-agent `.traj` files, and OpenTelemetry OTLP JSON exports. Imported traces stay in your browser.
 - **Recorder CLI** — native Codex / Cursor / Claude / OpenCode / Qoder streams, passive workspace capture, wrapped commands, `open`, and `list`. Recorded traces use the same schema and UI.
 - **Real time, not a beautified queue** — native tool spans keep their real start/end and may overlap. Instant events only get a visual minimum width; their timestamps are not moved.
-- **Capture fidelity** — every recorded trace declares how it was captured: `workspace`, `wrapped-output`, `native-events`, or `native+workspace`, plus observed/mixed/estimated timing.
+- **Capture fidelity** — every trace declares how it was captured: `workspace`, `wrapped-output`, `native-events`, `native+workspace`, or `otel`, plus observed/mixed/estimated timing. An OTel import says `OTEL TRACE` and `not workspace verified` instead of borrowing a recorder's credibility.
 - **Agent claims vs workspace truth** — native edit tools are matched to workspace diffs; an agent-reported edit with no observed diff is surfaced as unverified.
 - **Deep links** — every span has a URL (`/runs/:id?step=s08`), so a replay step can be shared or linked from a comparison.
 - **Honest timing** — SWE-agent trajectories and tests detected from wrapped stdout have no command timestamps; those durations are labeled **estimated**.
@@ -342,7 +342,7 @@ A trace is a task, an agent, a result, and a flat list of timed spans:
 }
 ```
 
-Span types are a closed set: `agent`, `reasoning`, `read`, `search`, `edit`, `shell`, `test`, `browser`, `tool`, `checkpoint`, `final`. Artifacts are `code`, `diff`, `terminal`, `test`, `search`, `reasoning`, `patch`, `markdown`, `browser`.
+Span types are a closed set: `agent`, `generation`, `reasoning`, `read`, `search`, `edit`, `shell`, `test`, `browser`, `tool`, `unknown`, `checkpoint`, `final`. Artifacts are `code`, `diff`, `terminal`, `test`, `search`, `reasoning`, `patch`, `markdown`, `browser`.
 
 See [`examples/native-sample.trace.json`](examples/native-sample.trace.json), the wrapped-output sample [`examples/recorded-sample.trace.json`](examples/recorded-sample.trace.json), and real native+workspace captures [`examples/real-claude.trace.json`](examples/real-claude.trace.json) / [`examples/real-opencode.trace.json`](examples/real-opencode.trace.json) / [`examples/real-qoder.trace.json`](examples/real-qoder.trace.json) / [`examples/real-glm-flash.trace.json`](examples/real-glm-flash.trace.json).
 
@@ -357,6 +357,21 @@ Use **Import trace → Use sample .traj** to try the bundled example, or drop a 
 5. marks submitted runs `partial`, because benchmark evaluation is not part of the trajectory.
 
 See [`examples/swe-agent-sample.traj`](examples/swe-agent-sample.traj).
+
+### OpenTelemetry (OTLP JSON)
+
+Drop an `ExportTraceServiceRequest` JSON file — what `OTEL_EXPORTER_OTLP_PROTOCOL=http/json` and most exporters emit — into **Import trace**. One file may contain several traceIds; each becomes its own run, and the dialog lists them so nothing is silently dropped.
+
+- **Exact time.** `startTimeUnixNano` / `endTimeUnixNano` must be decimal strings, parsed as BigInt and only converted to display milliseconds after subtraction, so a 1 ns difference stays 1 ns. Numeric timestamps are rejected because `JSON.parse` has already rounded them. Zero-duration spans stay zero.
+- **Real hierarchy.** `parentSpanId` is kept as `parentId`; parents stay selectable in the timeline. Overlapping siblings get separate rows in the flame view instead of drawing on top of each other.
+- **Honest semantics.** `gen_ai.operation.name` and exact `tool.name` values map to span types (`chat` → LLM, `bash` → shell, `read_file` → read). Anything unrecognized stays `unknown` with `otel.typeSource` saying why; names are never pattern-matched, and provider/model attributes alone do not imply an LLM call.
+- **No task verdict.** OTel `status.code` becomes `ok` / `error` / `unset`; `unset` is not success. `trace.status` stays `partial`, tests are left empty, and no `termination` is invented. A tool error followed by a success is not a recovered task.
+- **Nothing lost.** Nested `kvlistValue`, arrays of arrays, `bytesValue`, events, links, and the verbatim `resource` / `scope` objects (including scope attributes and dropped counts) stay in `span.raw.otlp` / `trace.metadata.otel`; flat scalars are also surfaced in the inspector. Hex ids are matched case-insensitively, and each trace keeps only the resources it used.
+- **Partial exports are allowed.** A child may outlive its parent, and a missing parent stays a dangling reference (reported as a diagnostic) rather than being re-parented. Cycles and invalid ids are rejected.
+
+![OTel import](docs/otel-import.png)
+
+Contract details and the fixture matrix: [`docs/M5_OTEL_CONTRACTS.md`](docs/M5_OTEL_CONTRACTS.md). Fixtures: [`examples/otel/`](examples/otel/).
 
 ## Architecture
 

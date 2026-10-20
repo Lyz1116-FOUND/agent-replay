@@ -36,6 +36,10 @@ export type StoryNode = {
 
 export function testResults(trace: Trace): TestResult[] {
   const spans = leafSpans(trace)
+  // Exported traces carry arbitrary attributes: `passed`/`failed`/`total` on a
+  // tool span is not a test observation, so only explicit test artifacts count
+  // there. Gating one field but not the others still fabricates "0 passed".
+  const attributeCountsAllowed = trace.capture?.fidelity !== 'otel'
   const results: TestResult[] = []
   spans.forEach((span, index) => {
     if (span.type !== 'test') return
@@ -43,19 +47,19 @@ export function testResults(trace: Trace): TestResult[] {
     const passed =
       artifact?.kind === 'test'
         ? artifact.passed
-        : typeof span.attributes?.passed === 'number'
+        : attributeCountsAllowed && typeof span.attributes?.passed === 'number'
           ? span.attributes.passed
           : 0
     const failed =
       artifact?.kind === 'test'
         ? artifact.failed
-        : typeof span.attributes?.failed === 'number'
+        : attributeCountsAllowed && typeof span.attributes?.failed === 'number'
           ? span.attributes.failed
           : 0
     const total =
       artifact?.kind === 'test'
         ? artifact.total
-        : typeof span.attributes?.total === 'number'
+        : attributeCountsAllowed && typeof span.attributes?.total === 'number'
           ? span.attributes.total
           : passed + failed
     if (total === 0 && passed === 0 && failed === 0) return
@@ -170,7 +174,14 @@ export function buildStory(trace: Trace): StoryNode[] {
       kind: 'final',
       step: spans.length,
       timeMs: spans[spans.length - 1]?.endMs ?? 0,
-      title: trace.status === 'pass' ? 'Run complete' : 'Run incomplete',
+      title:
+        trace.status === 'pass'
+          ? 'Run complete'
+          : trace.status === 'fail'
+            ? 'Run failed'
+            : trace.status === 'running'
+              ? 'Run in progress'
+              : 'Outcome not evaluated',
       detail: trace.result.summary,
       tone: trace.status === 'pass' ? 'pass' : trace.status === 'fail' ? 'fail' : 'neutral',
       regression: false,

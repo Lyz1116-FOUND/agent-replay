@@ -1,5 +1,79 @@
 # Changelog
 
+## Unreleased — M5 OpenTelemetry interoperability
+
+Offline OTLP/JSON import. No collector, no backend, no realtime stream.
+
+### Added
+
+- **OTLP JSON import.** An `ExportTraceServiceRequest` file can be dropped into
+  *Import trace*. One file may hold several traceIds; each becomes its own run
+  and the dialog lists them instead of silently keeping the first. Contract:
+  [`docs/M5_OTEL_CONTRACTS.md`](docs/M5_OTEL_CONTRACTS.md).
+- **Exact timestamps.** `startTimeUnixNano` / `endTimeUnixNano` are subtracted as
+  BigInt before any millisecond conversion, so a 1 ns difference survives and a
+  zero-duration span stays zero.
+- **Hierarchy and parallelism.** `parentSpanId` becomes `parentId`; parents stay
+  selectable in the timeline, overlapping same-type spans get their own flame
+  rows, and a child may outlive its parent without either span being resized.
+- **Honest OTel semantics.** `gen_ai.operation.name` and exact `tool.name`
+  values map to span types; anything else stays `unknown` with
+  `otel.typeSource: fallback`. New span types `generation` and `unknown`, new
+  status `unset` (which is not success).
+- **Raw preservation.** Nested `kvlistValue`, mixed arrays, `bytesValue`,
+  events, links, resource/scope metadata and dropped counts stay verbatim in
+  `span.raw.otlp` / `trace.metadata.otel`; flat scalars also appear in the
+  inspector. int64 beyond 2^53 keeps its exact decimal string.
+- **Fixtures and tests.** `examples/otel/` covers generic, nested, parallel,
+  error, AI, multi-trace, nanosecond precision, async child, nested attributes,
+  unset status and snake_case payloads, plus one payload captured from a real
+  `@opentelemetry/sdk-trace-node` 2.12.0 / OTLP/HTTP JSON exporter. 21 tests in
+  `src/adapters/otel.test.ts`, including cycle, self-parent, invalid id and
+  negative-duration counterexamples.
+
+### Fixed (review round 1)
+
+- **Resource attribution across traces.** A trace now keeps only the resources
+  it used, `span.raw.resourceIndex` points into that local array, and
+  `agent.name` comes from the earliest span's resource instead of the first
+  `service.name` in the file. `metadata.otel.services` lists every service the
+  trace spans.
+- **Hex id casing.** `traceId` / `spanId` / `parentSpanId` are lowercased before
+  grouping, parent lookup, cycle checks and duplicate detection, so the same
+  trace written in mixed case is one run. Raw spans keep the original casing.
+- **Resource/scope context is no longer dropped.** Each record keeps the
+  verbatim `resource` / `scope` objects plus `droppedAttributesCount`, scope
+  `attributes` and the original file index; a serialize → re-import round trip
+  preserves them.
+- **Nested arrays no longer fail the import.** Only homogeneous primitive arrays
+  reach the flat attribute channel; arrays of arrays stay raw.
+- **Numeric timestamps are rejected** with an explicit message instead of
+  silently rounding away nanoseconds after `JSON.parse`; unsafe numeric
+  `intValue`s are kept raw and counted.
+- **Tool spans stay tool spans.** `gen_ai.operation.name=execute_tool` without a
+  tool name no longer falls through to `generation`, and provider/model
+  attributes alone no longer imply an LLM call.
+- **Single-trace imports show diagnostics.** A lone trace with warnings stays in
+  the import dialog so orphan/precision notes are visible.
+- **No recovery story from generic attributes.** OTel `passed` / `failed` /
+  `total` attributes no longer enter the test-result channel; a span with only
+  `total=7` stays "Outcome not evaluated" instead of a green "0 passed" beat.
+  An explicit `test` artifact still counts.
+
+### Changed
+
+- `capture.fidelity` gains `otel`; `capture.workspaceVerification` is explicit
+  (`verified | partial | unavailable`). OTel imports never claim workspace
+  verification or a task verdict: `status` stays `partial`, `result.tests` is
+  empty, `termination` is absent.
+- The replay playlist now includes parent spans (`playbackSpans`); statistics
+  and the outcome story still use leaves.
+- `importTraceText()` is replaced by `importTraceFile()`, which returns every
+  trace in the file plus diagnostics.
+- Schema: dangling parents and children that outlive a parent are accepted only
+  for `fidelity: otel`; native recordings keep the strict containment rule.
+  Parent-chain cycles are now rejected for every trace.
+
 ## 0.3.0 — 2026-10-20
 
 First beta. The focus of this release is not more adapters — it is making a

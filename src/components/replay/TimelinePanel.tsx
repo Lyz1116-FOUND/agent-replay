@@ -15,7 +15,7 @@ export function TimelinePanel() {
     <aside className="flex w-[318px] shrink-0 flex-col border-r border-line bg-canvas">
       <div className="flex h-11 shrink-0 items-center gap-2 border-b border-line px-3">
         <span className="eyebrow">Timeline</span>
-        <span className="font-mono text-[10px] text-faint">{spans.length} steps</span>
+        <span className="font-mono text-[10px] text-faint">{spans.length} spans</span>
         <div className="ml-auto">
           <Segmented
             value={view}

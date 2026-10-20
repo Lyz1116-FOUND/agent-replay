@@ -113,6 +113,7 @@ function classify(action: string, thought: string): Classification {
 
 const DURATION_WEIGHTS: Record<SpanType, number> = {
   agent: 900,
+  generation: 1200,
   reasoning: 1400,
   read: 900,
   search: 800,
@@ -121,6 +122,7 @@ const DURATION_WEIGHTS: Record<SpanType, number> = {
   test: 4200,
   browser: 2400,
   tool: 1200,
+  unknown: 1000,
   checkpoint: 700,
   final: 700,
 }

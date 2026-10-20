@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import type { Span, Trace } from '../schema/trace'
-import { leafSpans, spanAtTime, spanEnd } from '../lib/trace'
+import { playbackSpans, spanAtTime, spanEnd } from '../lib/trace'
 
 export type StageView = 'artifact' | 'workspace'
 
@@ -44,7 +44,7 @@ export const useReplayStore = create<ReplayState>((set, get) => ({
   workspaceFile: null,
 
   setTrace: (trace) => {
-    const spans = leafSpans(trace)
+    const spans = playbackSpans(trace)
     set({
       trace,
       spans,

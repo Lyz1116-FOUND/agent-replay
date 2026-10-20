@@ -1,0 +1,125 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "demo-agent"
+            }
+          }
+        ]
+      },
+      "scopeSpans": [
+        {
+          "scope": {
+            "name": "agent-sdk",
+            "version": "1.0.0"
+          },
+          "spans": [
+            {
+              "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+              "spanId": "bbbbbbbbbbbbbbb1",
+              "name": "agent.run",
+              "kind": 1,
+              "startTimeUnixNano": "1760864400000000000",
+              "endTimeUnixNano": "1760864404000000000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "invoke_agent"
+                  }
+                }
+              ],
+              "status": {
+                "code": 1
+              }
+            },
+            {
+              "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+              "spanId": "bbbbbbbbbbbbbbb2",
+              "parentSpanId": "bbbbbbbbbbbbbbb1",
+              "name": "bash A",
+              "kind": 1,
+              "startTimeUnixNano": "1760864400100000000",
+              "endTimeUnixNano": "1760864402100000000",
+              "attributes": [
+                {
+                  "key": "tool.name",
+                  "value": {
+                    "stringValue": "bash"
+                  }
+                }
+              ],
+              "status": {
+                "code": 1
+              }
+            },
+            {
+              "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+              "spanId": "bbbbbbbbbbbbbbb3",
+              "parentSpanId": "bbbbbbbbbbbbbbb1",
+              "name": "bash B",
+              "kind": 1,
+              "startTimeUnixNano": "1760864400600000000",
+              "endTimeUnixNano": "1760864403200000000",
+              "attributes": [
+                {
+                  "key": "tool.name",
+                  "value": {
+                    "stringValue": "bash"
+                  }
+                }
+              ],
+              "status": {
+                "code": 1
+              }
+            },
+            {
+              "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+              "spanId": "bbbbbbbbbbbbbbb4",
+              "parentSpanId": "bbbbbbbbbbbbbbb1",
+              "name": "grep TODO",
+              "kind": 1,
+              "startTimeUnixNano": "1760864400200000000",
+              "endTimeUnixNano": "1760864400900000000",
+              "attributes": [
+                {
+                  "key": "tool.name",
+                  "value": {
+                    "stringValue": "grep"
+                  }
+                }
+              ],
+              "status": {
+                "code": 1
+              }
+            },
+            {
+              "traceId": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+              "spanId": "bbbbbbbbbbbbbbb5",
+              "parentSpanId": "bbbbbbbbbbbbbbb1",
+              "name": "chat",
+              "kind": 1,
+              "startTimeUnixNano": "1760864400700000000",
+              "endTimeUnixNano": "1760864401500000000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "chat"
+                  }
+                }
+              ],
+              "status": {
+                "code": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

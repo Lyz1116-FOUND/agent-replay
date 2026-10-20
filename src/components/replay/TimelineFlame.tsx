@@ -1,11 +1,20 @@
 import { clsx } from 'clsx'
 import type { Span, SpanType } from '../../schema/trace'
-import { SPAN_COLORS, SPAN_LABELS, formatClock, formatSpanDuration, spanVisualDuration } from '../../lib/trace'
+import {
+  SPAN_COLORS,
+  SPAN_LABELS,
+  formatClock,
+  formatSpanDuration,
+  packSpanRows,
+  spanDepths,
+  spanVisualDuration,
+} from '../../lib/trace'
 import { useReplayStore } from '../../store/replay'
 import { detectRecovery } from '../../lib/story'
 import { SpanIcon } from '../spanMeta'
 
 const LANE_ORDER: SpanType[] = [
+  'generation',
   'reasoning',
   'read',
   'search',
@@ -13,6 +22,7 @@ const LANE_ORDER: SpanType[] = [
   'shell',
   'test',
   'tool',
+  'unknown',
   'checkpoint',
   'final',
   'browser',
@@ -20,10 +30,14 @@ const LANE_ORDER: SpanType[] = [
 ]
 
 const LANE_LABELS: Partial<Record<SpanType, string>> = {
+  generation: 'LLM',
   reasoning: 'Think',
+  unknown: 'Span',
   checkpoint: 'Check',
   browser: 'Web',
 }
+
+const ROW_HEIGHT = 32
 
 function tickStep(durationMs: number): number {
   const target = durationMs / 5
@@ -49,6 +63,7 @@ export function TimelineFlame({ spans }: { spans: Span[] }) {
   for (let time = 0; time <= duration; time += step) ticks.push(time)
   const playheadRatio = Math.min(playheadMs / duration, 1)
   const currentSpan = spans.find((span) => span.id === currentSpanId)
+  const depths = spanDepths(spans)
 
   function seekAt(event: React.PointerEvent<HTMLDivElement>) {
     const rect = event.currentTarget.getBoundingClientRect()
@@ -86,13 +101,13 @@ export function TimelineFlame({ spans }: { spans: Span[] }) {
         </div>
 
         {lanes.map((lane) => {
-          const laneSpans = spans.filter((span) => span.type === lane)
+          const rows = packSpanRows(spans.filter((span) => span.type === lane))
           const active = currentSpan?.type === lane
           return (
-            <div key={lane} className="flex h-8 items-center">
+            <div key={lane} className="flex items-stretch">
               <div
                 className={clsx(
-                  'flex w-[64px] shrink-0 items-center gap-1.5 pr-2',
+                  'flex w-[64px] shrink-0 items-start gap-1.5 pr-2 pt-[9px]',
                   active ? 'text-ink' : 'text-faint',
                 )}
               >
@@ -100,57 +115,61 @@ export function TimelineFlame({ spans }: { spans: Span[] }) {
                 <span className="truncate text-[9.5px]">{LANE_LABELS[lane] ?? SPAN_LABELS[lane]}</span>
               </div>
               <div
-                className="relative h-8 min-w-0 flex-1 cursor-crosshair border-l border-line/60"
+                className="relative min-w-0 flex-1 cursor-crosshair border-l border-line/60"
                 onPointerDown={seekAt}
               >
-                {laneSpans.map((span) => {
-                  const left = (span.startMs / duration) * 100
-                  const width = (spanVisualDuration(span) / duration) * 100
-                  const future = span.startMs > playheadMs
-                  const current = span.id === currentSpanId
-                  const hovered = span.id === hoveredSpanId
-                  const color = SPAN_COLORS[span.type]
-                  const showLabel = width > 16
-                  return (
-                    <button
-                      key={span.id}
-                      onPointerDown={(event) => {
-                        event.stopPropagation()
-                        pause()
-                        seekToSpan(span.id)
-                      }}
-                      onMouseEnter={() => setHovered(span.id)}
-                      onMouseLeave={() => setHovered(null)}
-                      title={`${span.name} · ${formatSpanDuration(span)}${span.id === recovery?.recoveredAt.span.id ? ' · recovered' : span.id === recovery?.regressionAt?.span.id ? ' · regression' : ''}`}
-                      className="absolute top-1/2 h-[14px] -translate-y-1/2 overflow-hidden rounded-[2px] border-l-2 text-left transition-opacity"
-                      style={{
-                        left: `${left}%`,
-                        width: `max(3px, ${width}%)`,
-                        backgroundColor: `color-mix(in srgb, ${color} 24%, transparent)`,
-                        borderLeftColor: color,
-                        opacity: future ? 0.35 : 1,
-                        boxShadow:
-                          span.id === recovery?.recoveredAt.span.id
-                            ? 'inset 0 0 0 1px var(--color-pass)'
-                            : span.id === recovery?.regressionAt?.span.id
-                              ? 'inset 0 0 0 1px var(--color-fail)'
-                              : span.status === 'error'
-                                ? 'inset 0 0 0 1px var(--color-fail)'
-                                : hovered
-                                  ? `inset 0 0 0 1px ${color}`
-                                  : undefined,
-                        outline: current ? '1px solid var(--color-accent)' : undefined,
-                        outlineOffset: current ? '1px' : undefined,
-                      }}
-                    >
-                      {showLabel ? (
-                        <span className="block truncate px-1 font-mono text-[8px] leading-[12px] text-ink/90">
-                          {span.name}
-                        </span>
-                      ) : null}
-                    </button>
-                  )
-                })}
+                {rows.map((row, rowIndex) => (
+                  <div key={rowIndex} className="relative" style={{ height: ROW_HEIGHT }}>
+                    {row.map((span) => {
+                      const left = (span.startMs / duration) * 100
+                      const width = (spanVisualDuration(span) / duration) * 100
+                      const future = span.startMs > playheadMs
+                      const current = span.id === currentSpanId
+                      const hovered = span.id === hoveredSpanId
+                      const color = SPAN_COLORS[span.type]
+                      const showLabel = width > 16
+                      return (
+                        <button
+                          key={span.id}
+                          onPointerDown={(event) => {
+                            event.stopPropagation()
+                            pause()
+                            seekToSpan(span.id)
+                          }}
+                          onMouseEnter={() => setHovered(span.id)}
+                          onMouseLeave={() => setHovered(null)}
+                          title={`${span.name} · ${formatSpanDuration(span)}${span.id === recovery?.recoveredAt.span.id ? ' · recovered' : span.id === recovery?.regressionAt?.span.id ? ' · regression' : ''}`}
+                          className="absolute top-1/2 h-[14px] -translate-y-1/2 overflow-hidden rounded-[2px] border-l-2 text-left transition-opacity"
+                          style={{
+                            left: `${left}%`,
+                            width: `max(3px, ${width}%)`,
+                            backgroundColor: `color-mix(in srgb, ${color} 24%, transparent)`,
+                            borderLeftColor: color,
+                            opacity: future ? 0.35 : 1,
+                            boxShadow:
+                              span.id === recovery?.recoveredAt.span.id
+                                ? 'inset 0 0 0 1px var(--color-pass)'
+                                : span.id === recovery?.regressionAt?.span.id
+                                  ? 'inset 0 0 0 1px var(--color-fail)'
+                                  : span.status === 'error'
+                                    ? 'inset 0 0 0 1px var(--color-fail)'
+                                    : hovered
+                                      ? `inset 0 0 0 1px ${color}`
+                                      : undefined,
+                            outline: current ? '1px solid var(--color-accent)' : undefined,
+                            outlineOffset: current ? '1px' : undefined,
+                          }}
+                        >
+                          {showLabel ? (
+                            <span className="block truncate px-1 font-mono text-[8px] leading-[12px] text-ink/90">
+                              {span.name}
+                            </span>
+                          ) : null}
+                        </button>
+                      )
+                    })}
+                  </div>
+                ))}
               </div>
             </div>
           )
@@ -182,6 +201,7 @@ export function TimelineFlame({ spans }: { spans: Span[] }) {
           {spans.map((span) => {
             const current = span.id === currentSpanId
             const hovered = span.id === hoveredSpanId
+            const depth = depths.get(span.id) ?? 0
             return (
               <button
                 key={span.id}
@@ -209,7 +229,10 @@ export function TimelineFlame({ spans }: { spans: Span[] }) {
                     'truncate text-[10px]',
                     current ? 'text-ink' : 'text-muted',
                   )}
+                  style={{ paddingLeft: depth * 8 }}
+                  title={span.parentId ? `child of ${span.parentId}` : undefined}
                 >
+                  {depth > 0 ? '└ ' : ''}
                   {span.name}
                 </span>
                 <span className="text-right font-mono text-[8.5px] text-faint">

@@ -1,0 +1,64 @@
+{
+  "resourceSpans": [
+    {
+      "resource": {
+        "attributes": [
+          {
+            "key": "service.name",
+            "value": {
+              "stringValue": "snake"
+            }
+          }
+        ]
+      },
+      "scope_spans": [
+        {
+          "scope": {
+            "name": "snake"
+          },
+          "spans": [
+            {
+              "trace_id": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+              "span_id": "6666666666666661",
+              "name": "root",
+              "kind": 1,
+              "start_time_unix_nano": "1760864400000000000",
+              "end_time_unix_nano": "1760864402000000000",
+              "attributes": [
+                {
+                  "key": "gen_ai.operation.name",
+                  "value": {
+                    "stringValue": "invoke_agent"
+                  }
+                }
+              ],
+              "status": {
+                "code": 1
+              }
+            },
+            {
+              "trace_id": "a1b2c3d4e5f60718293a4b5c6d7e8f90",
+              "span_id": "6666666666666662",
+              "parent_span_id": "6666666666666661",
+              "name": "bash",
+              "kind": 1,
+              "start_time_unix_nano": "1760864400100000000",
+              "end_time_unix_nano": "1760864400900000000",
+              "attributes": [
+                {
+                  "key": "tool.name",
+                  "value": {
+                    "stringValue": "bash"
+                  }
+                }
+              ],
+              "status": {
+                "code": 1
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

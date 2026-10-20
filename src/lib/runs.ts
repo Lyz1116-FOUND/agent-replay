@@ -21,7 +21,8 @@ export function useRunById(id: string | undefined): Trace | undefined {
 
 export type RunStats = {
   steps: number
-  files: number
+  /** null when the trace never observed the workspace (e.g. an OTel import). */
+  files: number | null
   edits: number
   testRuns: number
   tokens: number
@@ -29,9 +30,12 @@ export type RunStats = {
 
 export function runStats(trace: Trace): RunStats {
   const spans = leafSpans(trace)
+  const observedWorkspace = trace.capture?.fidelity !== 'otel'
   return {
     steps: spans.length,
-    files: trace.result.filesChanged?.length ?? traceFiles(trace).length,
+    files:
+      trace.result.filesChanged?.length ??
+      (observedWorkspace ? traceFiles(trace).length : null),
     edits: spans.filter((span) => span.type === 'edit').length,
     testRuns: spans.filter((span) => span.type === 'test').length,
     tokens: spans.reduce((total, span) => {

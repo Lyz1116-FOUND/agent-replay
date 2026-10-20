@@ -32,6 +32,8 @@ export function Inspector() {
   const hovered = spans.find((item) => item.id === hoveredSpanId)
   const preview = hovered && hovered.id !== span.id ? hovered : null
   const estimated = span.attributes?.estimatedTiming === true
+  const parent = span.parentId ? spans.find((item) => item.id === span.parentId) : undefined
+  const childCount = spans.filter((item) => item.parentId === span.id).length
   const visibleAttributes = Object.entries(span.attributes ?? {}).filter(
     ([key]) => !HIDDEN_ATTRIBUTES.includes(key),
   )
@@ -106,6 +108,15 @@ export function Inspector() {
             ['Phase', typeof span.attributes?.phase === 'string' ? span.attributes.phase : '—'],
             ['Tool', typeof span.attributes?.tool === 'string' ? span.attributes.tool : '—'],
             ['Tokens', typeof span.attributes?.tokens === 'number' ? span.attributes.tokens.toLocaleString() : '—'],
+            [
+              'Parent',
+              parent
+                ? parent.name
+                : span.parentId
+                  ? `${span.parentId} (not in export)`
+                  : '—',
+            ],
+            ['Children', childCount > 0 ? String(childCount) : '—'],
             ['Status', span.status],
           ]}
         />

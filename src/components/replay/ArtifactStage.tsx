@@ -15,8 +15,11 @@ import { spanDuration } from '../../lib/trace'
 import { CodeViewer, DiffViewer } from './CodeViews'
 import { useReplayStore } from '../../store/replay'
 import { SpanIcon } from '../spanMeta'
+import { spanLabel, tn, useLocale, useT } from '../../i18n'
 
 export function ArtifactStage({ span }: { span: Span }) {
+  // Subscribes this subtree to locale changes for the tab labels below.
+  useLocale()
   const artifacts = span.artifacts ?? []
   const [active, setActive] = useState(() => preferredArtifactIndex(span))
 
@@ -125,16 +128,17 @@ function FileBar({
 }
 
 function CodeArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'code' }> }) {
+  const t = useT()
   const lines = artifact.content.replace(/\n$/, '').split('\n').length
   return (
     <div className="flex h-full min-h-0 flex-col">
       <FileBar
         path={artifact.path}
-        meta={`${lines} lines · ${artifact.language}`}
+        meta={tn('artifact.lines', lines, { language: artifact.language })}
         extra={
           artifact.startLine ? (
             <span className="shrink-0 rounded-xs border border-line px-1 font-mono text-[9.5px] text-faint">
-              from line {artifact.startLine}
+              {t('artifact.fromLine', { line: artifact.startLine })}
             </span>
           ) : null
         }
@@ -178,6 +182,7 @@ function toneForTerminalLine(line: string): string {
 }
 
 function TerminalArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'terminal' }> }) {
+  const t = useT()
   return (
     <div className="flex h-full min-h-0 flex-col bg-[#0b0e13]">
       <div className="flex h-9 shrink-0 items-center gap-2 border-b border-line px-3.5 font-mono text-[11px]">
@@ -195,9 +200,9 @@ function TerminalArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 't
         </pre>
       </div>
       <div className="flex h-7 shrink-0 items-center justify-between border-t border-line px-3.5 font-mono text-[10px] text-faint">
-        <span>process exited</span>
+        <span>{t('artifact.processExited')}</span>
         <span className={artifact.exitCode === 0 ? 'text-pass' : 'text-fail'}>
-          exit {artifact.exitCode}
+          {t('artifact.exit', { code: artifact.exitCode })}
         </span>
       </div>
     </div>
@@ -205,31 +210,34 @@ function TerminalArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 't
 }
 
 function TestArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'test' }> }) {
+  const t = useT()
   const total = Math.max(artifact.total, 1)
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="shrink-0 border-b border-line bg-panel px-5 py-4">
         <div className="flex items-start justify-between gap-6">
           <div>
-            <div className="eyebrow">Test run</div>
+            <div className="eyebrow">{t('artifact.testRun')}</div>
             <div className="mt-1 flex items-baseline gap-1.5 font-mono">
               <span className={artifact.failed > 0 ? 'text-[22px] text-fail' : 'text-[22px] text-pass'}>
                 {artifact.passed}
               </span>
-              <span className="text-[13px] text-faint">/ {artifact.total} passed</span>
+              <span className="text-[13px] text-faint">
+                {t('artifact.passedOf', { total: artifact.total })}
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-4 font-mono text-[11px]">
             <span className="text-faint">
-              cmd <span className="text-muted">{artifact.command}</span>
+              {t('artifact.cmd')} <span className="text-muted">{artifact.command}</span>
             </span>
             {artifact.failed > 0 ? (
               <span className="rounded-xs border border-fail/35 bg-fail/10 px-1.5 py-0.5 text-fail">
-                {artifact.failed} failed
+                {tn('artifact.failed', artifact.failed)}
               </span>
             ) : (
               <span className="rounded-xs border border-pass/35 bg-pass/10 px-1.5 py-0.5 text-pass">
-                all green
+                {t('artifact.allGreen')}
               </span>
             )}
           </div>
@@ -242,7 +250,7 @@ function TestArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'test'
 
       {artifact.failedTests && artifact.failedTests.length > 0 ? (
         <div className="shrink-0 border-b border-line bg-fail/[0.04] px-5 py-3">
-          <div className="eyebrow text-fail/70">Failed</div>
+          <div className="eyebrow text-fail/70">{t('artifact.failedTitle')}</div>
           <ul className="mt-1.5 space-y-1">
             {artifact.failedTests.map((test) => (
               <li key={test} className="flex items-center gap-2 font-mono text-[11px] text-fail/90">
@@ -268,13 +276,14 @@ function TestArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'test'
 }
 
 function SearchArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'search' }> }) {
+  const t = useT()
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex h-10 shrink-0 items-center gap-2 border-b border-line bg-panel px-4">
         <Search size={13} className="text-faint" />
         <span className="font-mono text-[12px] text-ink">{artifact.query}</span>
         <span className="ml-auto font-mono text-[10px] text-faint">
-          {artifact.results.length} matches
+          {tn('artifact.matches', artifact.results.length)}
         </span>
       </div>
       <div className="panel-scroll min-h-0 flex-1 py-2">
@@ -306,7 +315,9 @@ function SearchArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'sea
           )
         })}
         {artifact.results.length === 0 ? (
-          <div className="px-4 py-10 text-center font-mono text-[11px] text-faint">No matches</div>
+          <div className="px-4 py-10 text-center font-mono text-[11px] text-faint">
+            {t('artifact.noMatches')}
+          </div>
         ) : null}
       </div>
     </div>
@@ -314,18 +325,19 @@ function SearchArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'sea
 }
 
 function ReasoningArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'reasoning' }> }) {
+  const t = useT()
   return (
     <div className="panel-scroll h-full overflow-y-auto">
       <div className="mx-auto w-full max-w-[620px] px-8 py-10">
         <div className="flex items-center gap-2">
           <Brain size={14} className="text-warn" />
-          <span className="eyebrow">Reasoning summary</span>
+          <span className="eyebrow">{t('artifact.reasoning')}</span>
         </div>
         <p className="mt-5 whitespace-pre-line text-[14.5px] leading-[1.8] text-[#d5dbe4]">
           {artifact.content}
         </p>
         <div className="mt-10 border-t border-line pt-3 text-[10.5px] leading-relaxed text-faint">
-          Product-exposed summary. Agent Replay never records raw chain-of-thought.
+          {t('artifact.reasoningNote')}
         </div>
       </div>
     </div>
@@ -333,12 +345,13 @@ function ReasoningArtifact({ artifact }: { artifact: Extract<Artifact, { kind: '
 }
 
 function PatchArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'patch' }> }) {
+  const t = useT()
   const stats = patchStats(artifact.diff)
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex h-9 shrink-0 items-center gap-2 border-b border-line bg-panel px-3.5">
         <FileCode2 size={12} className="text-faint" />
-        <span className="font-mono text-[11px] text-ink">unified patch</span>
+        <span className="font-mono text-[11px] text-ink">{t('artifact.unifiedPatch')}</span>
         <span className="ml-auto font-mono text-[10px]">
           <span className="text-pass">+{stats.added}</span>{' '}
           <span className="text-fail">-{stats.removed}</span>
@@ -438,6 +451,7 @@ function Markdown({ content }: { content: string }) {
 }
 
 function MarkdownArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'markdown' }> }) {
+  const t = useT()
   const trace = useReplayStore((state) => state.trace)
   const patch = trace?.result.patch
   const stats = patch ? patchStats(patch) : null
@@ -446,20 +460,20 @@ function MarkdownArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'm
       <div className="mx-auto w-full max-w-[640px] px-8 py-9">
         <div className="flex items-center gap-2">
           <Flag size={14} className="text-pass" />
-          <span className="eyebrow">Final report</span>
+          <span className="eyebrow">{t('artifact.finalReport')}</span>
         </div>
         <div className="mt-5">
           <Markdown content={artifact.content} />
         </div>
         <div className="mt-8 grid grid-cols-3 gap-px overflow-hidden rounded-sm border border-line bg-line">
           <div className="bg-panel px-3 py-2.5">
-            <div className="eyebrow">Result</div>
+            <div className="eyebrow">{t('artifact.result')}</div>
             <div className="mt-1 font-mono text-[12px] text-pass">
               {trace?.status === 'pass' ? 'PASS' : trace?.status.toUpperCase()}
             </div>
           </div>
           <div className="bg-panel px-3 py-2.5">
-            <div className="eyebrow">Tests</div>
+            <div className="eyebrow">{t('artifact.tests')}</div>
             <div className="mt-1 font-mono text-[12px] text-ink">
               {trace?.result.tests
                 ? `${trace.result.tests.passed}/${trace.result.tests.total}`
@@ -467,7 +481,7 @@ function MarkdownArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'm
             </div>
           </div>
           <div className="bg-panel px-3 py-2.5">
-            <div className="eyebrow">Patch</div>
+            <div className="eyebrow">{t('artifact.patchLabel')}</div>
             <div className="mt-1 font-mono text-[12px]">
               {stats ? (
                 <>
@@ -486,6 +500,7 @@ function MarkdownArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'm
 }
 
 function BrowserArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'browser' }> }) {
+  const t = useT()
   return (
     <div className="flex h-full min-h-0 flex-col">
       <div className="flex h-9 shrink-0 items-center gap-2 border-b border-line bg-panel px-3.5">
@@ -496,16 +511,16 @@ function BrowserArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'br
         {artifact.screenshot ? (
           <img
             src={artifact.screenshot}
-            alt={`Screenshot of ${artifact.url}`}
+            alt={t('artifact.screenshotAlt', { url: artifact.url })}
             className="rounded-sm border border-line"
           />
         ) : (
           <div className="flex h-48 items-center justify-center rounded-sm border border-dashed border-line bg-panel2/40 font-mono text-[11px] text-faint">
-            screenshot not captured
+            {t('artifact.screenshotMissing')}
           </div>
         )}
         <div className="mt-5">
-          <div className="eyebrow">Actions</div>
+          <div className="eyebrow">{t('artifact.actions')}</div>
           <ol className="mt-2 space-y-1.5">
             {artifact.actions.map((action, index) => (
               <li key={index} className="flex gap-2 font-mono text-[11px] text-muted">
@@ -521,15 +536,16 @@ function BrowserArtifact({ artifact }: { artifact: Extract<Artifact, { kind: 'br
 }
 
 function EmptyArtifact({ span }: { span: Span }) {
+  const t = useT()
   return (
     <div className="flex h-full flex-col items-center justify-center px-8 text-center">
       <SpanIcon type={span.type} size={20} />
-      <p className="mt-3 text-[13px] text-ink">No artifact recorded for this step</p>
+      <p className="mt-3 text-[13px] text-ink">{t('artifact.empty.title')}</p>
       <p className="mt-1 max-w-[320px] text-[11.5px] leading-relaxed text-muted">
-        The trace records the step and its timing, but no file, command, or test output.
+        {t('artifact.empty.body')}
       </p>
       <div className="mt-4 font-mono text-[10px] text-faint">
-        {span.type} · {spanDuration(span)}ms
+        {spanLabel(span.type)} · {spanDuration(span)}ms
       </div>
     </div>
   )

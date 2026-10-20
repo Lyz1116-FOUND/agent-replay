@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { AlertTriangle, Loader2, X } from 'lucide-react'
 import { importTraceFile, TraceImportError } from '../../adapters/import'
 import { useRunsStore } from '../../store/runs'
+import { useT } from '../../i18n'
 
 type LoadState =
   | { status: 'idle' }
@@ -14,6 +15,7 @@ function fileName(src: string): string {
 }
 
 export function RemoteTraceLoader() {
+  const t = useT()
   const location = useLocation()
   const navigate = useNavigate()
   const addTransient = useRunsStore((state) => state.addTransient)
@@ -48,7 +50,7 @@ export function RemoteTraceLoader() {
         } else {
           setState({
             status: 'error',
-            message: 'Could not open this trace.',
+            message: t('remote.failed'),
             issues: [error instanceof Error ? error.message : String(error)],
           })
         }
@@ -57,7 +59,7 @@ export function RemoteTraceLoader() {
     return () => {
       cancelled = true
     }
-  }, [src, addTransient, navigate, location.search])
+  }, [src, addTransient, navigate, location.search, t])
 
   if (state.status === 'idle') return null
 
@@ -73,8 +75,7 @@ export function RemoteTraceLoader() {
         {state.status === 'loading' ? (
           <div className="flex items-center gap-2.5 text-[12px] text-muted">
             <Loader2 size={14} className="animate-spin text-accent" />
-            Opening <span className="font-mono text-ink">{fileName(src ?? '')}</span>
-            <span className="text-faint">· fetched locally, nothing leaves your machine</span>
+            {t('remote.loading', { file: fileName(src ?? '') })}
           </div>
         ) : (
           <div>
@@ -95,7 +96,7 @@ export function RemoteTraceLoader() {
               <button
                 onClick={() => setState({ status: 'idle' })}
                 className="rounded-xs p-0.5 text-faint hover:text-ink"
-                aria-label="Dismiss"
+                aria-label={t('remote.dismiss')}
               >
                 <X size={13} />
               </button>

@@ -1,16 +1,19 @@
 import { Link, NavLink } from 'react-router-dom'
-import { Upload } from 'lucide-react'
+import { Languages, Upload } from 'lucide-react'
 import { clsx } from 'clsx'
 import { Button, Logo } from '../ui/primitives'
 import { useUiStore } from '../../store/ui'
+import { toggleLocale, useLocale, useT } from '../../i18n'
 
 const navItems = [
-  { to: '/', label: 'Runs', end: true },
-  { to: '/compare', label: 'Compare', end: false },
-]
+  { to: '/', key: 'nav.runs', end: true },
+  { to: '/compare', key: 'nav.compare', end: false },
+] as const
 
 export function TopBar() {
   const setImportOpen = useUiStore((state) => state.setImportOpen)
+  const locale = useLocale()
+  const t = useT()
 
   return (
     <header className="flex h-12 shrink-0 items-center gap-6 border-b border-line bg-canvas px-4">
@@ -36,18 +39,27 @@ export function TopBar() {
               )
             }
           >
-            {item.label}
+            {t(item.key)}
           </NavLink>
         ))}
       </nav>
 
       <div className="ml-auto flex items-center gap-3">
         <span className="hidden font-mono text-[10px] uppercase tracking-[0.14em] text-faint lg:inline">
-          Visual debugger for coding agents
+          {t('app.tagline')}
         </span>
+        <button
+          onClick={toggleLocale}
+          title={t('lang.switch')}
+          aria-label={t('lang.switch')}
+          className="flex h-6 items-center gap-1 rounded-xs border border-line px-1.5 font-mono text-[10px] text-muted transition-colors hover:border-line-strong hover:text-ink"
+        >
+          <Languages size={11} />
+          {locale === 'zh' ? 'EN' : '中文'}
+        </button>
         <Button size="sm" variant="subtle" onClick={() => setImportOpen(true)}>
           <Upload size={13} />
-          Import trace
+          {t('app.import')}
         </Button>
         <span className="hidden rounded-xs border border-line px-1.5 py-0.5 font-mono text-[10px] text-faint sm:inline">
           v0.3

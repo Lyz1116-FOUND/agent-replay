@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { AppShell } from './components/shell/AppShell'
+import { useT } from './i18n'
 import { RunsPage } from './pages/RunsPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
@@ -21,6 +22,7 @@ function PageLoading({ label }: { label: string }) {
 }
 
 export default function App() {
+  const t = useT()
   return (
     <Routes>
       <Route element={<AppShell />}>
@@ -28,7 +30,7 @@ export default function App() {
         <Route
           path="runs/:runId"
           element={
-            <Suspense fallback={<PageLoading label="Loading replay" />}>
+            <Suspense fallback={<PageLoading label={t('loading.replay')} />}>
               <ReplayPage />
             </Suspense>
           }
@@ -36,7 +38,7 @@ export default function App() {
         <Route
           path="compare"
           element={
-            <Suspense fallback={<PageLoading label="Loading comparison" />}>
+            <Suspense fallback={<PageLoading label={t('loading.compare')} />}>
               <ComparePage />
             </Suspense>
           }

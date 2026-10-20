@@ -21,6 +21,7 @@ It is not another LLM observability dashboard. Langfuse and Phoenix answer *“w
 
 ## Features
 
+- **Bilingual UI** — English and Chinese, following the browser language on first visit with a toggle in the top bar. Trace content (span names, commands, diffs, import diagnostics) is never translated.
 - **Overview first** — an overview-first experience shows the outcome story, recovery/regression beats, and key counts before the dense debugger.
 - **Two timelines** — a narrative *Story* view for explaining, and a *Flame* view with span lanes and a dense log for debugging.
 - **Failure → recovery as a first-class idea** — failed runs, regressions, and the passing run that recovered are marked in the overview, timeline, and flame view.
@@ -58,6 +59,12 @@ npm run dev    # web app only
 ```
 
 The web app and recorder are independent: `npm run dev` is enough to explore demo traces; `npm run build` also produces `dist-cli/agent-replay.mjs`.
+
+### Language
+
+The interface ships in English and Chinese. First visit follows `navigator.language`; the top-bar toggle (`中文` / `EN`) overrides it and the choice persists in `localStorage`. Only interface copy is translated — span names, commands, file paths, diffs and technical import diagnostics stay in their original form.
+
+![Chinese interface](docs/runs-zh.png)
 
 ## Record a real session
 

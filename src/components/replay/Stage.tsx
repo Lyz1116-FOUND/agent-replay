@@ -2,7 +2,8 @@ import { FileDiff, FolderTree } from 'lucide-react'
 import { Segmented } from '../ui/primitives'
 import { useReplayStore } from '../../store/replay'
 import { useCurrentSpan } from '../../store/hooks'
-import { SPAN_COLORS, SPAN_LABELS } from '../../lib/trace'
+import { SPAN_COLORS } from '../../lib/trace'
+import { spanLabel, useT } from '../../i18n'
 import { SpanIcon } from '../spanMeta'
 import { ArtifactStage } from './ArtifactStage'
 import { WorkspaceView } from './WorkspaceView'
@@ -11,12 +12,13 @@ export function Stage() {
   const span = useCurrentSpan()
   const spans = useReplayStore((state) => state.spans)
   const stageView = useReplayStore((state) => state.stageView)
+  const t = useT()
   const setStageView = useReplayStore((state) => state.setStageView)
 
   if (!span) {
     return (
       <section className="flex min-w-0 flex-1 items-center justify-center bg-panel text-[12px] text-faint">
-        No step selected
+        {t('stage.noStep')}
       </section>
     )
   }
@@ -36,7 +38,7 @@ export function Stage() {
         >
           <SpanIcon type={span.type} size={12} />
           <span className="font-mono text-[9.5px] uppercase tracking-[0.1em]">
-            {SPAN_LABELS[span.type]}
+            {spanLabel(span.type)}
           </span>
         </span>
         <span className="h-3 w-px shrink-0 bg-line" />
@@ -56,7 +58,7 @@ export function Stage() {
                 label: (
                   <>
                     <FileDiff size={11} />
-                    Artifact
+                    {t('stage.artifact')}
                   </>
                 ),
               },
@@ -65,7 +67,7 @@ export function Stage() {
                 label: (
                   <>
                     <FolderTree size={11} />
-                    Workspace
+                    {t('stage.workspace')}
                   </>
                 ),
               },

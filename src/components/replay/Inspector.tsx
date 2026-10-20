@@ -1,19 +1,16 @@
 import { clsx } from 'clsx'
 import { ArrowDown, ArrowUp, CornerDownRight, FileCode2 } from 'lucide-react'
-import {
-  SPAN_LABELS,
-  STATUS_COLORS,
-  formatClock,
-  formatSpanDuration,
-} from '../../lib/trace'
+import { STATUS_COLORS, formatClock, formatSpanDuration } from '../../lib/trace'
 import { artifactDetail, artifactLabel } from '../../lib/artifacts'
 import { useReplayStore } from '../../store/replay'
 import { useCurrentSpan } from '../../store/hooks'
 import { SpanIcon } from '../spanMeta'
+import { phaseLabel, spanLabel, spanStatusLabel, useT } from '../../i18n'
 
 const HIDDEN_ATTRIBUTES = ['phase', 'tool', 'tokens', 'estimatedTiming']
 
 export function Inspector() {
+  const t = useT()
   const span = useCurrentSpan()
   const spans = useReplayStore((state) => state.spans)
   const trace = useReplayStore((state) => state.trace)
@@ -41,7 +38,7 @@ export function Inspector() {
   return (
     <aside className="flex w-[304px] shrink-0 flex-col border-l border-line bg-canvas">
       <div className="flex h-11 shrink-0 items-center gap-2 border-b border-line px-3">
-        <span className="eyebrow">Inspector</span>
+        <span className="eyebrow">{t('inspector.title')}</span>
         <span className="ml-auto font-mono text-[9.5px] text-faint">{span.id}</span>
       </div>
 
@@ -52,7 +49,7 @@ export function Inspector() {
             className="flex w-full items-center gap-2 border-b border-accent/20 bg-accent/[0.05] px-3 py-2 text-left transition-colors hover:bg-accent/[0.08]"
           >
             <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-            <span className="eyebrow text-accent/70">Preview</span>
+            <span className="eyebrow text-accent/70">{t('inspector.preview')}</span>
             <span className="truncate text-[11px] text-muted">{preview.name}</span>
           </button>
         ) : null}
@@ -67,11 +64,11 @@ export function Inspector() {
                 className="h-1.5 w-1.5 rounded-full"
                 style={{ backgroundColor: STATUS_COLORS[span.status] }}
               />
-              {span.status}
+              {spanStatusLabel(span.status)}
             </span>
             {estimated ? (
               <span className="rounded-xs border border-warn/35 bg-warn/[0.06] px-1 font-mono text-[8.5px] uppercase tracking-wide text-warn">
-                estimated timing
+                {t('inspector.estimated')}
               </span>
             ) : null}
           </div>
@@ -83,7 +80,7 @@ export function Inspector() {
             <div className="min-w-0">
               <h2 className="text-[13.5px] font-medium leading-snug text-ink">{span.name}</h2>
               <div className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.08em] text-faint">
-                {SPAN_LABELS[span.type]}
+                {spanLabel(span.type)}
               </div>
             </div>
           </div>
@@ -95,35 +92,45 @@ export function Inspector() {
 
         <FieldSection
           rows={[
-            ['Start', formatClock(span.startMs)],
-            ['Duration', formatSpanDuration(span)],
+            [t('inspector.start'), formatClock(span.startMs)],
+            [t('inspector.duration'), formatSpanDuration(span)],
             [
-              'Timing',
+              t('inspector.timing'),
               typeof span.attributes?.timingKind === 'string'
                 ? typeof span.attributes?.timingResolutionMs === 'number'
                   ? `${span.attributes.timingKind} · ${span.attributes.timingResolutionMs}ms polling`
                   : span.attributes.timingKind
                 : '—',
             ],
-            ['Phase', typeof span.attributes?.phase === 'string' ? span.attributes.phase : '—'],
-            ['Tool', typeof span.attributes?.tool === 'string' ? span.attributes.tool : '—'],
-            ['Tokens', typeof span.attributes?.tokens === 'number' ? span.attributes.tokens.toLocaleString() : '—'],
             [
-              'Parent',
+              t('inspector.phase'),
+              typeof span.attributes?.phase === 'string'
+                ? phaseLabel(span.attributes.phase)
+                : '—',
+            ],
+            [t('inspector.tool'), typeof span.attributes?.tool === 'string' ? span.attributes.tool : '—'],
+            [
+              t('inspector.tokens'),
+              typeof span.attributes?.tokens === 'number'
+                ? span.attributes.tokens.toLocaleString()
+                : '—',
+            ],
+            [
+              t('inspector.parent'),
               parent
                 ? parent.name
                 : span.parentId
-                  ? `${span.parentId} (not in export)`
+                  ? t('inspector.parentMissing', { id: span.parentId })
                   : '—',
             ],
-            ['Children', childCount > 0 ? String(childCount) : '—'],
-            ['Status', span.status],
+            [t('inspector.children'), childCount > 0 ? String(childCount) : '—'],
+            [t('inspector.status'), spanStatusLabel(span.status)],
           ]}
         />
 
         {span.files && span.files.length > 0 ? (
           <div className="border-b border-line px-3.5 py-3">
-            <div className="eyebrow mb-1.5">Files</div>
+            <div className="eyebrow mb-1.5">{t('inspector.files')}</div>
             <div className="space-y-0.5">
               {span.files.map((path) => (
                 <button
@@ -133,7 +140,7 @@ export function Inspector() {
                     setStageView('workspace')
                   }}
                   className="flex w-full items-center gap-1.5 rounded-xs px-1 py-1 text-left font-mono text-[10px] text-muted transition-colors hover:bg-panel2 hover:text-ink"
-                  title="Show in workspace"
+                  title={t('inspector.showInWorkspace')}
                 >
                   <FileCode2 size={10} className="shrink-0 text-faint" />
                   <span className="truncate">{path}</span>
@@ -144,27 +151,33 @@ export function Inspector() {
         ) : null}
 
         <div className="border-b border-line px-3.5 py-3">
-          <div className="eyebrow mb-2">Causal chain</div>
+          <div className="eyebrow mb-2">{t('inspector.causal')}</div>
           <CauseRow
             icon={<ArrowUp size={11} />}
-            label="Why this step"
-            text={previous ? previous.summary ?? previous.name : 'Run begins with this step.'}
+            label={t('inspector.why')}
+            text={previous ? previous.summary ?? previous.name : t('inspector.runStart')}
             muted
           />
           <CauseRow
             icon={<CornerDownRight size={11} />}
-            label="What followed"
+            label={t('inspector.after')}
             text={
               next
-                ? `${next.name}${next.status === 'error' ? ' → error' : next.status === 'ok' ? '' : ` → ${next.status}`}`
-                : trace?.result.summary ?? 'Run ends here.'
+                ? `${next.name}${
+                    next.status === 'error'
+                      ? t('inspector.nextError')
+                      : next.status === 'ok'
+                        ? ''
+                        : t('inspector.nextStatus', { status: spanStatusLabel(next.status) })
+                  }`
+                : trace?.result.summary ?? t('inspector.runEnd')
             }
           />
         </div>
 
         {visibleAttributes.length > 0 ? (
           <div className="border-b border-line px-3.5 py-3">
-            <div className="eyebrow mb-2">Attributes</div>
+            <div className="eyebrow mb-2">{t('inspector.attributes')}</div>
             <div className="space-y-1">
               {visibleAttributes.map(([key, value]) => (
                 <div key={key} className="flex items-baseline justify-between gap-3">
@@ -184,7 +197,7 @@ export function Inspector() {
 
         {span.artifacts && span.artifacts.length > 0 ? (
           <div className="border-b border-line px-3.5 py-3">
-            <div className="eyebrow mb-2">Artifacts</div>
+            <div className="eyebrow mb-2">{t('inspector.artifacts')}</div>
             <div className="space-y-1">
               {span.artifacts.map((artifact, artifactIndex) => (
                 <div
@@ -211,7 +224,7 @@ export function Inspector() {
         <details className="group px-3.5 py-3">
           <summary className="flex cursor-pointer list-none items-center gap-1.5 text-[10.5px] text-faint transition-colors hover:text-muted">
             <ArrowDown size={10} className="transition-transform group-open:rotate-180" />
-            Raw span JSON
+            {t('inspector.raw')}
           </summary>
           <pre className="mt-2 max-h-64 overflow-auto rounded-sm border border-line bg-[#0b0e13] p-2 font-mono text-[9.5px] leading-relaxed text-muted">
             {JSON.stringify(span, null, 2)}

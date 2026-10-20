@@ -170,18 +170,6 @@ export function formatDuration(ms: number): string {
   return `${minutes}m ${String(seconds).padStart(2, '0')}s`
 }
 
-export function formatStartedAt(iso: string): string {
-  const date = new Date(iso)
-  if (Number.isNaN(date.getTime())) return iso
-  return date.toLocaleString('en-US', {
-    month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  })
-}
-
 export type FileActivity = {
   path: string
   spans: Span[]

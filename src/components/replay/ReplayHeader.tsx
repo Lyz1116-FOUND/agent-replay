@@ -5,6 +5,7 @@ import { formatDuration, isEstimatedTiming } from '../../lib/trace'
 import { runStats } from '../../lib/runs'
 import { detectRecovery } from '../../lib/story'
 import { AgentBadge, StatusPill } from '../ui/primitives'
+import { tn, useT } from '../../i18n'
 
 export function ReplayHeader({
   trace,
@@ -13,6 +14,7 @@ export function ReplayHeader({
   trace: Trace
   onOverview?: () => void
 }) {
+  const t = useT()
   const stats = runStats(trace)
   const estimated = isEstimatedTiming(trace)
   const recovery = detectRecovery(trace)
@@ -22,8 +24,8 @@ export function ReplayHeader({
       <Link
         to="/"
         className="flex h-7 w-7 shrink-0 items-center justify-center rounded-sm border border-transparent text-muted transition-colors hover:border-line hover:bg-panel2 hover:text-ink"
-        aria-label="Back to runs"
-        title="Back to runs"
+        aria-label={t('replay.back')}
+        title={t('replay.back')}
       >
         <ArrowLeft size={15} />
       </Link>
@@ -39,12 +41,12 @@ export function ReplayHeader({
               title={recovery.summary}
             >
               <CheckCircle2 size={9} />
-              recovery detected
+              {t('replay.recovery')}
             </button>
           ) : null}
           {estimated ? (
             <span className="hidden shrink-0 rounded-xs border border-warn/35 px-1 font-mono text-[8.5px] uppercase tracking-wide text-warn sm:inline">
-              estimated timing
+              {t('replay.estimated')}
             </span>
           ) : null}
         </div>
@@ -63,28 +65,28 @@ export function ReplayHeader({
 
       <div className="hidden shrink-0 items-center gap-4 md:flex">
         <HeaderStat icon={<Clock size={11} />} value={formatDuration(trace.durationMs)} />
-        <HeaderStat icon={<ListTree size={11} />} value={`${stats.steps} steps`} />
-        <HeaderStat icon={<FileCode2 size={11} />} value={stats.files === null ? 'files n/a' : `${stats.files} changed`} />
+        <HeaderStat icon={<ListTree size={11} />} value={tn('replay.steps', stats.steps)} />
+        <HeaderStat icon={<FileCode2 size={11} />} value={stats.files === null ? t('replay.filesUnknown') : tn('replay.filesChanged', stats.files)} />
       </div>
 
       {onOverview ? (
         <button
           onClick={onOverview}
           className="flex h-7 shrink-0 items-center gap-1.5 rounded-sm border border-line bg-panel px-2.5 text-[11px] text-muted transition-colors hover:border-line-strong hover:text-ink"
-          title="Overview"
+          title={t('replay.overview')}
         >
           <Rows3 size={12} />
-          <span className="hidden sm:inline">Overview</span>
+          <span className="hidden sm:inline">{t('replay.overview')}</span>
         </button>
       ) : null}
 
       <Link
         to={`/compare?task=${encodeURIComponent(trace.task.id)}`}
-        aria-label="Compare runs for this task"
+        aria-label={t('replay.compare')}
         className="flex h-7 shrink-0 items-center gap-1.5 rounded-sm border border-line bg-panel px-2.5 text-[11px] text-muted transition-colors hover:border-line-strong hover:text-ink"
       >
         <GitCompare size={12} />
-        <span className="hidden sm:inline">Compare</span>
+        <span className="hidden sm:inline">{t('replay.compare')}</span>
       </Link>
     </div>
   )

@@ -5,8 +5,10 @@ import { detectRecovery } from '../../lib/story'
 import { useReplayStore } from '../../store/replay'
 import { SpanIcon } from '../spanMeta'
 import { clsx } from 'clsx'
+import { phaseLabel, spanLabel, useT } from '../../i18n'
 
 export function TimelineStory({ spans }: { spans: Span[] }) {
+  const t = useT()
   const currentSpanId = useReplayStore((state) => state.currentSpanId)
   const hoveredSpanId = useReplayStore((state) => state.hoveredSpanId)
   const seekToSpan = useReplayStore((state) => state.seekToSpan)
@@ -27,7 +29,7 @@ export function TimelineStory({ spans }: { spans: Span[] }) {
       {groups.map((group, groupIndex) => (
         <div key={`${group.phase}-${groupIndex}`}>
           <div className="flex items-center gap-2 px-2 pb-1 pt-3">
-            <span className="eyebrow">{group.phase}</span>
+            <span className="eyebrow">{phaseLabel(group.phase)}</span>
             <span className="h-px flex-1 bg-line/70" />
             <span className="font-mono text-[9.5px] text-faint">{group.spans.length}</span>
           </div>
@@ -72,12 +74,12 @@ export function TimelineStory({ spans }: { spans: Span[] }) {
                     </span>
                     {recovery?.regressionAt?.span.id === span.id ? (
                       <span className="shrink-0 rounded-xs border border-fail/30 px-1 font-mono text-[7.5px] uppercase tracking-wide text-fail">
-                        regression
+                        {t('overview.story.regression')}
                       </span>
                     ) : null}
                     {recovery?.recoveredAt.span.id === span.id ? (
                       <span className="shrink-0 rounded-xs border border-pass/30 px-1 font-mono text-[7.5px] uppercase tracking-wide text-pass">
-                        recovered
+                        {t('overview.story.recovered')}
                       </span>
                     ) : null}
                     {span.status === 'error' ? (
@@ -87,7 +89,7 @@ export function TimelineStory({ spans }: { spans: Span[] }) {
                     ) : null}
                   </span>
                   <span className="mt-0.5 block truncate text-[10px] leading-[1.4] text-faint">
-                    {span.summary ?? span.type}
+                    {span.summary ?? spanLabel(span.type)}
                   </span>
                   {current ? <StepProgress span={span} /> : null}
                 </span>

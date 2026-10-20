@@ -6,6 +6,13 @@ Offline OTLP/JSON import. No collector, no backend, no realtime stream.
 
 ### Added
 
+- **Bilingual UI (English / Chinese).** Interface copy lives in a typed catalog
+  (`src/i18n/messages.ts`); the locale follows the browser on first visit, the
+  top-bar toggle persists in `localStorage`, and `<html lang>` follows the
+  choice. Plurals use `_one` / `_other` keys, dates and numbers use the active
+  locale, and recorded phase names (`Discover`, `Attempt 1`, …) get translated
+  labels without changing the data. Trace content and import diagnostics are
+  intentionally not translated.
 - **OTLP JSON import.** An `ExportTraceServiceRequest` file can be dropped into
   *Import trace*. One file may hold several traceIds; each becomes its own run
   and the dialog lists them instead of silently keeping the first. Contract:

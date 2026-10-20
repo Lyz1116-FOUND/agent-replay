@@ -9,7 +9,8 @@ import {
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import type { Trace } from '../schema/trace'
-import { formatDuration, formatStartedAt } from '../lib/trace'
+import { formatDuration } from '../lib/trace'
+import { formatDateTime, tn, useT } from '../i18n'
 import { runStats, useAllRuns } from '../lib/runs'
 import { useRunsStore } from '../store/runs'
 import { useUiStore } from '../store/ui'
@@ -17,12 +18,19 @@ import { AgentBadge, Button, Kbd, StatusPill } from '../components/ui/primitives
 
 type StatusFilter = 'all' | 'pass' | 'fail'
 
+const FILTER_KEYS = {
+  all: 'runs.filter.all',
+  pass: 'runs.filter.pass',
+  fail: 'runs.filter.fail',
+} as const
+
 export function RunsPage() {
   const runs = useAllRuns()
   const imported = useRunsStore((state) => state.imported)
   const transient = useRunsStore((state) => state.transient)
   const setImportOpen = useUiStore((state) => state.setImportOpen)
   const navigate = useNavigate()
+  const t = useT()
   const [query, setQuery] = useState('')
   const [filter, setFilter] = useState<StatusFilter>('all')
   const inputRef = useRef<HTMLInputElement>(null)
@@ -90,26 +98,25 @@ export function RunsPage() {
       <div className="mx-auto w-full max-w-[1120px] px-6 py-9">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="eyebrow">Workspace / Runs</div>
+            <div className="eyebrow">{t('runs.eyebrow')}</div>
             <div className="mt-2 flex items-baseline gap-3">
-              <h1 className="text-[26px] font-semibold tracking-[-0.02em] text-ink">Runs</h1>
+              <h1 className="text-[26px] font-semibold tracking-[-0.02em] text-ink">{t('runs.title')}</h1>
               <span className="font-mono text-[11px] text-faint">
-                {runs.length} runs · {tasks} tasks
+                {tn('runs.count', runs.length, { tasks })}
               </span>
             </div>
             <p className="mt-1.5 max-w-[560px] text-[12.5px] leading-relaxed text-muted">
-              Time-based replays of coding agents. Open a run to scrub through what the agent
-              read, changed, ran, and got wrong.
+              {t('runs.subtitle')}
             </p>
           </div>
           <div className="flex items-center gap-2">
             <Button size="sm" variant="ghost" onClick={() => navigate('/compare')}>
               <GitCompare size={13} />
-              Compare
+              {t('runs.compare')}
             </Button>
             <Button size="sm" variant="primary" onClick={() => setImportOpen(true)}>
               <Upload size={13} />
-              Import trace
+              {t('runs.import')}
             </Button>
           </div>
         </div>
@@ -124,7 +131,7 @@ export function RunsPage() {
               ref={inputRef}
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search task, agent, model, status…"
+              placeholder={t('runs.searchPlaceholder')}
               className="h-8 w-full rounded-sm border border-line bg-panel pl-8 pr-16 text-[12px] text-ink placeholder:text-faint focus:border-accent focus:outline-none"
             />
             <div className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-1">
@@ -132,7 +139,7 @@ export function RunsPage() {
                 <button
                   onClick={() => setQuery('')}
                   className="rounded-xs p-0.5 text-faint hover:text-ink"
-                  aria-label="Clear search"
+                  aria-label={t('runs.clearSearch')}
                 >
                   <X size={12} />
                 </button>
@@ -154,7 +161,7 @@ export function RunsPage() {
                     : 'border-transparent text-muted hover:text-ink',
                 )}
               >
-                {value === 'all' ? 'All' : value === 'pass' ? 'Passed' : 'Failed'}
+                {t(FILTER_KEYS[value])}
                 <span className="font-mono text-[10px] text-faint">{counts[value]}</span>
               </button>
             ))}
@@ -162,12 +169,12 @@ export function RunsPage() {
         </div>
 
         <div className="hidden grid-cols-[minmax(0,1fr)_156px_74px_56px_52px_96px_16px] items-center gap-4 border-b border-line px-2 py-2 md:grid">
-          <span className="eyebrow">Task</span>
-          <span className="eyebrow">Agent</span>
-          <span className="eyebrow">Result</span>
-          <span className="eyebrow text-right">Time</span>
-          <span className="eyebrow text-right">Steps</span>
-          <span className="eyebrow text-right">Started</span>
+          <span className="eyebrow">{t('runs.table.task')}</span>
+          <span className="eyebrow">{t('runs.table.agent')}</span>
+          <span className="eyebrow">{t('runs.table.result')}</span>
+          <span className="eyebrow text-right">{t('runs.table.time')}</span>
+          <span className="eyebrow text-right">{t('runs.table.steps')}</span>
+          <span className="eyebrow text-right">{t('runs.table.started')}</span>
           <span />
         </div>
 
@@ -186,8 +193,8 @@ export function RunsPage() {
         {filtered.length === 0 ? (
           <div className="mt-10 flex flex-col items-center rounded-md border border-dashed border-line py-14">
             <Search size={18} className="text-faint" />
-            <p className="mt-3 text-[13px] text-ink">No runs match this filter</p>
-            <p className="mt-1 text-[11.5px] text-muted">Try a different search term or status.</p>
+            <p className="mt-3 text-[13px] text-ink">{t('runs.empty.title')}</p>
+            <p className="mt-1 text-[11.5px] text-muted">{t('runs.empty.body')}</p>
             <Button
               size="sm"
               variant="subtle"
@@ -197,21 +204,19 @@ export function RunsPage() {
                 setFilter('all')
               }}
             >
-              Clear filters
+              {t('runs.empty.clear')}
             </Button>
           </div>
         ) : null}
 
         <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-4 text-[11px] text-faint">
-          <span>
-            Showing {filtered.length} of {runs.length} runs · traces stay in your browser
-          </span>
+          <span>{t('runs.footer.showing', { shown: filtered.length, total: runs.length })}</span>
           <span className="flex items-center gap-2">
             <span className="font-mono">JSON</span>
-            <span>native schema</span>
+            <span>{t('runs.footer.native')}</span>
             <span className="text-line-strong">·</span>
             <span className="font-mono">.traj</span>
-            <span>SWE-agent import</span>
+            <span>{t('runs.footer.traj')}</span>
           </span>
         </div>
       </div>
@@ -231,6 +236,7 @@ function RunRow({
   taskRunCount: number
 }) {
   const navigate = useNavigate()
+  const t = useT()
   const stats = runStats(run)
   const tests = run.result.tests
 
@@ -249,15 +255,15 @@ function RunRow({
           <span className="truncate text-[13px] font-medium text-ink">{run.task.title}</span>
           {run.metadata?.source === 'recorder' ? (
             <span className="shrink-0 rounded-xs border border-accent/30 px-1 font-mono text-[9px] uppercase tracking-wide text-accent/80">
-              recorded
+              {t('runs.badge.recorded')}
             </span>
           ) : imported ? (
             <span className="shrink-0 rounded-xs border border-line px-1 font-mono text-[9px] uppercase tracking-wide text-faint">
-              imported
+              {t('runs.badge.imported')}
             </span>
           ) : transient ? (
             <span className="shrink-0 rounded-xs border border-line px-1 font-mono text-[9px] uppercase tracking-wide text-faint">
-              opened
+              {t('runs.badge.opened')}
             </span>
           ) : null}
         </div>
@@ -269,7 +275,7 @@ function RunRow({
             <>
               <span className="text-line-strong">·</span>
               <span className={tests.failed > 0 ? 'text-fail/80' : 'text-pass/80'}>
-                {tests.passed}/{tests.total} tests
+                {t('runs.tests', { passed: tests.passed, total: tests.total })}
               </span>
             </>
           ) : null}
@@ -280,17 +286,17 @@ function RunRow({
                 navigate(`/compare?task=${run.task.id}`)
               }}
               className="ml-1 inline-flex items-center gap-1 rounded-xs border border-line px-1.5 py-[1px] text-[9.5px] text-muted transition-colors hover:border-accent/50 hover:text-accent"
-              title="Compare runs of this task"
+              title={t('runs.compareTask')}
             >
               <GitCompare size={9} />
-              {taskRunCount} runs
+              {tn('runs.taskRuns', taskRunCount)}
             </button>
           ) : null}
         </div>
         <div className="mt-2 flex items-center gap-3 md:hidden">
           <StatusPill status={run.status} />
           <span className="font-mono text-[10.5px] text-muted">{formatDuration(run.durationMs)}</span>
-          <span className="font-mono text-[10.5px] text-faint">{stats.steps} steps</span>
+          <span className="font-mono text-[10.5px] text-faint">{tn('runs.steps', stats.steps)}</span>
         </div>
       </div>
 
@@ -311,7 +317,7 @@ function RunRow({
       </span>
 
       <span className="hidden text-right font-mono text-[10.5px] text-faint md:block">
-        {formatStartedAt(run.startedAt)}
+        {formatDateTime(run.startedAt)}
       </span>
 
       <ChevronRight

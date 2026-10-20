@@ -6,10 +6,12 @@ import { formatClock, isEstimatedTiming, spanAtTime, spanEnd } from '../../lib/t
 import { useReplayStore } from '../../store/replay'
 import { Kbd } from '../ui/primitives'
 import { SpanIcon } from '../spanMeta'
+import { spanStatusLabel, useT } from '../../i18n'
 
 const SPEEDS = [1, 2, 4, 8]
 
 export function Player() {
+  const t = useT()
   const trace = useReplayStore((state) => state.trace)
   const spans = useReplayStore((state) => state.spans)
   const playing = useReplayStore((state) => state.playing)
@@ -47,24 +49,24 @@ export function Player() {
         <button
           onClick={() => step(-1)}
           className="rounded-sm p-1.5 text-muted transition-colors hover:bg-panel2 hover:text-ink"
-          aria-label="Previous step"
-          title="Previous step (←)"
+          aria-label={t('player.prev')}
+          title={t('player.prevTitle')}
         >
           <SkipBack size={14} />
         </button>
         <button
           onClick={toggle}
           className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-[#05101f] transition-colors hover:bg-[#6fafff]"
-          aria-label={playing ? 'Pause replay' : 'Play replay'}
-          title="Play / pause (space)"
+          aria-label={playing ? t('player.pause') : t('player.play')}
+          title={t('player.playTitle')}
         >
           {playing ? <Pause size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" className="ml-0.5" />}
         </button>
         <button
           onClick={() => step(1)}
           className="rounded-sm p-1.5 text-muted transition-colors hover:bg-panel2 hover:text-ink"
-          aria-label="Next step"
-          title="Next step (→)"
+          aria-label={t('player.next')}
+          title={t('player.nextTitle')}
         >
           <SkipForward size={14} />
         </button>
@@ -83,7 +85,7 @@ export function Player() {
           setSpeed(next)
         }}
         className="h-6 w-9 shrink-0 rounded-xs border border-line bg-panel font-mono text-[10px] text-muted transition-colors hover:border-line-strong hover:text-ink"
-        title="Playback speed"
+        title={t('player.speed')}
       >
         {speed}×
       </button>
@@ -91,20 +93,20 @@ export function Player() {
       {estimated ? (
         <span
           className="hidden shrink-0 items-center gap-1 font-mono text-[9px] text-warn/80 lg:flex"
-          title="This trace has no timestamps; durations were estimated by the adapter."
+          title={t('player.estimatedTitle')}
         >
           <span className="h-1 w-1 rounded-full bg-warn" />
-          estimated
+          {t('player.estimated')}
         </span>
       ) : null}
 
       <div className="hidden shrink-0 items-center gap-2 xl:flex">
         <span className="flex items-center gap-1 text-[9.5px] text-faint">
-          <Kbd>space</Kbd> play
+          <Kbd>space</Kbd> {t('player.kbd.play')}
         </span>
         <span className="flex items-center gap-1 text-[9.5px] text-faint">
           <Kbd>←</Kbd>
-          <Kbd>→</Kbd> step
+          <Kbd>→</Kbd> {t('player.kbd.step')}
         </span>
       </div>
     </div>
@@ -122,6 +124,7 @@ function Scrubber({
   playheadMs: number
   hoveredSpan: Span | undefined
 }) {
+  const t = useT()
   const seek = useReplayStore((state) => state.seek)
   const pause = useReplayStore((state) => state.pause)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -149,7 +152,7 @@ function Scrubber({
     <div
       ref={containerRef}
       role="slider"
-      aria-label="Replay position"
+      aria-label={t('player.position')}
       aria-valuemin={0}
       aria-valuemax={Math.round(duration)}
       aria-valuenow={Math.round(playheadMs)}
@@ -232,7 +235,7 @@ function Scrubber({
           <div className="mt-1 flex items-center justify-between font-mono text-[9px] text-faint">
             <span>{formatClock(hoverMs ?? 0)}</span>
             <span className={clsx(tooltipSpan.status === 'error' && 'text-fail')}>
-              {tooltipSpan.status}
+              {spanStatusLabel(tooltipSpan.status)}
             </span>
           </div>
         </div>

@@ -5,8 +5,10 @@ import type { Span } from '../../schema/trace'
 import { buildFileIndex, formatClock, formatSpanDuration, spanEnd } from '../../lib/trace'
 import { useReplayStore } from '../../store/replay'
 import { SpanIcon } from '../spanMeta'
+import { useT } from '../../i18n'
 
 export function WorkspaceView() {
+  const t = useT()
   const trace = useReplayStore((state) => state.trace)
   const playheadMs = useReplayStore((state) => state.playheadMs)
   const currentSpanId = useReplayStore((state) => state.currentSpanId)
@@ -30,9 +32,9 @@ export function WorkspaceView() {
     return (
       <div className="flex h-full flex-col items-center justify-center px-8 text-center">
         <FolderTree size={20} className="text-faint" />
-        <p className="mt-3 text-[13px] text-ink">No files recorded in this trace</p>
+        <p className="mt-3 text-[13px] text-ink">{t('workspace.empty.title')}</p>
         <p className="mt-1 max-w-[320px] text-[11.5px] leading-relaxed text-muted">
-          Steps in this run did not declare file paths, so there is no workspace activity to show.
+          {t('workspace.empty.body')}
         </p>
       </div>
     )
@@ -41,7 +43,8 @@ export function WorkspaceView() {
   const groups = new Map<string, typeof files>()
   for (const file of files) {
     const segments = file.path.split('/')
-    const directory = segments.length > 1 ? segments.slice(0, -1).join('/') : 'repository root'
+    const directory =
+      segments.length > 1 ? segments.slice(0, -1).join('/') : t('workspace.root')
     const bucket = groups.get(directory) ?? []
     bucket.push(file)
     groups.set(directory, bucket)
@@ -54,9 +57,13 @@ export function WorkspaceView() {
     <div className="panel-scroll h-full overflow-y-auto">
       <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
         <div className="flex items-center gap-2">
-          <span className="eyebrow">Workspace activity</span>
+          <span className="eyebrow">{t('workspace.activity')}</span>
           <span className="font-mono text-[10px] text-faint">
-            {files.length} files · {totalReads} reads · {totalEdits} edits
+            {t('workspace.summary', {
+              files: files.length,
+              reads: totalReads,
+              edits: totalEdits,
+            })}
           </span>
         </div>
         <span className="font-mono text-[10px] text-faint">{formatClock(playheadMs)}</span>
@@ -137,9 +144,11 @@ export function WorkspaceView() {
             <div className="min-w-0">
               <div className="truncate font-mono text-[11px] text-ink">{selected.path}</div>
               <div className="mt-0.5 text-[10px] text-faint">
-                first touched at {formatClock(selected.firstTouchMs)} ·{" "}
-                {selected.reads.length} {selected.reads.length === 1 ? 'read' : 'reads'} ·{" "}
-                {selected.edits.length} {selected.edits.length === 1 ? 'edit' : 'edits'}
+                {t('workspace.firstTouched', {
+                  time: formatClock(selected.firstTouchMs),
+                  reads: selected.reads.length,
+                  edits: selected.edits.length,
+                })}
               </div>
             </div>
             <StateBadge state={fileState(selected.edits, selected.reads, playheadMs, currentSpan, selected.path)} />
@@ -181,11 +190,12 @@ function fileState(
 }
 
 function StateBadge({ state }: { state: FileState }) {
+  const t = useT()
   const config = {
-    untouched: { label: 'not touched', color: 'var(--color-faint)' },
-    read: { label: 'read', color: 'var(--color-accent)' },
-    editing: { label: 'editing', color: 'var(--color-edit)' },
-    modified: { label: 'modified', color: 'var(--color-warn)' },
+    untouched: { label: t('workspace.state.untouched'), color: 'var(--color-faint)' },
+    read: { label: t('workspace.state.read'), color: 'var(--color-accent)' },
+    editing: { label: t('workspace.state.editing'), color: 'var(--color-edit)' },
+    modified: { label: t('workspace.state.modified'), color: 'var(--color-warn)' },
   }[state]
   return (
     <span

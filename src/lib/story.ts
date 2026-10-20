@@ -1,5 +1,6 @@
 import type { Span, Trace } from '../schema/trace'
 import { formatClock, leafSpans } from './trace'
+import { t, tn } from '../i18n'
 
 export type TestResult = {
   span: Span
@@ -119,8 +120,16 @@ function pushEditNode(nodes: StoryNode[], edits: Span[], stepIndex: Map<string, 
     spanId: last.id,
     step: stepIndex.get(last.id) ?? 0,
     timeMs: last.startMs,
-    title: names.length === 0 ? `${edits.length} edits` : names.length === 1 ? `Edit ${names[0]}` : `${names.length} files edited`,
-    detail: names.length > 0 ? names.join(', ') : `${edits.length} workspace ${edits.length === 1 ? 'change' : 'changes'}`,
+    title:
+      names.length === 0
+        ? tn('story.editCount', edits.length)
+        : names.length === 1
+          ? t('story.editOne', { file: names[0] })
+          : t('story.editMany', { count: names.length }),
+    detail:
+      names.length > 0
+        ? names.join(', ')
+        : tn('story.workspaceChange', edits.length),
     tone: 'edit',
     regression: false,
     recovered: false,
@@ -157,8 +166,8 @@ export function buildStory(trace: Trace): StoryNode[] {
       title: result.command,
       detail:
         result.failed > 0
-          ? `${result.failed} failed · ${result.passed} passed`
-          : `${result.passed} passed`,
+          ? t('story.testDetail', { failed: result.failed, passed: result.passed })
+          : t('story.testDetailPassed', { passed: result.passed }),
       tone: result.failed > 0 ? 'fail' : 'pass',
       regression,
       recovered,
@@ -176,12 +185,12 @@ export function buildStory(trace: Trace): StoryNode[] {
       timeMs: spans[spans.length - 1]?.endMs ?? 0,
       title:
         trace.status === 'pass'
-          ? 'Run complete'
+          ? t('story.runComplete')
           : trace.status === 'fail'
-            ? 'Run failed'
+            ? t('story.runFailed')
             : trace.status === 'running'
-              ? 'Run in progress'
-              : 'Outcome not evaluated',
+              ? t('story.runInProgress')
+              : t('story.outcomeUnknown'),
       detail: trace.result.summary,
       tone: trace.status === 'pass' ? 'pass' : trace.status === 'fail' ? 'fail' : 'neutral',
       regression: false,
@@ -194,10 +203,14 @@ export function buildStory(trace: Trace): StoryNode[] {
 
 export function storyHeadline(trace: Trace): string {
   const results = testResults(trace)
-  if (results.length === 0) return 'No test runs recorded.'
+  if (results.length === 0) return t('story.noTests')
   return results
     .slice(-4)
-    .map((result) => (result.failed > 0 ? `${result.failed} failed` : `${result.passed} passed`))
+    .map((result) =>
+      result.failed > 0
+        ? tn('story.failedCount', result.failed)
+        : tn('story.passedCount', result.passed),
+    )
     .join(' → ')
 }
 
@@ -210,26 +223,28 @@ export function buildOutcomeSummary(trace: Trace): string {
   const last = results[results.length - 1]
 
   if (recovery) {
-    if (recovery.regression) return 'Tried a fix that made things worse, then recovered.'
-    if (reads >= 4 && edits <= 2) return 'Read more upfront, then recovered with a focused edit.'
-    return `Recovered after ${recovery.failingRuns} failing test ${recovery.failingRuns === 1 ? 'run' : 'runs'}.`
+    if (recovery.regression) return t('story.outcome.regression')
+    if (reads >= 4 && edits <= 2) return t('story.outcome.readFirst')
+    return tn('story.outcome.recovered', recovery.failingRuns)
   }
 
   if (last && last.failed > 0) {
     if (edits >= 2) {
-      return `${edits} edits across ${results.length} test runs, but never recovered.`
+      return tn('story.outcome.neverRecovered', edits, {
+        runs: tn('story.testRuns', results.length),
+      })
     }
-    return `Ended with ${last.failed} failing ${last.failed === 1 ? 'test' : 'tests'} and no recovery.`
+    return tn('story.outcome.endedFailing', last.failed)
   }
 
   if (last && last.failed === 0) {
-    if (reads >= 4 && edits <= 2) return 'Read the code first, then solved it in a focused edit.'
-    return `Solved it with ${edits} ${edits === 1 ? 'edit' : 'edits'} and ${results.length} test ${results.length === 1 ? 'run' : 'runs'}.`
+    if (reads >= 4 && edits <= 2) return t('story.outcome.readSolved')
+    return tn('story.outcome.solved', edits, {
+      runs: tn('story.testRuns', results.length),
+    })
   }
 
-  return edits > 0
-    ? `Recorded ${edits} ${edits === 1 ? 'edit' : 'edits'} without a test run.`
-    : 'Recorded a session without tests or edits.'
+  return edits > 0 ? tn('story.outcome.recordedEdits', edits) : t('story.outcome.recordedNothing')
 }
 
 export function formatStoryTime(ms: number): string {

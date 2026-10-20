@@ -8,6 +8,7 @@ import { Button, Modal, Segmented } from '../ui/primitives'
 import { useRunsStore } from '../../store/runs'
 import { useUiStore } from '../../store/ui'
 import type { Trace } from '../../schema/trace'
+import { formatNumber, tn, useT } from '../../i18n'
 
 type Mode = 'file' | 'paste'
 
@@ -18,6 +19,7 @@ export function ImportDialog() {
 }
 
 function ImportDialogContent() {
+  const t = useT()
   const setOpen = useUiStore((state) => state.setImportOpen)
   const addImported = useRunsStore((state) => state.addImported)
   const navigate = useNavigate()
@@ -51,7 +53,7 @@ function ImportDialogContent() {
       if (caught instanceof TraceImportError) setError(caught)
       else
         setError(
-          new TraceImportError('Unexpected error while importing.', [
+          new TraceImportError(t('import.unexpected'), [
             caught instanceof Error ? caught.message : String(caught),
           ]),
         )
@@ -70,17 +72,17 @@ function ImportDialogContent() {
     <Modal
       open
       onClose={() => setOpen(false)}
-      title="Import trace"
-      subtitle="Open a native Agent Replay trace, a SWE-agent .traj file, or an OTLP JSON trace export."
+      title={t('import.title')}
+      subtitle={t('import.subtitle')}
       width={600}
       footer={
         result ? (
           <>
             <span className="mr-auto font-mono text-[10px] text-faint">
-              {result.traces.length} {result.traces.length === 1 ? 'run' : 'runs'} added
+              {tn('import.added', result.traces.length)}
             </span>
             <Button size="sm" variant="primary" onClick={() => setOpen(false)}>
-              Done
+              {t('import.done')}
             </Button>
           </>
         ) : (
@@ -97,13 +99,13 @@ function ImportDialogContent() {
                 setResult(null)
               }}
             >
-              Use sample .traj
+              {t('import.useSample')}
             </Button>
             <Button size="sm" variant="ghost" onClick={() => setOpen(false)}>
-              Cancel
+              {t('import.cancel')}
             </Button>
             <Button size="sm" variant="primary" disabled={!text} onClick={() => runImport(text)}>
-              Import trace
+              {t('import.submit')}
             </Button>
           </>
         )
@@ -114,8 +116,8 @@ function ImportDialogContent() {
           value={mode}
           onChange={setMode}
           options={[
-            { value: 'file', label: <><FileJson size={12} /> File</> },
-            { value: 'paste', label: 'Paste JSON' },
+            { value: 'file', label: <><FileJson size={12} /> {t('import.file')}</> },
+            { value: 'paste', label: t('import.paste') },
           ]}
         />
         <span className="font-mono text-[10px] text-faint">agent-replay/v1 · .traj · OTLP JSON</span>
@@ -125,13 +127,11 @@ function ImportDialogContent() {
         <div className="rounded-sm border border-line bg-panel2/60 p-3">
           <div className="text-[12px] text-ink">
             {result.traces.length === 1
-              ? 'Imported 1 trace with diagnostics'
-              : `This file holds ${result.traces.length} traces`}
+              ? t('import.single.title')
+              : tn('import.multi.title', result.traces.length)}
           </div>
           <p className="mt-0.5 text-[11px] text-faint">
-            {result.traces.length === 1
-              ? 'Review the notes below, then open the run.'
-              : 'Each OTel traceId becomes its own run. Pick one to open.'}
+            {result.traces.length === 1 ? t('import.single.body') : t('import.multi.body')}
           </p>
           <div className="mt-2.5 space-y-1">
             {result.traces.map((trace) => (
@@ -142,7 +142,7 @@ function ImportDialogContent() {
               >
                 <span className="truncate text-[11.5px] text-ink">{trace.task.title}</span>
                 <span className="ml-auto shrink-0 font-mono text-[9.5px] text-faint">
-                  {trace.spans.length} spans
+                  {tn('import.spans', trace.spans.length)}
                 </span>
                 <ChevronRight size={11} className="shrink-0 text-faint" />
               </button>
@@ -185,8 +185,8 @@ function ImportDialogContent() {
           )}
         >
           <Upload size={18} className="text-muted" />
-          <p className="text-[13px] text-ink">Drop a .json or .traj file</p>
-          <p className="text-[11px] text-faint">or click to browse</p>
+          <p className="text-[13px] text-ink">{t('import.dropTitle')}</p>
+          <p className="text-[11px] text-faint">{t('import.dropHint')}</p>
           <input
             ref={inputRef}
             type="file"
@@ -214,7 +214,7 @@ function ImportDialogContent() {
         <div className="mt-3 flex items-center justify-between rounded-sm border border-line bg-panel2/60 px-3 py-2">
           <span className="truncate font-mono text-[11px] text-muted">{filename}</span>
           <span className="ml-3 shrink-0 font-mono text-[10px] text-faint">
-            {text.length.toLocaleString()} chars
+            {t('import.chars', { count: formatNumber(text.length) })}
           </span>
         </div>
       ) : null}
@@ -238,9 +238,7 @@ function ImportDialogContent() {
       ) : null}
 
       <p className="mt-3 text-[11px] leading-relaxed text-faint">
-        SWE-agent trajectories have no timestamps, so their durations are estimated and marked in
-        the inspector. OTel imports keep exporter timestamps and hierarchy, but are never counted as
-        workspace-verified. Nothing is uploaded — traces stay in your browser.
+        {t('import.note')}
       </p>
     </Modal>
   )

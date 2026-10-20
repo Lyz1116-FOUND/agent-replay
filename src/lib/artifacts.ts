@@ -1,4 +1,5 @@
 import type { Artifact, ArtifactKind, SpanType } from '../schema/trace'
+import { t, tn } from '../i18n'
 
 export const PREFERRED_ARTIFACTS: Record<SpanType, ArtifactKind[]> = {
   agent: ['markdown', 'reasoning', 'terminal'],
@@ -30,19 +31,19 @@ export function artifactLabel(artifact: Artifact): string {
     case 'diff':
       return artifact.path.split('/').pop() ?? artifact.path
     case 'terminal':
-      return 'Terminal'
+      return t('artifact.terminal')
     case 'test':
-      return 'Test results'
+      return t('artifact.test')
     case 'search':
-      return `Search "${artifact.query}"`
+      return t('artifact.search', { query: artifact.query })
     case 'reasoning':
-      return 'Reasoning summary'
+      return t('artifact.reasoning')
     case 'patch':
-      return 'Patch'
+      return t('artifact.patch')
     case 'markdown':
-      return 'Summary'
+      return t('artifact.markdown')
     case 'browser':
-      return 'Browser'
+      return t('artifact.browser')
   }
 }
 
@@ -52,17 +53,20 @@ export function artifactDetail(artifact: Artifact): string | undefined {
       return artifact.language
     case 'diff': {
       const { added } = diffLineStats(artifact.before, artifact.after)
-      return `${added} ${added === 1 ? 'addition' : 'additions'}`
+      return tn('artifact.additions', added)
     }
     case 'terminal':
-      return `exit ${artifact.exitCode}`
+      return t('artifact.exit', { code: artifact.exitCode })
     case 'test':
-      return `${artifact.passed}/${artifact.total} passed`
+      return t('artifact.testSummary', {
+        passed: artifact.passed,
+        total: artifact.total,
+      })
     case 'search':
-      return `${artifact.results.length} results`
+      return tn('artifact.results', artifact.results.length)
     case 'patch': {
       const { added } = patchStats(artifact.diff)
-      return `${added} ${added === 1 ? 'addition' : 'additions'}`
+      return tn('artifact.additions', added)
     }
     default:
       return undefined

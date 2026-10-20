@@ -6,7 +6,6 @@ import type { Trace, SpanType } from '../schema/trace'
 import { useAllRuns } from '../lib/runs'
 import {
   SPAN_COLORS,
-  SPAN_LABELS,
   formatDuration,
   isEstimatedTiming,
   leafSpans,
@@ -15,6 +14,7 @@ import {
 } from '../lib/trace'
 import { AgentBadge, StatusPill } from '../components/ui/primitives'
 import { buildOutcomeSummary } from '../lib/story'
+import { formatNumber, spanLabel, tn, useT } from '../i18n'
 
 const FINGERPRINT_ORDER: SpanType[] = [
   'read',
@@ -32,6 +32,7 @@ const FINGERPRINT_ORDER: SpanType[] = [
 type TaskGroup = { taskId: string; title: string; runs: Trace[] }
 
 export function ComparePage() {
+  const t = useT()
   const runs = useAllRuns()
   const [params, setParams] = useSearchParams()
   const taskParam = params.get('task')
@@ -66,9 +67,9 @@ export function ComparePage() {
     return (
       <div className="flex h-full flex-col items-center justify-center">
         <GitCompare size={20} className="text-faint" />
-        <p className="mt-3 text-[13px] text-ink">Nothing to compare yet</p>
+        <p className="mt-3 text-[13px] text-ink">{t('compare.empty')}</p>
         <Link to="/" className="mt-3 text-[12px] text-accent hover:underline">
-          Back to runs
+          {t('compare.back')}
         </Link>
       </div>
     )
@@ -82,15 +83,17 @@ export function ComparePage() {
           className="mb-5 inline-flex items-center gap-1.5 text-[11px] text-faint transition-colors hover:text-muted"
         >
           <ArrowLeft size={12} />
-          Runs
+          {t('compare.back')}
         </Link>
 
         <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="eyebrow">Cross-run analysis</div>
-            <h1 className="mt-2 text-[26px] font-semibold tracking-[-0.02em] text-ink">Compare</h1>
+            <div className="eyebrow">{t('compare.eyebrow')}</div>
+            <h1 className="mt-2 text-[26px] font-semibold tracking-[-0.02em] text-ink">
+              {t('compare.title')}
+            </h1>
             <p className="mt-1.5 max-w-[560px] text-[12.5px] leading-relaxed text-muted">
-              Same task, different agents. Compare outcomes, pacing, and problem-solving style.
+              {t('compare.subtitle')}
             </p>
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -115,7 +118,7 @@ export function ComparePage() {
         {activeTask ? (
           <>
             <div className="mt-7 flex flex-wrap items-center gap-2 border-y border-line py-3">
-              <span className="eyebrow mr-1">Runs</span>
+              <span className="eyebrow mr-1">{t('compare.runs')}</span>
               {activeTask.runs.map((run) => {
                 const selected = selectedIds.includes(run.id)
                 const disabled = !selected && selectedIds.length >= 4
@@ -138,7 +141,7 @@ export function ComparePage() {
                         ? 'border-accent/45 bg-accent/[0.07] text-ink'
                         : 'border-line bg-panel text-muted hover:border-line-strong',
                     )}
-                    title={disabled ? 'Compare up to 4 runs' : 'Toggle run'}
+                    title={disabled ? t('compare.limit') : t('compare.toggle')}
                   >
                     <span
                       className={clsx(
@@ -166,7 +169,10 @@ export function ComparePage() {
                 )
               })}
               <span className="ml-auto font-mono text-[9.5px] text-faint">
-                {selectedRuns.length} of {activeTask.runs.length} selected
+                {t('compare.selected', {
+                  selected: selectedRuns.length,
+                  total: activeTask.runs.length,
+                })}
               </span>
             </div>
 
@@ -175,22 +181,22 @@ export function ComparePage() {
             <section className="mt-10">
               <div className="flex items-end justify-between">
                 <div>
-                  <div className="eyebrow">Timeline</div>
+                  <div className="eyebrow">{t('compare.timeline')}</div>
                   <h2 className="mt-1.5 text-[15px] font-medium text-ink">
-                    How each run spends its time
+                    {t('compare.timelineTitle')}
                   </h2>
                 </div>
                 <span className="font-mono text-[9.5px] text-faint">
-                  shared scale · click a block to open it
+                  {t('compare.timelineHint')}
                 </span>
               </div>
               <CompareTimeline runs={selectedRuns} />
             </section>
 
             <section className="mt-10 pb-6">
-              <div className="eyebrow">Fingerprint</div>
+              <div className="eyebrow">{t('compare.fingerprint')}</div>
               <h2 className="mt-1.5 text-[15px] font-medium text-ink">
-                What each agent spends its steps on
+                {t('compare.fingerprintTitle')}
               </h2>
               <div className="mt-4 space-y-2">
                 {selectedRuns.map((run) => (
@@ -224,6 +230,7 @@ function metrics(run: Trace) {
 }
 
 function SummaryTable({ runs }: { runs: Trace[] }) {
+  const t = useT()
   const metricsByRun = runs.map(metrics)
   const minDuration = Math.min(...metricsByRun.map((item) => item.duration))
   const minSteps = Math.min(...metricsByRun.map((item) => item.steps))
@@ -236,7 +243,7 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
           className="grid items-center gap-x-4 border-b border-line bg-panel px-4 py-2.5"
           style={{ gridTemplateColumns: columns }}
         >
-          <span className="eyebrow">Run</span>
+          <span className="eyebrow">{t('compare.table.run')}</span>
           {runs.map((run) => (
             <div key={run.id} className="min-w-0">
               <div className="flex items-center gap-2">
@@ -244,7 +251,7 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
                 <StatusPill status={run.status} />
                 {isEstimatedTiming(run) ? (
                   <span className="rounded-xs border border-warn/30 px-1 font-mono text-[8px] uppercase text-warn">
-                    est.
+                    {t('compare.est')}
                   </span>
                 ) : null}
               </div>
@@ -252,14 +259,14 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
                 to={`/runs/${run.id}`}
                 className="mt-1 inline-block font-mono text-[9.5px] text-faint transition-colors hover:text-accent"
               >
-                open replay →
+                {t('compare.openReplay')}
               </Link>
             </div>
           ))}
         </div>
 
         <SummaryRow
-          label="Duration"
+          label={t('compare.table.duration')}
           columns={columns}
           values={metricsByRun.map((item, index) => ({
             key: runs[index].id,
@@ -268,7 +275,7 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
           }))}
         />
         <SummaryRow
-          label="Steps"
+          label={t('compare.table.steps')}
           columns={columns}
           values={metricsByRun.map((item, index) => ({
             key: runs[index].id,
@@ -277,7 +284,7 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
           }))}
         />
         <SummaryRow
-          label="Edits"
+          label={t('compare.table.edits')}
           columns={columns}
           values={metricsByRun.map((item, index) => ({
             key: runs[index].id,
@@ -286,7 +293,7 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
           }))}
         />
         <SummaryRow
-          label="Test runs"
+          label={t('compare.table.testRuns')}
           columns={columns}
           values={metricsByRun.map((item, index) => ({
             key: runs[index].id,
@@ -295,7 +302,7 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
           }))}
         />
         <SummaryRow
-          label="Tests"
+          label={t('compare.table.tests')}
           columns={columns}
           values={metricsByRun.map((item, index) => ({
             key: runs[index].id,
@@ -304,7 +311,7 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
           }))}
         />
         <SummaryRow
-          label="Files changed"
+          label={t('compare.table.files')}
           columns={columns}
           values={metricsByRun.map((item, index) => ({
             key: runs[index].id,
@@ -313,11 +320,11 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
           }))}
         />
         <SummaryRow
-          label="Tokens"
+          label={t('compare.table.tokens')}
           columns={columns}
           values={metricsByRun.map((item, index) => ({
             key: runs[index].id,
-            content: item.tokens > 0 ? item.tokens.toLocaleString() : '—',
+            content: item.tokens > 0 ? formatNumber(item.tokens) : '—',
             tone: 'default',
           }))}
           last
@@ -326,7 +333,7 @@ function SummaryTable({ runs }: { runs: Trace[] }) {
           className="grid gap-x-4 border-t border-line bg-panel2/25 px-4 py-3"
           style={{ gridTemplateColumns: columns }}
         >
-          <span className="pt-0.5 text-[10.5px] text-faint">Outcome story</span>
+          <span className="pt-0.5 text-[10.5px] text-faint">{t('compare.table.outcome')}</span>
           {runs.map((run) => (
             <p key={run.id} className="text-[11px] leading-relaxed text-muted">
               {buildOutcomeSummary(run)}
@@ -373,6 +380,7 @@ function SummaryRow({
 }
 
 function CompareTimeline({ runs }: { runs: Trace[] }) {
+  const t = useT()
   const navigate = useNavigate()
   const maxDuration = Math.max(...runs.map((run) => run.durationMs), 1)
   const ticks = Array.from({ length: 5 }, (_, index) => (index / 4) * maxDuration)
@@ -434,7 +442,7 @@ function CompareTimeline({ runs }: { runs: Trace[] }) {
                   key={span.id}
                   onClick={() => navigate(`/runs/${run.id}?step=${span.id}`)}
                   title={`${span.name} · ${formatDuration(spanDuration(span))}`}
-                  aria-label={`Open ${run.agent.name} at ${span.name}`}
+                  aria-label={t('compare.openAria', { agent: run.agent.name, span: span.name })}
                   className="absolute top-[5px] h-[18px] overflow-hidden rounded-[2px] border-l-2 text-left transition-opacity hover:opacity-80"
                   style={{
                     left: `${(span.startMs / maxDuration) * 100}%`,
@@ -463,7 +471,7 @@ function CompareTimeline({ runs }: { runs: Trace[] }) {
                 className="h-1.5 w-1.5 rounded-full"
                 style={{ backgroundColor: SPAN_COLORS[type] }}
               />
-              {SPAN_LABELS[type]}
+              {spanLabel(type)}
             </span>
           ),
         )}
@@ -491,13 +499,13 @@ function FingerprintRow({ run }: { run: Trace }) {
           )}
         />
         <span className="truncate text-[11px] text-ink">{run.agent.name}</span>
-        <span className="font-mono text-[9px] text-faint">{total} steps</span>
+        <span className="font-mono text-[9px] text-faint">{tn('compare.steps', total)}</span>
       </div>
       <div className="flex h-4 min-w-0 flex-1 overflow-hidden rounded-xs bg-panel2">
         {counts.map((item) => (
           <span
             key={item.type}
-            title={`${SPAN_LABELS[item.type]} · ${item.count}`}
+            title={`${spanLabel(item.type)} · ${item.count}`}
             className="h-full border-r border-canvas/50 last:border-r-0"
             style={{
               width: `${(item.count / total) * 100}%`,
@@ -513,7 +521,7 @@ function FingerprintRow({ run }: { run: Trace }) {
               className="h-1.5 w-1.5 rounded-full"
               style={{ backgroundColor: SPAN_COLORS[item.type] }}
             />
-            <span className="text-muted">{SPAN_LABELS[item.type].toLowerCase()}</span>
+            <span className="text-muted">{spanLabel(item.type)}</span>
             <span className="font-mono text-[9px] text-ink/80">{item.count}</span>
           </span>
         ))}

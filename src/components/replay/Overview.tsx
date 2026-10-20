@@ -21,6 +21,7 @@ import {
   type StoryNode,
 } from '../../lib/story'
 import { AgentBadge, Button, Kbd, StatusPill } from '../ui/primitives'
+import { useT } from '../../i18n'
 
 export function Overview({
   trace,
@@ -31,6 +32,7 @@ export function Overview({
   onOpenDetail: () => void
   onOpenSpan: (spanId?: string) => void
 }) {
+  const t = useT()
   const stats = runStats(trace)
   const tests = testResults(trace)
   const recovery = detectRecovery(trace)
@@ -44,7 +46,7 @@ export function Overview({
       <div className="mx-auto w-full max-w-[960px] px-8 py-9">
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="min-w-0">
-            <div className="eyebrow">Replay overview</div>
+            <div className="eyebrow">{t('overview.eyebrow')}</div>
             <h1 className="mt-2 max-w-[680px] text-[26px] font-semibold leading-tight tracking-[-0.02em] text-ink">
               {trace.task.title}
             </h1>
@@ -72,8 +74,7 @@ export function Overview({
                     title={capture.description}
                     className={clsx(
                       'rounded-xs border px-1.5 py-0.5 font-mono text-[8.5px] uppercase tracking-wide',
-                      capture.timingLabel === 'OBSERVED TIMING' ||
-                        capture.timingLabel === 'EXPORTER TIMING'
+                      capture.timingTone === 'observed' || capture.timingTone === 'exporter'
                         ? 'border-line text-faint'
                         : 'border-warn/35 text-warn',
                     )}
@@ -90,18 +91,18 @@ export function Overview({
           </div>
           <div className="flex shrink-0 items-center gap-2">
             <Button size="sm" variant="subtle" onClick={onOpenDetail}>
-              Open detailed replay
+              {t('overview.openDetail')}
               <ArrowRight size={13} />
             </Button>
           </div>
         </div>
 
         <div className="mt-8 grid grid-cols-2 divide-x divide-line overflow-hidden rounded-md border border-line bg-panel sm:grid-cols-5">
-          <Stat label="Duration" value={formatDuration(trace.durationMs)} />
-          <Stat label="Steps" value={String(stats.steps)} />
-          <Stat label="Edits" value={String(stats.edits)} />
-          <Stat label="Test runs" value={String(stats.testRuns)} />
-          <Stat label="Files changed" value={stats.files === null ? '—' : String(stats.files)} />
+          <Stat label={t('overview.stat.duration')} value={formatDuration(trace.durationMs)} />
+          <Stat label={t('overview.stat.steps')} value={String(stats.steps)} />
+          <Stat label={t('overview.stat.edits')} value={String(stats.edits)} />
+          <Stat label={t('overview.stat.testRuns')} value={String(stats.testRuns)} />
+          <Stat label={t('overview.stat.files')} value={stats.files === null ? '—' : String(stats.files)} />
         </div>
 
         {recovery ? (
@@ -109,10 +110,10 @@ export function Overview({
             <CheckCircle2 size={17} className="shrink-0 text-pass" />
             <div className="min-w-0 flex-1">
               <div className="text-[12px] font-medium text-ink">
-                Recovery detected
+                {t('overview.recovery.title')}
                 {recovery.regression ? (
                   <span className="ml-2 rounded-xs border border-fail/30 px-1 font-mono text-[8.5px] uppercase tracking-wide text-fail">
-                    regression first
+                    {t('overview.recovery.regression')}
                   </span>
                 ) : null}
               </div>
@@ -124,7 +125,7 @@ export function Overview({
               onClick={() => onOpenSpan(recovery.recoveredAt.span.id)}
               className="inline-flex shrink-0 items-center gap-1 self-start rounded-sm border border-pass/30 px-2 py-1 text-[10.5px] text-pass transition-colors hover:bg-pass/10 sm:self-auto"
             >
-              Jump to recovery
+              {t('overview.recovery.jump')}
               <ArrowRight size={11} />
             </button>
           </div>
@@ -132,7 +133,7 @@ export function Overview({
           <div className="mt-5 flex items-center gap-2.5 rounded-sm border border-fail/25 bg-fail/[0.03] px-4 py-2.5">
             <span className="h-1.5 w-1.5 rounded-full bg-fail" />
             <span className="text-[11.5px] text-muted">
-              No passing test run was recorded. {storyHeadline(trace)}
+              {t('overview.noPassing', { headline: storyHeadline(trace) })}
             </span>
           </div>
         ) : null}
@@ -140,13 +141,13 @@ export function Overview({
         <div className="mt-9">
           <div className="flex items-end justify-between">
             <div>
-              <div className="eyebrow">Story</div>
+              <div className="eyebrow">{t('overview.story.eyebrow')}</div>
               <h2 className="mt-1.5 text-[15px] font-medium text-ink">
-                The short version, step by step
+                {t('overview.story.title')}
               </h2>
             </div>
             <span className="font-mono text-[9.5px] text-faint">
-              {story.length} beats · {trace.spans.length} steps · click a card to inspect
+              {t('overview.story.meta', { beats: story.length, steps: trace.spans.length })}
             </span>
           </div>
 
@@ -170,14 +171,14 @@ export function Overview({
             {capture
               ? capture.sourceLine
               : recorded
-                ? 'Recorded with agent-replay · normalized from git, workspace, and command output'
+                ? t('overview.source.recorded')
                 : trace.metadata?.source === 'swe-agent'
-                  ? 'Imported SWE-agent trajectory · timing is estimated'
-                  : 'Trace data · all views share the same playhead'}
+                  ? t('overview.source.swe')
+                  : t('overview.source.default')}
           </div>
           <span className="flex items-center gap-1.5 text-[9.5px] text-faint">
-            <Kbd>enter</Kbd>
-            detailed replay
+            <Kbd>{t('overview.kbd.enter')}</Kbd>
+            {t('overview.kbd.detail')}
           </span>
         </div>
       </div>
@@ -195,6 +196,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 }
 
 function StoryCard({ node, onClick }: { node: StoryNode; onClick: () => void }) {
+  const t = useT()
   const Icon = node.kind === 'test' ? FlaskConical : node.kind === 'edit' ? Pencil : Flag
   return (
     <button
@@ -213,11 +215,11 @@ function StoryCard({ node, onClick }: { node: StoryNode; onClick: () => void }) 
         </span>
         {node.regression ? (
           <span className="rounded-xs border border-fail/30 px-1 font-mono text-[8px] uppercase tracking-wide text-fail">
-            regression
+            {t('overview.story.regression')}
           </span>
         ) : node.recovered ? (
           <span className="rounded-xs border border-pass/30 px-1 font-mono text-[8px] uppercase tracking-wide text-pass">
-            recovered
+            {t('overview.story.recovered')}
           </span>
         ) : null}
       </div>

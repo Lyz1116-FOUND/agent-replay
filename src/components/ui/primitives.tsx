@@ -4,6 +4,14 @@ import { clsx } from 'clsx'
 import { X } from 'lucide-react'
 import type { TraceStatus } from '../../schema/trace'
 import { STATUS_COLORS } from '../../lib/trace'
+import { useT } from '../../i18n'
+
+const STATUS_KEYS = {
+  pass: 'status.pass',
+  fail: 'status.fail',
+  partial: 'status.partial',
+  running: 'status.running',
+} as const
 
 type ButtonVariant = 'primary' | 'ghost' | 'subtle' | 'danger'
 type ButtonSize = 'sm' | 'md'
@@ -40,13 +48,6 @@ export function Button({
   )
 }
 
-const STATUS_LABELS: Record<TraceStatus, string> = {
-  pass: 'PASS',
-  fail: 'FAIL',
-  partial: 'PARTIAL',
-  running: 'RUNNING',
-}
-
 export function StatusPill({
   status,
   label,
@@ -56,7 +57,8 @@ export function StatusPill({
   label?: string
   className?: string
 }) {
-  const text = label ?? STATUS_LABELS[status]
+  const t = useT()
+  const text = label ?? t(STATUS_KEYS[status])
   return (
     <span
       className={clsx(
@@ -153,6 +155,7 @@ export function Modal({
   footer?: ReactNode
   width?: number
 }) {
+  const t = useT()
   useEffect(() => {
     if (!open) return
     function onKeyDown(event: KeyboardEvent) {
@@ -185,7 +188,7 @@ export function Modal({
           <button
             onClick={onClose}
             className="rounded-sm p-1 text-faint transition-colors hover:bg-panel2 hover:text-ink"
-            aria-label="Close dialog"
+            aria-label={t('dialog.close')}
           >
             <X size={16} />
           </button>

@@ -2,7 +2,6 @@ import { clsx } from 'clsx'
 import type { Span, SpanType } from '../../schema/trace'
 import {
   SPAN_COLORS,
-  SPAN_LABELS,
   formatClock,
   formatSpanDuration,
   packSpanRows,
@@ -12,6 +11,7 @@ import {
 import { useReplayStore } from '../../store/replay'
 import { detectRecovery } from '../../lib/story'
 import { SpanIcon } from '../spanMeta'
+import { spanLabel, tn, useT } from '../../i18n'
 
 const LANE_ORDER: SpanType[] = [
   'generation',
@@ -29,12 +29,10 @@ const LANE_ORDER: SpanType[] = [
   'agent',
 ]
 
-const LANE_LABELS: Partial<Record<SpanType, string>> = {
-  generation: 'LLM',
-  reasoning: 'Think',
-  unknown: 'Span',
-  checkpoint: 'Check',
-  browser: 'Web',
+const LANE_LABEL_KEYS: Partial<Record<SpanType, 'timeline.lane.think' | 'timeline.lane.check' | 'timeline.lane.web'>> = {
+  reasoning: 'timeline.lane.think',
+  checkpoint: 'timeline.lane.check',
+  browser: 'timeline.lane.web',
 }
 
 const ROW_HEIGHT = 32
@@ -46,6 +44,7 @@ function tickStep(durationMs: number): number {
 }
 
 export function TimelineFlame({ spans }: { spans: Span[] }) {
+  const t = useT()
   const playheadMs = useReplayStore((state) => state.playheadMs)
   const currentSpanId = useReplayStore((state) => state.currentSpanId)
   const hoveredSpanId = useReplayStore((state) => state.hoveredSpanId)
@@ -112,7 +111,9 @@ export function TimelineFlame({ spans }: { spans: Span[] }) {
                 )}
               >
                 <SpanIcon type={lane} size={11} />
-                <span className="truncate text-[9.5px]">{LANE_LABELS[lane] ?? SPAN_LABELS[lane]}</span>
+                <span className="truncate text-[9.5px]">
+                  {LANE_LABEL_KEYS[lane] ? t(LANE_LABEL_KEYS[lane]) : spanLabel(lane)}
+                </span>
               </div>
               <div
                 className="relative min-w-0 flex-1 cursor-crosshair border-l border-line/60"
@@ -187,15 +188,15 @@ export function TimelineFlame({ spans }: { spans: Span[] }) {
 
       <div className="mt-3 flex items-center justify-between border-t border-line/70 px-1 pt-2">
         <span className="font-mono text-[9.5px] text-faint">
-          click lane to seek · blocks are spans
+          {t('timeline.hint')}
         </span>
         <span className="font-mono text-[9.5px] text-faint">{formatClock(playheadMs)}</span>
       </div>
 
       <div className="mt-3 border-t border-line/70 pt-2">
         <div className="flex items-center justify-between px-1 pb-1.5">
-          <span className="eyebrow">Span log</span>
-          <span className="font-mono text-[9px] text-faint">{spans.length} events</span>
+          <span className="eyebrow">{t('timeline.spanLog')}</span>
+          <span className="font-mono text-[9px] text-faint">{tn('timeline.events', spans.length)}</span>
         </div>
         <div>
           {spans.map((span) => {
@@ -230,7 +231,7 @@ export function TimelineFlame({ spans }: { spans: Span[] }) {
                     current ? 'text-ink' : 'text-muted',
                   )}
                   style={{ paddingLeft: depth * 8 }}
-                  title={span.parentId ? `child of ${span.parentId}` : undefined}
+                  title={span.parentId ? t('timeline.childOf', { id: span.parentId }) : undefined}
                 >
                   {depth > 0 ? '└ ' : ''}
                   {span.name}

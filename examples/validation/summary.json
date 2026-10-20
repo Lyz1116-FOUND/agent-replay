@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T11:11:08.209Z",
+  "generatedAt": "2026-10-20T11:14:01.123Z",
   "runs": 10,
   "tasks": [
     "multi-file-bug",
@@ -72,7 +72,8 @@
     },
     "opencode": {
       "availability": {
-        "status": "ready"
+        "status": "ready",
+        "detail": "opencode v2.0.32"
       },
       "runs": 9,
       "attempted": 9,
@@ -122,6 +123,10 @@
     }
   },
   "availability": {
+    "opencode": {
+      "status": "ready",
+      "detail": "opencode v2.0.32"
+    },
     "codex": {
       "status": "ready",
       "detail": "codex-cli 0.163.0"

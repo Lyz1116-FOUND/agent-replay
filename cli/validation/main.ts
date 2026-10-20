@@ -26,6 +26,25 @@ const recorder = path.join(REPO_ROOT, 'dist-cli', 'agent-replay.mjs')
 mkdirSync(outDir, { recursive: true })
 mkdirSync(workRoot, { recursive: true })
 
+if (flag('reindex')) {
+  // Rebuild the summary from the ledger without touching the agents.
+  const ledger = path.join(outDir, 'runs.jsonl')
+  const loaded: RunRecord[] = existsSync(ledger)
+    ? readFileSync(ledger, 'utf8')
+        .split('\n')
+        .filter((line) => line.trim())
+        .map((line) => JSON.parse(line) as RunRecord)
+    : []
+  const availabilityNow: Record<string, Availability> = {}
+  for (const id of new Set(loaded.map((record) => record.agent))) {
+    availabilityNow[id] = VALIDATION_AGENTS[id]?.availability() ?? { status: 'error' }
+  }
+  const rebuilt = summarize(loaded, availabilityNow)
+  writeFileSync(path.join(outDir, 'summary.json'), `${JSON.stringify(rebuilt, null, 2)}\n`)
+  console.log(JSON.stringify(rebuilt.totals, null, 2))
+  process.exit(0)
+}
+
 if (flag('verify-tasks')) {
   let failed = 0
   for (const task of tasks) {

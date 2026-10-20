@@ -1,12 +1,12 @@
 {
   "schemaVersion": "agent-replay/v1",
-  "id": "rec_mvges0zd_e3a6b5",
+  "id": "rec_mvgkri06_3b110f",
   "task": {
     "id": "single-file-bug-opencode-2",
     "title": "single-file-bug-opencode-2",
     "description": "Recorded OpenCode session in single-file-bug--opencode--2.",
     "repo": "single-file-bug--opencode--2",
-    "baseCommit": "34da0f9"
+    "baseCommit": "ecd814e"
   },
   "agent": {
     "name": "OpenCode",
@@ -19,13 +19,25 @@
   "environment": {
     "isolation": "xdg",
     "provider": "opencode",
+    "model": "opencode/glm-5.3-flash-free",
     "harnessVersion": "2.0.32",
-    "platform": "darwin-arm64",
-    "nodeVersion": "v22.22.2"
+    "recorderVersion": "0.3.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "nodeVersion": "v22.22.2",
+    "shell": "zsh",
+    "cwdRealpath": "/private/tmp/agent-replay-validation/runs/single-file-bug--opencode--2",
+    "agentCli": {
+      "name": "OpenCode",
+      "version": "2.0.32"
+    },
+    "network": {
+      "proxyConfigured": true
+    }
   },
-  "startedAt": "2026-10-20T08:15:43.609Z",
-  "endedAt": "2026-10-20T08:16:43.559Z",
-  "durationMs": 59950,
+  "startedAt": "2026-10-20T11:03:16.710Z",
+  "endedAt": "2026-10-20T11:03:56.638Z",
+  "durationMs": 39928,
   "result": {
     "summary": "Recorded session: 3/3 tests pass after 1 edit.",
     "exitCode": 0,
@@ -75,7 +87,7 @@
       "attributes": {
         "phase": "Setup",
         "tool": "git",
-        "baseCommit": "34da0f9",
+        "baseCommit": "ecd814e",
         "timingKind": "synthetic"
       },
       "artifacts": [
@@ -84,49 +96,49 @@
           "command": "git status --short",
           "output": "(clean worktree)",
           "exitCode": 0,
-          "cwd": "/private/tmp/ar-validation/single-file-bug--opencode--2"
+          "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--opencode--2"
         }
       ]
     },
     {
-      "id": "native-call_954e59e1ea7a4c9290eeac68",
+      "id": "native-call_44fd1deec39c4c6abb711efc",
       "type": "read",
       "name": "Read single-file-bug--opencode--2",
       "summary": "",
-      "startMs": 5250,
-      "endMs": 5651,
+      "startMs": 4754,
+      "endMs": 5954,
       "status": "ok",
       "files": [],
       "attributes": {
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_954e59e1ea7a4c9290eeac68",
+        "callId": "call_44fd1deec39c4c6abb711efc",
         "timingKind": "observed"
       },
       "artifacts": [
         {
           "kind": "terminal",
           "command": "Read single-file-bug--opencode--2",
-          "output": "Read directory /private/tmp/ar-validation/single-file-bug--opencode--2, entries 1-5\n.agent-replay/\n.git/\nreplays/\ncalc.mjs\ntest.mjs",
+          "output": "Read directory /private/tmp/agent-replay-validation/runs/single-file-bug--opencode--2, entries 1-5\n.agent-replay/\n.git/\nreplays/\ncalc.mjs\ntest.mjs",
           "exitCode": 0,
-          "cwd": "/private/tmp/ar-validation/single-file-bug--opencode--2"
+          "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--opencode--2"
         }
       ]
     },
     {
-      "id": "native-call_4bef069ae73048b29cebea79",
+      "id": "native-call_730f1a6d623348b9be66195c",
       "type": "search",
       "name": "glob",
       "summary": "glob",
-      "startMs": 5579,
-      "endMs": 35656,
+      "startMs": 5774,
+      "endMs": 15982,
       "status": "error",
       "attributes": {
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_4bef069ae73048b29cebea79",
+        "callId": "call_730f1a6d623348b9be66195c",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -135,17 +147,17 @@
           "command": "glob",
           "output": "",
           "exitCode": 0,
-          "cwd": "/private/tmp/ar-validation/single-file-bug--opencode--2"
+          "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--opencode--2"
         }
       ]
     },
     {
-      "id": "native-call_52084eff26e94a9fbbbedefa",
+      "id": "native-call_5585e6d6c7b246d69c51a2a1",
       "type": "read",
       "name": "Read calc.mjs",
       "summary": "calc.mjs",
-      "startMs": 41080,
-      "endMs": 41715,
+      "startMs": 20928,
+      "endMs": 21377,
       "status": "ok",
       "files": [
         "calc.mjs"
@@ -154,7 +166,7 @@
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_52084eff26e94a9fbbbedefa",
+        "callId": "call_5585e6d6c7b246d69c51a2a1",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -162,17 +174,17 @@
           "kind": "code",
           "path": "calc.mjs",
           "language": "javascript",
-          "content": "Read file /private/tmp/ar-validation/single-file-bug--opencode--2/calc.mjs, lines 1-3\n1: export function bump(value) {\n2:   return value\n3: }"
+          "content": "Read file /private/tmp/agent-replay-validation/runs/single-file-bug--opencode--2/calc.mjs, lines 1-3\n1: export function bump(value) {\n2:   return value\n3: }"
         }
       ]
     },
     {
-      "id": "native-call_f5d95f04cad142e1b3a4db60",
+      "id": "native-call_95a90b251ab440dc9de81266",
       "type": "read",
       "name": "Read test.mjs",
       "summary": "test.mjs",
-      "startMs": 41613,
-      "endMs": 41702,
+      "startMs": 21194,
+      "endMs": 21390,
       "status": "ok",
       "files": [
         "test.mjs"
@@ -181,7 +193,7 @@
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_f5d95f04cad142e1b3a4db60",
+        "callId": "call_95a90b251ab440dc9de81266",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -189,17 +201,17 @@
           "kind": "code",
           "path": "test.mjs",
           "language": "javascript",
-          "content": "Read file /private/tmp/ar-validation/single-file-bug--opencode--2/test.mjs, lines 1-7\n1: import test from 'node:test'\n2: import assert from 'node:assert/strict'\n3: import { bump } from './calc.mjs'\n4: \n5: test('bump 1', () => assert.equal(bump(1), 2))\n6: test('bump 2', () => assert.equal(bump(2), 3))\n7: test('bump 0', () => assert.equal(bump(0), 1))"
+          "content": "Read file /private/tmp/agent-replay-validation/runs/single-file-bug--opencode--2/test.mjs, lines 1-7\n1: import test from 'node:test'\n2: import assert from 'node:assert/strict'\n3: import { bump } from './calc.mjs'\n4: \n5: test('bump 1', () => assert.equal(bump(1), 2))\n6: test('bump 2', () => assert.equal(bump(2), 3))\n7: test('bump 0', () => assert.equal(bump(0), 1))"
         }
       ]
     },
     {
-      "id": "native-call_99f6df1891184e17b4a2e3e0",
+      "id": "native-call_ef154a57b5ef4ea7b69f5051",
       "type": "edit",
       "name": "Edit calc.mjs",
       "summary": "calc.mjs",
-      "startMs": 46409,
-      "endMs": 47127,
+      "startMs": 27454,
+      "endMs": 28097,
       "status": "ok",
       "files": [
         "calc.mjs"
@@ -208,7 +220,7 @@
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_99f6df1891184e17b4a2e3e0",
+        "callId": "call_ef154a57b5ef4ea7b69f5051",
         "timingKind": "observed",
         "operation": "modify",
         "workspaceVerified": true
@@ -228,18 +240,18 @@
       ]
     },
     {
-      "id": "native-call_7940af9c48d04a209fb42369",
+      "id": "native-call_4cbc42d26c1d4164b79fbeca",
       "type": "test",
       "name": "node --test",
       "summary": "3/3 passed",
-      "startMs": 51768,
-      "endMs": 52875,
+      "startMs": 30735,
+      "endMs": 31100,
       "status": "ok",
       "attributes": {
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_7940af9c48d04a209fb42369",
+        "callId": "call_4cbc42d26c1d4164b79fbeca",
         "timingKind": "observed",
         "command": "node --test",
         "exitCode": 0,
@@ -254,17 +266,17 @@
           "passed": 3,
           "failed": 0,
           "total": 3,
-          "output": "TAP version 13\n# Subtest: bump 1\nok 1 - bump 1\n  ---\n  duration_ms: 0.480042\n  type: 'test'\n  ...\n# Subtest: bump 2\nok 2 - bump 2\n  ---\n  duration_ms: 0.1425\n  type: 'test'\n  ...\n# Subtest: bump 0\nok 3 - bump 0\n  ---\n  duration_ms: 0.062333\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 179.535125"
+          "output": "TAP version 13\n# Subtest: bump 1\nok 1 - bump 1\n  ---\n  duration_ms: 0.292375\n  type: 'test'\n  ...\n# Subtest: bump 2\nok 2 - bump 2\n  ---\n  duration_ms: 0.109375\n  type: 'test'\n  ...\n# Subtest: bump 0\nok 3 - bump 0\n  ---\n  duration_ms: 0.035459\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 97.823125"
         }
       ]
     },
     {
-      "id": "message-59056-500905177",
+      "id": "message-39411-891754501",
       "type": "reasoning",
       "name": "Assistant message",
-      "summary": "Fixed. All 3 tests pass.",
-      "startMs": 59056,
-      "endMs": 59056,
+      "summary": "All 3 tests pass now (`pass 3`, `fail 0`).",
+      "startMs": 39411,
+      "endMs": 39411,
       "status": "ok",
       "attributes": {
         "phase": "Attempt 2",
@@ -277,7 +289,7 @@
       "artifacts": [
         {
           "kind": "reasoning",
-          "content": "Fixed. All 3 tests pass.\n\n**The bug:** `bump()` in `calc.mjs` returned the value unchanged instead of incrementing it, so the assertions in `test.mjs` (`bump(1) === 2`, `bump(2) === 3`, `bump(0) === 1`) all failed.\n\n**The edit** (one line in `calc.mjs`):\n\n```js\nexport function bump(value) {\n  return value + 1\n}\n```\n\n**Verification:** `node --test` → `tests 3, pass 3, fail 0`."
+          "content": "All 3 tests pass now (`pass 3`, `fail 0`).\n\n**The fix** — one line in `calc.mjs`:\n\n```js\nexport function bump(value) {\n  return value + 1\n}\n```\n\nThe tests expected `bump(n)` to return `n + 1`, but the function was returning `value` unchanged. Added the increment; no other changes were needed."
         }
       ]
     },
@@ -286,8 +298,8 @@
       "type": "checkpoint",
       "name": "git diff --stat",
       "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
-      "startMs": 59500,
-      "endMs": 59700,
+      "startMs": 39478,
+      "endMs": 39678,
       "status": "ok",
       "files": [
         "calc.mjs"
@@ -303,7 +315,7 @@
           "command": "git diff --stat",
           "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
           "exitCode": 0,
-          "cwd": "/private/tmp/ar-validation/single-file-bug--opencode--2"
+          "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--opencode--2"
         },
         {
           "kind": "patch",
@@ -316,8 +328,8 @@
       "type": "final",
       "name": "Done",
       "summary": "Recorded session: 3/3 tests pass after 1 edit.",
-      "startMs": 59750,
-      "endMs": 59950,
+      "startMs": 39728,
+      "endMs": 39928,
       "status": "ok",
       "files": [
         "calc.mjs"
@@ -332,7 +344,7 @@
       "artifacts": [
         {
           "kind": "markdown",
-          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit.\n- 1 test run\n- 1 edit across 1 file\n- duration 59.9s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit.\n- 1 test run\n- 1 edit across 1 file\n- duration 39.9s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
         },
         {
           "kind": "patch",
@@ -343,18 +355,18 @@
   ],
   "metadata": {
     "source": "recorder",
-    "sessionId": "rec_mvges0zd_e3a6b5",
+    "sessionId": "rec_mvgkri06_3b110f",
     "command": "opencode run --standalone --format json --auto \"Fix the failing tests. Make the minimal edit and run `node --test` to verify. Work only inside the current working directory.\"",
-    "cwd": "/private/tmp/ar-validation/single-file-bug--opencode--2",
-    "repoRoot": "/private/tmp/ar-validation/single-file-bug--opencode--2",
-    "baseCommit": "34da0f9",
+    "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--opencode--2",
+    "repoRoot": "/private/tmp/agent-replay-validation/runs/single-file-bug--opencode--2",
+    "baseCommit": "ecd814e",
     "initialStatus": "",
     "gitAvailable": true,
-    "sessionDurationMs": 59900,
+    "sessionDurationMs": 39878,
     "adapter": "opencode",
-    "nativeSessionId": "ses_ea79e8b82ffeBH7j47TZHlCkf0",
+    "nativeSessionId": "ses_ea70526b4ffeGkogRkdt7z9lLy",
     "recoveryDetected": false,
     "regressionDetected": false,
-    "recordedAt": "2026-10-20T08:16:43.511Z"
+    "recordedAt": "2026-10-20T11:03:56.589Z"
   }
 }

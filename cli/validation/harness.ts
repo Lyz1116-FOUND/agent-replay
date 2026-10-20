@@ -194,7 +194,7 @@ export function runTask(options: RunOptions): RunRecord {
   }
 
   if (trace) {
-    const tracesDir = path.join(path.dirname(options.workRoot), 'validation', 'traces')
+    const tracesDir = path.join(REPO_ROOT, 'examples', 'validation', 'traces')
     mkdirSync(tracesDir, { recursive: true })
     const dest = path.join(tracesDir, `${name}.trace.json`)
     writeFileSync(dest, JSON.stringify(trace, null, 2))

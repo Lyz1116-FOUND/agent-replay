@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-20T11:53:19.997Z",
+  "generatedAt": "2026-10-20T12:51:49.593Z",
   "runs": 10,
   "tasks": [
     "multi-file-bug",
@@ -12,8 +12,8 @@
   ],
   "totals": {
     "runs": 10,
-    "taskPass": 10,
-    "taskFail": 0,
+    "taskPass": 9,
+    "taskFail": 1,
     "taskUnknown": 0,
     "unavailable": 0,
     "agentError": 0
@@ -47,27 +47,27 @@
       },
       "allRunsWallClock": {
         "count": 1,
-        "minMs": 32025,
-        "p25Ms": 32025,
-        "medianMs": 32025,
-        "p75Ms": 32025,
-        "maxMs": 32025
+        "minMs": 38439,
+        "p25Ms": 38439,
+        "medianMs": 38439,
+        "p75Ms": 38439,
+        "maxMs": 38439
       },
       "successfulTaskLatency": {
         "count": 1,
-        "minMs": 32025,
-        "p25Ms": 32025,
-        "medianMs": 32025,
-        "p75Ms": 32025,
-        "maxMs": 32025
+        "minMs": 38439,
+        "p25Ms": 38439,
+        "medianMs": 38439,
+        "p75Ms": 38439,
+        "maxMs": 38439
       },
       "completedAgentLatency": {
         "count": 1,
-        "minMs": 32025,
-        "p25Ms": 32025,
-        "medianMs": 32025,
-        "p75Ms": 32025,
-        "maxMs": 32025
+        "minMs": 38439,
+        "p25Ms": 38439,
+        "medianMs": 38439,
+        "p75Ms": 38439,
+        "maxMs": 38439
       }
     },
     "opencode": {
@@ -76,48 +76,48 @@
       },
       "runs": 9,
       "attempted": 9,
-      "taskPass": 9,
-      "taskFail": 0,
+      "taskPass": 8,
+      "taskFail": 1,
       "taskUnknown": 0,
       "unavailable": 0,
       "agentError": 0,
-      "passRate": 1,
+      "passRate": 0.889,
       "captureIntegrity": {
-        "nativeEditEvents": 21,
-        "workspaceEditEvents": 19,
-        "matchedEdits": 19,
-        "confirmedEdits": 19,
+        "nativeEditEvents": 13,
+        "workspaceEditEvents": 13,
+        "matchedEdits": 13,
+        "confirmedEdits": 13,
         "supersededEdits": 0,
-        "unverifiedEdits": 2,
+        "unverifiedEdits": 0,
         "outsideWorkspaceEdits": 0,
-        "nativeTestRuns": 13,
-        "capturedTestRuns": 13,
-        "editConfirmationRecall": 0.905,
+        "nativeTestRuns": 9,
+        "capturedTestRuns": 9,
+        "editConfirmationRecall": 1,
         "testCaptureRecall": 1
       },
       "allRunsWallClock": {
         "count": 9,
-        "minMs": 21080,
-        "p25Ms": 27229,
-        "medianMs": 43618,
-        "p75Ms": 66663,
-        "maxMs": 129834
+        "minMs": 30277,
+        "p25Ms": 41970,
+        "medianMs": 46315,
+        "p75Ms": 49549,
+        "maxMs": 240074
       },
       "successfulTaskLatency": {
-        "count": 9,
-        "minMs": 21080,
-        "p25Ms": 27229,
-        "medianMs": 43618,
-        "p75Ms": 66663,
-        "maxMs": 129834
+        "count": 8,
+        "minMs": 30277,
+        "p25Ms": 39640,
+        "medianMs": 45983,
+        "p75Ms": 47485,
+        "maxMs": 53340
       },
       "completedAgentLatency": {
-        "count": 9,
-        "minMs": 21080,
-        "p25Ms": 27229,
-        "medianMs": 43618,
-        "p75Ms": 66663,
-        "maxMs": 129834
+        "count": 8,
+        "minMs": 30277,
+        "p25Ms": 39640,
+        "medianMs": 45983,
+        "p75Ms": 47485,
+        "maxMs": 53340
       }
     }
   },

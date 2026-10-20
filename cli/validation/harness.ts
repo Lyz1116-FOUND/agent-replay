@@ -1,9 +1,17 @@
 import { spawnSync } from 'node:child_process'
+import { createHash } from 'node:crypto'
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import type { Trace } from '../../src/schema/trace.ts'
 import { parseTestOutput } from '../lib/testParser.ts'
-import { resolveTaskResult, resolveTermination, type EndReason, type VerifyResult } from './outcome.ts'
+import {
+  finalizeTrace,
+  resolveTaskResult,
+  resolveTermination,
+  traceFileName,
+  type EndReason,
+  type VerifyResult,
+} from './outcome.ts'
 import type { CaptureIntegritySummary, RunRecord, ValidationTask } from './types.ts'
 import type { ValidationAgent } from './agents.ts'
 
@@ -118,7 +126,7 @@ export function verifyTask(task: ValidationTask, workRoot: string): TaskCheck {
   }
 }
 
-function integrityOf(trace: Trace): CaptureIntegritySummary | null {
+export function integrityOf(trace: Trace): CaptureIntegritySummary | null {
   const integrity = trace.capture?.integrity
   if (!integrity) return null
   return {
@@ -130,7 +138,9 @@ function integrityOf(trace: Trace): CaptureIntegritySummary | null {
     unverifiedEdits: integrity.unverifiedEdits,
     outsideWorkspaceEdits: integrity.outsideWorkspaceEdits,
     nativeTestRuns: integrity.nativeTestRuns,
-    capturedTestRuns: integrity.capturedTests,
+    // Recall is parsed/native: an extra command-driven test run is not a
+    // capture of a native test run, and must not push recall past 100%.
+    capturedTestRuns: integrity.parsedTestRuns,
   }
 }
 
@@ -140,10 +150,36 @@ export function cleanupIsolation(dir: string | undefined): void {
   rmSync(dir, { recursive: true, force: true })
 }
 
+function hashFile(file: string): string | null {
+  try {
+    return createHash('sha1').update(readFileSync(file)).digest('hex')
+  } catch {
+    return null
+  }
+}
+
+/** Tests are the task. If they changed, the run proved nothing. */
+export function hashProtected(repo: string, task: ValidationTask): Record<string, string> {
+  const hashes: Record<string, string> = {}
+  for (const file of task.protectedFiles ?? []) {
+    const digest = hashFile(path.join(repo, file))
+    if (digest) hashes[file] = digest
+  }
+  return hashes
+}
+
+export function testsWereModified(
+  repo: string,
+  before: Record<string, string>,
+): boolean {
+  return Object.entries(before).some(([file, digest]) => hashFile(path.join(repo, file)) !== digest)
+}
+
 export type RunOptions = {
   task: ValidationTask
   agent: ValidationAgent
   run: number
+  attempt: number
   workRoot: string
   recorder: string
   timeoutMs: number
@@ -156,6 +192,7 @@ export function runTask(options: RunOptions): RunRecord {
   prepareRepo(task, repo)
 
   const name = `${task.id}-${agent.id}-${run}`
+  const baselineHashes = hashProtected(repo, task)
   const built = agent.buildCommand(task.prompt)
   const env: Record<string, string> = {
     ...process.env,
@@ -209,18 +246,20 @@ export function runTask(options: RunOptions): RunRecord {
 
   // Judge the task in the final worktree, after the agent stopped touching it.
   const verify = trustedVerify(repo, task)
+  const tampered = testsWereModified(repo, baselineHashes)
+  const termination = resolveTermination(trace?.termination, end)
 
   const record: RunRecord = {
     task: task.id,
     taskKind: task.kind,
     agent: agent.id,
     run,
-    attempt: 1,
+    attempt: options.attempt,
     timedOut,
     elapsedMs,
     exit: result.status,
-    taskResult: resolveTaskResult(verify),
-    termination: resolveTermination(trace?.termination, end),
+    taskResult: resolveTaskResult(verify, tampered),
+    termination,
     verify,
     end,
     integrity: trace ? integrityOf(trace) : null,
@@ -234,8 +273,9 @@ export function runTask(options: RunOptions): RunRecord {
   if (trace) {
     const tracesDir = path.join(REPO_ROOT, 'examples', 'validation', 'traces')
     mkdirSync(tracesDir, { recursive: true })
-    const dest = path.join(tracesDir, `${name}.trace.json`)
-    writeFileSync(dest, JSON.stringify(trace, null, 2))
+    // One file per attempt, so a retry never overwrites the evidence.
+    const dest = path.join(tracesDir, traceFileName(task.id, agent.id, run, options.attempt))
+    writeFileSync(dest, JSON.stringify(finalizeTrace(trace, termination, { attempt: options.attempt, end }), null, 2))
     record.trace = path.relative(REPO_ROOT, dest)
   }
 

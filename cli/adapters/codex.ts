@@ -98,12 +98,23 @@ export class CodexAdapter implements AgentStreamAdapter {
 
     if (type === 'turn.failed') {
       const error = asRecord(event.error)
+      const message = firstString(error.message, event.message, 'Codex turn failed') ?? 'Codex turn failed'
+      const code = statusFromMessage(message)
+      // The turn failure carries the provider's reason, so it has to reach the
+      // termination classifier; a bare `final` would be recorded as a task failure.
       return [
+        {
+          kind: 'error',
+          atMs: receivedAtMs,
+          message,
+          termination: classifyFailure({ message, status: code }).kind,
+          code,
+        },
         {
           kind: 'final',
           atMs: receivedAtMs,
           status: 'error',
-          text: firstString(error.message, event.message),
+          text: message,
         },
       ]
     }

@@ -4,6 +4,14 @@
   "kind": "bug",
   "prompt": "Fix the failing tests. Make the minimal edit and run `node --test` to verify. Work only inside the current working directory.",
   "verify": "node --test",
-  "expectedFiles": ["calc.mjs"],
-  "baseline": { "pass": 0, "fail": 3 }
+  "expectedFiles": [
+    "calc.mjs"
+  ],
+  "baseline": {
+    "pass": 0,
+    "fail": 3
+  },
+  "protectedFiles": [
+    "test.mjs"
+  ]
 }

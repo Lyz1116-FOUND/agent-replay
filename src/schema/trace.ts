@@ -70,6 +70,7 @@ export type Environment = z.infer<typeof environmentSchema>
  */
 export const captureIntegritySchema = z.object({
   nativeEdits: z.number().int().nonnegative(),
+  failedEdits: z.number().int().nonnegative().optional(),
   workspaceEdits: z.number().int().nonnegative(),
   /** One-to-one: this exact call claimed a workspace diff. */
   matchedEdits: z.number().int().nonnegative(),

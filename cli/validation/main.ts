@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import path from 'node:path'
 import { summarize } from './aggregate.ts'
-import { appendRun, latestPerKey, mergeAvailability } from './ledger.ts'
+import { appendRun, latestPerKey, mergeAvailability, nextAttempt } from './ledger.ts'
 import { DEFAULT_AGENTS, VALIDATION_AGENTS } from './agents.ts'
 import { REPO_ROOT, loadTasks, runTask, verifyTask } from './harness.ts'
 import type { Availability, RunRecord } from './types.ts'
@@ -111,10 +111,12 @@ if (!flag('reset') && existsSync(ledgerPath)) {
 for (const task of tasks) {
   for (const id of runnable) {
     for (let run = 1; run <= runs; run += 1) {
+      const attempt = nextAttempt(records, { task: task.id, agent: id, run })
       const record = runTask({
         task,
         agent: VALIDATION_AGENTS[id],
         run,
+        attempt,
         workRoot,
         recorder,
         timeoutMs,

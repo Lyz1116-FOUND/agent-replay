@@ -129,4 +129,26 @@ describe('event merger path normalization', () => {
     expect(integrity.matchedEdits).toBe(1)
     expect(integrity.confirmedEdits).toBeLessThanOrEqual(integrity.nativeEdits)
   })
+
+  it('does not count a failed edit call as a claim', () => {
+    const failed = {
+      ...completed('calc.mjs'),
+      status: 'error',
+      output: 'oldString not found in calc.mjs',
+    } as AgentEvent
+    const merged = mergeEvents({
+      agentEvents: [failed],
+      editEvents: [],
+      commandEvents: [],
+      meta,
+      adapterId: 'opencode',
+      sessionEndMs: 2_000,
+    })
+    expect(merged.capture.integrity).toMatchObject({
+      nativeEdits: 0,
+      matchedEdits: 0,
+      unverifiedEdits: 0,
+      failedEdits: 1,
+    })
+  })
 })

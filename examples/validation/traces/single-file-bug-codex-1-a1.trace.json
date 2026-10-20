@@ -1,0 +1,414 @@
+{
+  "schemaVersion": "agent-replay/v1",
+  "id": "rec_mvgom9nf_361a98",
+  "task": {
+    "id": "single-file-bug-codex-1",
+    "title": "single-file-bug-codex-1",
+    "description": "Recorded Codex session in single-file-bug--codex--1.",
+    "repo": "single-file-bug--codex--1",
+    "baseCommit": "bc1a4af"
+  },
+  "agent": {
+    "name": "Codex"
+  },
+  "status": "pass",
+  "termination": {
+    "kind": "completed"
+  },
+  "environment": {
+    "isolation": "none",
+    "provider": "openai",
+    "harnessVersion": "0.163.0",
+    "recorderVersion": "0.3.0",
+    "platform": "darwin",
+    "arch": "arm64",
+    "nodeVersion": "v22.22.2",
+    "shell": "zsh",
+    "cwdRealpath": "/private/tmp/agent-replay-validation/runs/single-file-bug--codex--1",
+    "agentCli": {
+      "name": "Codex",
+      "version": "0.163.0"
+    },
+    "network": {
+      "proxyConfigured": true
+    }
+  },
+  "startedAt": "2026-10-20T12:51:11.067Z",
+  "endedAt": "2026-10-20T12:51:49.423Z",
+  "durationMs": 38356,
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 1 edit (recovered).",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "codex",
+    "sources": [
+      "native:codex",
+      "workspace"
+    ],
+    "workspaceVerified": 1,
+    "unverifiedEdits": 0,
+    "integrity": {
+      "nativeEdits": 1,
+      "failedEdits": 0,
+      "workspaceEdits": 1,
+      "matchedEdits": 1,
+      "confirmedEdits": 1,
+      "supersededEdits": 0,
+      "unverifiedEdits": 0,
+      "outsideWorkspaceEdits": 0,
+      "nativeTestRuns": 2,
+      "parsedTestRuns": 2,
+      "capturedTests": 2
+    }
+  },
+  "spans": [
+    {
+      "id": "rec-baseline",
+      "type": "checkpoint",
+      "name": "Baseline",
+      "summary": "Clean worktree at session start.",
+      "startMs": 0,
+      "endMs": 200,
+      "status": "ok",
+      "files": [],
+      "attributes": {
+        "phase": "Setup",
+        "tool": "git",
+        "baseCommit": "bc1a4af",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git status --short",
+          "output": "(clean worktree)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--codex--1"
+        }
+      ]
+    },
+    {
+      "id": "message-12429-737750463",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "我会先查看测试和相关代码，定位失败原因，做最小修改后运行 `node --test` 验证。",
+      "startMs": 12429,
+      "endMs": 12429,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "codex",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "我会先查看测试和相关代码，定位失败原因，做最小修改后运行 `node --test` 验证。"
+        }
+      ]
+    },
+    {
+      "id": "native-item_1",
+      "type": "shell",
+      "name": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g…",
+      "summary": "exit 0",
+      "startMs": 14415,
+      "endMs": 14437,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "codex",
+        "callId": "item_1",
+        "timingKind": "observed",
+        "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g '*.js' -g 'package.json' -g '*.mjs' -g '*.cjs'\"",
+        "exitCode": 0
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "/bin/zsh -lc \"pwd; rg --files -g 'AGENTS.md' -g 'CLAUDE.md' -g '*.js' -g 'package.json' -g '*.mjs' -g '*.cjs'\"",
+          "output": "/private/tmp/agent-replay-validation/runs/single-file-bug--codex--1\ncalc.mjs\ntest.mjs",
+          "exitCode": 0,
+          "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--codex--1"
+        }
+      ]
+    },
+    {
+      "id": "native-item_2",
+      "type": "test",
+      "name": "/bin/zsh -lc 'node --test'",
+      "summary": "0/3 passed",
+      "startMs": 14571,
+      "endMs": 14816,
+      "status": "error",
+      "attributes": {
+        "phase": "Attempt 1",
+        "tool": "native",
+        "adapter": "codex",
+        "callId": "item_2",
+        "timingKind": "observed",
+        "command": "/bin/zsh -lc 'node --test'",
+        "exitCode": 1,
+        "passed": 0,
+        "failed": 3,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "/bin/zsh -lc 'node --test'",
+          "passed": 0,
+          "failed": 3,
+          "total": 3,
+          "output": "✖ bump 1 (1.48175ms)\n✖ bump 2 (0.096583ms)\n✖ bump 0 (0.064416ms)\nℹ tests 3\nℹ suites 0\nℹ pass 0\nℹ fail 3\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 179.104\n\n✖ failing tests:\n\ntest at test.mjs:5:1\n✖ bump 1 (1.48175ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  1 !== 2\n  \n      at TestContext.<anonymous> (file:///private/tmp/agent-replay-validation/runs/single-file-bug--codex--1/test.mjs:5:29)\n      at Test.runInAsyncScope (node:async_hooks:226:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.start (node:internal/test_runner/test:1096:17)\n      at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 1,\n    expected: 2,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at test.mjs:6:1\n✖ bump 2 (0.096583ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  2 !== 3\n  \n      at TestContext.<anonymous> (file:///private/tmp/agent-replay-validation/runs/single-file-bug--codex--1/test.mjs:6:29)\n      at Test.runInAsyncScope (node:async_hooks:226:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n      at Test.postRun (node:internal/test_runner/test:1330:19)\n      at Test.run (node:internal/test_runner/test:1258:12)\n      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:385:3) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 2,\n    expected: 3,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }\n\ntest at test.mjs:7:1\n✖ bump 0 (0.064416ms)\n  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n  \n  0 !== 1\n  \n      at TestContext.<anonymous> (file:///private/tmp/agent-replay-validation/runs/single-file-bug--codex--1/test.mjs:7:29)\n      at Test.runInAsyncScope (node:async_hooks:226:14)\n      at Test.run (node:internal/test_runner/test:1201:25)\n      at Test.processPendingSubtests (node:internal/test_runner/test:831:18)\n      at Test.postRun (node:internal/test_runner/test:1330:19)\n      at Test.run (node:internal/test_runner/test:1258:12)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:831:7) {\n    generatedMessage: true,\n    code: 'ERR_ASSERTION',\n    actual: 0,\n    expected: 1,\n    operator: 'strictEqual',\n    diff: 'simple'\n  }",
+          "failedTests": [
+            "bump 1",
+            "bump 2",
+            "bump 0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "native-item_3",
+      "type": "shell",
+      "name": "/bin/zsh -lc 'ls -la; cat calc.mjs test.mjs'",
+      "summary": "exit 0",
+      "startMs": 19372,
+      "endMs": 19379,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "codex",
+        "callId": "item_3",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250,
+        "command": "/bin/zsh -lc 'ls -la; cat calc.mjs test.mjs'",
+        "exitCode": 0
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "/bin/zsh -lc 'ls -la; cat calc.mjs test.mjs'",
+          "output": "total 16\ndrwxr-xr-x@  7 foundtt  wheel  224 Oct 20 21:51 .\ndrwxr-xr-x@  3 foundtt  wheel   96 Oct 20 21:51 ..\ndrwxr-xr-x@  3 foundtt  wheel   96 Oct 20 21:51 .agent-replay\ndrwxr-xr-x@ 12 foundtt  wheel  384 Oct 20 21:51 .git\n-rw-r--r--@  1 foundtt  staff   47 Oct 20 21:51 calc.mjs\ndrwxr-xr-x@  2 foundtt  wheel   64 Oct 20 21:51 replays\n-rw-r--r--@  1 foundtt  staff  245 Oct 20 21:51 test.mjs\nexport function bump(value) {\n  return value\n}\nimport test from 'node:test'\nimport assert from 'node:assert/strict'\nimport { bump } from './calc.mjs'\n\ntest('bump 1', () => assert.equal(bump(1), 2))\ntest('bump 2', () => assert.equal(bump(2), 3))\ntest('bump 0', () => assert.equal(bump(0), 1))",
+          "exitCode": 0,
+          "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--codex--1"
+        }
+      ]
+    },
+    {
+      "id": "native-item_4",
+      "type": "edit",
+      "name": "Edit calc.mjs",
+      "summary": "calc.mjs",
+      "startMs": 23314,
+      "endMs": 23314,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "codex",
+        "callId": "item_4",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250,
+        "operation": "modify",
+        "workspaceVerified": true
+      },
+      "artifacts": [
+        {
+          "kind": "diff",
+          "path": "calc.mjs",
+          "before": "export function bump(value) {\n  return value\n}",
+          "after": "export function bump(value) {\n  return value + 1\n}\n",
+          "language": "javascript"
+        }
+      ]
+    },
+    {
+      "id": "native-item_5",
+      "type": "test",
+      "name": "/bin/zsh -lc 'node --test'",
+      "summary": "3/3 passed",
+      "startMs": 23470,
+      "endMs": 23712,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 2",
+        "tool": "native",
+        "adapter": "codex",
+        "callId": "item_5",
+        "timingKind": "observed",
+        "command": "/bin/zsh -lc 'node --test'",
+        "exitCode": 0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3
+      },
+      "artifacts": [
+        {
+          "kind": "test",
+          "command": "/bin/zsh -lc 'node --test'",
+          "passed": 3,
+          "failed": 0,
+          "total": 3,
+          "output": "✔ bump 1 (1.029875ms)\n✔ bump 2 (0.073042ms)\n✔ bump 0 (0.066875ms)\nℹ tests 3\nℹ suites 0\nℹ pass 3\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 182.212625"
+        }
+      ]
+    },
+    {
+      "id": "native-item_6",
+      "type": "shell",
+      "name": "/bin/zsh -lc 'git diff -- calc.mjs; git status …",
+      "summary": "exit 0",
+      "startMs": 23724,
+      "endMs": 23734,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 3",
+        "tool": "native",
+        "adapter": "codex",
+        "callId": "item_6",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250,
+        "command": "/bin/zsh -lc 'git diff -- calc.mjs; git status --short'",
+        "exitCode": 0
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "/bin/zsh -lc 'git diff -- calc.mjs; git status --short'",
+          "output": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n M calc.mjs\n?? .agent-replay/",
+          "exitCode": 0,
+          "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--codex--1"
+        }
+      ]
+    },
+    {
+      "id": "message-26693-1384565907",
+      "type": "reasoning",
+      "name": "Assistant message",
+      "summary": "已修复：仅修改 `calc.mjs` 一行，让 `bump(value)` 返回 `value + 1`。",
+      "startMs": 26693,
+      "endMs": 26693,
+      "status": "ok",
+      "attributes": {
+        "phase": "Attempt 3",
+        "tool": "native",
+        "adapter": "codex",
+        "timingKind": "observed",
+        "instant": true,
+        "visualDurationMs": 250
+      },
+      "artifacts": [
+        {
+          "kind": "reasoning",
+          "content": "已修复：仅修改 `calc.mjs` 一行，让 `bump(value)` 返回 `value + 1`。\n\n已运行 `node --test`：3 项测试全部通过。所有操作均在当前工作目录内完成。"
+        }
+      ]
+    },
+    {
+      "id": "rec-checkpoint",
+      "type": "checkpoint",
+      "name": "git diff --stat",
+      "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
+      "startMs": 37906,
+      "endMs": 38106,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "git",
+        "timingKind": "synthetic"
+      },
+      "artifacts": [
+        {
+          "kind": "terminal",
+          "command": "git diff --stat",
+          "output": " calc.mjs | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)",
+          "exitCode": 0,
+          "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--codex--1"
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+        }
+      ]
+    },
+    {
+      "id": "rec-final",
+      "type": "final",
+      "name": "Done",
+      "summary": "Recorded session: 3/3 tests pass after 1 edit (recovered).",
+      "startMs": 38156,
+      "endMs": 38356,
+      "status": "ok",
+      "files": [
+        "calc.mjs"
+      ],
+      "attributes": {
+        "phase": "Finish",
+        "tool": "recorder",
+        "timingKind": "synthetic",
+        "recoveryDetected": true,
+        "regressionDetected": false
+      },
+      "artifacts": [
+        {
+          "kind": "markdown",
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit (recovered).\n\n已修复：仅修改 `calc.mjs` 一行，让 `bump(value)` 返回 `value + 1`。\n\n已运行 `node --test`：3 项测试全部通过。所有操作均在当前工作目录内完成。\n- 2 test runs\n- 1 edit across 1 file\n- duration 38.3s\n- capture native+workspace · observed timing\n- recovery detected after 3 failing tests\nNative agent events verified against workspace diffs."
+        },
+        {
+          "kind": "patch",
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "recorder",
+    "sessionId": "rec_mvgom9nf_361a98",
+    "command": "codex exec --json -s danger-full-access --skip-git-repo-check \"Fix the failing tests. Make the minimal edit and run `node --test` to verify. Work only inside the current working directory.\"",
+    "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--codex--1",
+    "repoRoot": "/private/tmp/agent-replay-validation/runs/single-file-bug--codex--1",
+    "baseCommit": "bc1a4af",
+    "initialStatus": "",
+    "gitAvailable": true,
+    "sessionDurationMs": 38306,
+    "adapter": "codex",
+    "nativeSessionId": "01a1595d-a467-7e23-98eb-2c9b7310dad5",
+    "recoveryDetected": true,
+    "regressionDetected": false,
+    "recordedAt": "2026-10-20T12:51:49.374Z",
+    "harness": {
+      "attempt": 1,
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false
+    }
+  }
+}

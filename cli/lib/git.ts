@@ -109,7 +109,11 @@ export function diffStat(cwd: string): string {
 export function diffPatch(cwd: string): string {
   const result = git(cwd, ['diff', 'HEAD', '--no-color', '--no-ext-diff'])
   const text = result.ok ? result.stdout : ''
-  return truncate(text, 300_000).text
+  if (!text.trim()) return ''
+  // `git()` trims trailing whitespace, and a patch without its final newline is
+  // rejected by `git apply` as corrupt.
+  const body = truncate(text, 300_000).text
+  return body.endsWith('\n') ? body : `${body}\n`
 }
 
 export function gitSnapshot(cwd: string) {

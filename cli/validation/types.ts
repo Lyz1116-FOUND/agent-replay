@@ -4,6 +4,8 @@ export type TaskResultStatus = 'pass' | 'fail' | 'unknown'
 
 export type TaskResult = {
   status: TaskResultStatus
+  /** Why the verdict is what it is, when it is not a plain test result. */
+  reason?: 'tests_modified'
   passedTests?: number
   totalTests?: number
 }
@@ -23,6 +25,8 @@ export type ValidationTask = {
   verify: string
   expectedFiles: string[]
   baseline: { pass: number; fail: number }
+  /** Files the agent must not touch: they define the task. */
+  protectedFiles?: string[]
   dir: string
 }
 

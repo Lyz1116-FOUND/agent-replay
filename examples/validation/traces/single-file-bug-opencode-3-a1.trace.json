@@ -1,12 +1,12 @@
 {
   "schemaVersion": "agent-replay/v1",
-  "id": "rec_mvgmb3kz_571e61",
+  "id": "rec_mvgodhly_592060",
   "task": {
     "id": "single-file-bug-opencode-3",
     "title": "single-file-bug-opencode-3",
     "description": "Recorded OpenCode session in single-file-bug--opencode--3.",
     "repo": "single-file-bug--opencode--3",
-    "baseCommit": "720dd42"
+    "baseCommit": "d265e0c"
   },
   "agent": {
     "name": "OpenCode",
@@ -35,9 +35,9 @@
       "proxyConfigured": true
     }
   },
-  "startedAt": "2026-10-20T11:46:30.755Z",
-  "endedAt": "2026-10-20T11:46:55.904Z",
-  "durationMs": 25149,
+  "startedAt": "2026-10-20T12:44:21.478Z",
+  "endedAt": "2026-10-20T12:45:14.733Z",
+  "durationMs": 53255,
   "result": {
     "summary": "Recorded session: 3/3 tests pass after 1 edit.",
     "exitCode": 0,
@@ -49,7 +49,7 @@
     "filesChanged": [
       "calc.mjs"
     ],
-    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
   },
   "capture": {
     "fidelity": "native+workspace",
@@ -63,6 +63,7 @@
     "unverifiedEdits": 0,
     "integrity": {
       "nativeEdits": 1,
+      "failedEdits": 0,
       "workspaceEdits": 1,
       "matchedEdits": 1,
       "confirmedEdits": 1,
@@ -87,7 +88,7 @@
       "attributes": {
         "phase": "Setup",
         "tool": "git",
-        "baseCommit": "720dd42",
+        "baseCommit": "d265e0c",
         "timingKind": "synthetic"
       },
       "artifacts": [
@@ -101,19 +102,19 @@
       ]
     },
     {
-      "id": "native-call_b87164f0202740608d51b3d4",
+      "id": "native-f9527c7d-83b2-4321-80e7-e67e442f4f09",
       "type": "read",
       "name": "Read single-file-bug--opencode--3",
       "summary": "",
-      "startMs": 3084,
-      "endMs": 4498,
+      "startMs": 5499,
+      "endMs": 5511,
       "status": "ok",
       "files": [],
       "attributes": {
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_b87164f0202740608d51b3d4",
+        "callId": "f9527c7d-83b2-4321-80e7-e67e442f4f09",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -127,12 +128,12 @@
       ]
     },
     {
-      "id": "native-call_39a308b0e10741a4b7d675b4",
+      "id": "native-call_7afaa948bd0b417381a05d21",
       "type": "read",
       "name": "Read calc.mjs",
       "summary": "calc.mjs",
-      "startMs": 7013,
-      "endMs": 8596,
+      "startMs": 10245,
+      "endMs": 11441,
       "status": "ok",
       "files": [
         "calc.mjs"
@@ -141,7 +142,7 @@
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_39a308b0e10741a4b7d675b4",
+        "callId": "call_7afaa948bd0b417381a05d21",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -154,12 +155,12 @@
       ]
     },
     {
-      "id": "native-call_0a61b25d0c704139b9232b67",
+      "id": "native-call_74f053deef224e6f9e1a504f",
       "type": "read",
       "name": "Read test.mjs",
       "summary": "test.mjs",
-      "startMs": 7803,
-      "endMs": 8576,
+      "startMs": 10776,
+      "endMs": 11451,
       "status": "ok",
       "files": [
         "test.mjs"
@@ -168,7 +169,7 @@
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_0a61b25d0c704139b9232b67",
+        "callId": "call_74f053deef224e6f9e1a504f",
         "timingKind": "observed"
       },
       "artifacts": [
@@ -181,12 +182,12 @@
       ]
     },
     {
-      "id": "native-call_6bf03d709f0c4d6590f019ee",
+      "id": "native-call_07e278303a294c58bfe3d5a0",
       "type": "edit",
       "name": "Edit calc.mjs",
       "summary": "calc.mjs",
-      "startMs": 11576,
-      "endMs": 12879,
+      "startMs": 24415,
+      "endMs": 25107,
       "status": "ok",
       "files": [
         "calc.mjs"
@@ -195,7 +196,7 @@
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_6bf03d709f0c4d6590f019ee",
+        "callId": "call_07e278303a294c58bfe3d5a0",
         "timingKind": "observed",
         "operation": "modify",
         "workspaceVerified": true
@@ -215,18 +216,18 @@
       ]
     },
     {
-      "id": "native-call_320f7ca853fe42e49432599e",
+      "id": "native-call_60576ba074164523b0432ffa",
       "type": "test",
       "name": "node --test",
       "summary": "3/3 passed",
-      "startMs": 17825,
-      "endMs": 18967,
+      "startMs": 33875,
+      "endMs": 34203,
       "status": "ok",
       "attributes": {
         "phase": "Attempt 1",
         "tool": "native",
         "adapter": "opencode",
-        "callId": "call_320f7ca853fe42e49432599e",
+        "callId": "call_60576ba074164523b0432ffa",
         "timingKind": "observed",
         "command": "node --test",
         "exitCode": 0,
@@ -241,17 +242,17 @@
           "passed": 3,
           "failed": 0,
           "total": 3,
-          "output": "TAP version 13\n# Subtest: bump 1\nok 1 - bump 1\n  ---\n  duration_ms: 0.253375\n  type: 'test'\n  ...\n# Subtest: bump 2\nok 2 - bump 2\n  ---\n  duration_ms: 0.069333\n  type: 'test'\n  ...\n# Subtest: bump 0\nok 3 - bump 0\n  ---\n  duration_ms: 0.031875\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 92.677291"
+          "output": "TAP version 13\n# Subtest: bump 1\nok 1 - bump 1\n  ---\n  duration_ms: 0.361417\n  type: 'test'\n  ...\n# Subtest: bump 2\nok 2 - bump 2\n  ---\n  duration_ms: 0.212917\n  type: 'test'\n  ...\n# Subtest: bump 0\nok 3 - bump 0\n  ---\n  duration_ms: 0.07425\n  type: 'test'\n  ...\n1..3\n# tests 3\n# suites 0\n# pass 3\n# fail 0\n# cancelled 0\n# skipped 0\n# todo 0\n# duration_ms 103.305791"
         }
       ]
     },
     {
-      "id": "message-24698-97311652",
+      "id": "message-52737-841437742",
       "type": "reasoning",
       "name": "Assistant message",
-      "summary": "Fixed. The tests expected `bump(n)` to return `n + 1`, but `calc.mjs` returned the value unchanged.",
-      "startMs": 24698,
-      "endMs": 24698,
+      "summary": "Fixed. The tests expected `bump` to increment its argument, but it was returning the value unchanged.",
+      "startMs": 52737,
+      "endMs": 52737,
       "status": "ok",
       "attributes": {
         "phase": "Attempt 2",
@@ -264,7 +265,7 @@
       "artifacts": [
         {
           "kind": "reasoning",
-          "content": "Fixed. The tests expected `bump(n)` to return `n + 1`, but `calc.mjs` returned the value unchanged.\n\n**Edit** (`calc.mjs`, one line):\n```js\nexport function bump(value) {\n  return value + 1\n}\n```\n\n**Verification** — `node --test`:\n```\n# tests 3\n# pass 3\n# fail 0\n```\n\nAll 3 tests pass."
+          "content": "Fixed. The tests expected `bump` to increment its argument, but it was returning the value unchanged.\n\n**Edit** (`calc.mjs`, one line):\n```js\nreturn value + 1\n```\n\n**Verification** — `node --test`: 3 tests, 3 pass, 0 fail."
         }
       ]
     },
@@ -273,8 +274,8 @@
       "type": "checkpoint",
       "name": "git diff --stat",
       "summary": " 1 file changed, 1 insertion(+), 1 deletion(-)",
-      "startMs": 24699,
-      "endMs": 24899,
+      "startMs": 52805,
+      "endMs": 53005,
       "status": "ok",
       "files": [
         "calc.mjs"
@@ -294,7 +295,7 @@
         },
         {
           "kind": "patch",
-          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
         }
       ]
     },
@@ -303,8 +304,8 @@
       "type": "final",
       "name": "Done",
       "summary": "Recorded session: 3/3 tests pass after 1 edit.",
-      "startMs": 24949,
-      "endMs": 25149,
+      "startMs": 53055,
+      "endMs": 53255,
       "status": "ok",
       "files": [
         "calc.mjs"
@@ -319,29 +320,35 @@
       "artifacts": [
         {
           "kind": "markdown",
-          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit.\n- 1 test run\n- 1 edit across 1 file\n- duration 25.1s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
+          "content": "## Recorded session\nRecorded session: 3/3 tests pass after 1 edit.\n- 1 test run\n- 1 edit across 1 file\n- duration 53.2s\n- capture native+workspace · observed timing\nNative agent events verified against workspace diffs."
         },
         {
           "kind": "patch",
-          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }"
+          "diff": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
         }
       ]
     }
   ],
   "metadata": {
     "source": "recorder",
-    "sessionId": "rec_mvgmb3kz_571e61",
+    "sessionId": "rec_mvgodhly_592060",
     "command": "opencode run --standalone --format json --auto \"Fix the failing tests. Make the minimal edit and run `node --test` to verify. Work only inside the current working directory.\"",
     "cwd": "/private/tmp/agent-replay-validation/runs/single-file-bug--opencode--3",
     "repoRoot": "/private/tmp/agent-replay-validation/runs/single-file-bug--opencode--3",
-    "baseCommit": "720dd42",
+    "baseCommit": "d265e0c",
     "initialStatus": "",
     "gitAvailable": true,
-    "sessionDurationMs": 25099,
+    "sessionDurationMs": 53205,
     "adapter": "opencode",
-    "nativeSessionId": "ses_ea6dd91e1ffe69uLut6A8fwzZH",
+    "nativeSessionId": "ses_ea6a89c20ffeQhNs11edkhpiIb",
     "recoveryDetected": false,
     "regressionDetected": false,
-    "recordedAt": "2026-10-20T11:46:55.855Z"
+    "recordedAt": "2026-10-20T12:45:14.685Z",
+    "harness": {
+      "attempt": 1,
+      "exitCode": 0,
+      "signal": null,
+      "timedOut": false
+    }
   }
 }

@@ -149,6 +149,21 @@ describe('Codex exec adapter', () => {
       code: 429,
     })
   })
+
+  it('classifies a failed turn, not just a stream error', () => {
+    const failedTurn = adapter.parseLine(
+      JSON.stringify({
+        type: 'turn.failed',
+        error: { message: '429 Too Many Requests: rate limit exceeded' },
+      }),
+      30,
+    )
+    expect(failedTurn.find((event) => event.kind === 'error')).toMatchObject({
+      termination: 'rate_limited',
+      code: 429,
+    })
+    expect(failedTurn.find((event) => event.kind === 'final')).toMatchObject({ status: 'error' })
+  })
 })
 
 describe('Claude stream adapter', () => {

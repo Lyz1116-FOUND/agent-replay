@@ -56,4 +56,19 @@ describe('end reasons are recorded separately', () => {
       kind: 'recorder_error',
     })
   })
+
+describe('the verdict cannot be gamed', () => {
+  it('rejects a green summary from a command that exited non-zero', () => {
+    const liar: VerifyResult = { command: 'node --test', exitCode: 1, passed: 3, failed: 0, total: 3 }
+    expect(resolveTaskResult(liar).status).toBe('fail')
+  })
+
+  it('rejects a run that rewrote the tests', () => {
+    const rewritten: VerifyResult = { command: 'node --test', exitCode: 0, passed: 3, failed: 0, total: 3 }
+    expect(resolveTaskResult(rewritten, true)).toMatchObject({
+      status: 'fail',
+      reason: 'tests_modified',
+    })
+  })
+})
 })

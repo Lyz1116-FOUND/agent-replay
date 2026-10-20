@@ -326,6 +326,7 @@ export function mergeEvents(options: {
   const merged: MergedSpan[] = []
   const nativeEditSpans: MergedSpan[] = []
   const errors: AgentErrorEvent[] = []
+  let failedEdits = 0
   let model: string | undefined
   let finalText: string | undefined
   let finalStatus: 'success' | 'error' | undefined
@@ -352,7 +353,12 @@ export function mergeEvents(options: {
       started.delete(event.callId)
       const built = nativeSpan(event, start, adapterId, meta)
       merged.push(built.merged)
-      if (built.merged.span.type === 'edit') nativeEditSpans.push(built.merged)
+      if (built.merged.span.type === 'edit') {
+        // A failed edit is a failed attempt, not a claim the workspace owes us
+        // evidence for. Counting it as a claim would manufacture a fidelity gap.
+        if (built.merged.span.status === 'error') failedEdits += 1
+        else nativeEditSpans.push(built.merged)
+      }
       continue
     }
     if (event.kind === 'final') {
@@ -587,6 +593,7 @@ export function mergeEvents(options: {
       unverifiedEdits,
       integrity: {
         nativeEdits: nativeEditSpans.length,
+        failedEdits,
         workspaceEdits: editEvents.length,
         matchedEdits: workspaceVerified,
         confirmedEdits: workspaceVerified + supersededEdits,

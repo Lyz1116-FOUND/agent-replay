@@ -223,12 +223,12 @@ Three tasks x N runs per agent, each run in a fresh git repo, recorded by the re
 
 Before anything is measured, `node dist-cli/validate.mjs --verify-tasks` proves every task is worth running: the baseline must fail and the task's own `reference/` overlay must turn the suite fully green.
 
-When a run finishes, the harness runs the task's command itself in the final worktree and judges the task on that result. An agent saying it passed is evidence; the worktree is the verdict.
+When a run finishes, the harness runs the task's command itself in the final worktree and judges the task on that result. An agent saying it passed is evidence; the worktree is the verdict. Two guards keep that verdict honest: the command must have exited zero, and the task's protected test files must be byte-identical to what the agent started with — otherwise the run is `fail` with `reason: tests_modified`.
 
 | Agent | Runs | Task pass | Median (completed) | p25 – p75 | Edit recall | Test recall |
 |---|---|---|---|---|---|---|
-| `opencode` / glm-5.3-flash-free | 9 | 9 | 43.6s | — | 19/21 | 13/13 |
-| `codex` 0.163.0 | 1 | 1 | 32.0s | — | 1/1 | 2/2 |
+| `opencode` / glm-5.3-flash-free | 9 | 8 | 46.0s | — | 19/19 | 13/13 |
+| `codex` 0.163.0 | 1 | 1 | 38.4s | — | 1/1 | 2/2 |
 
 Availability is recorded, not hidden: `cursor` reports `login_required` (it needs an interactive browser login), and `claude` is gated behind `--allow-paid` because it costs money. Neither is counted as a task failure, and neither blocks the matrix.
 
@@ -238,7 +238,7 @@ Timing is end-to-end wall-clock, never "model speed". The harness reports three 
 - `successfulTaskLatency` — only runs that solved the task, whatever happened afterwards
 - `completedAgentLatency` — solved the task and ended cleanly
 
-An earlier batch produced 8/9 with one `agent_error` (a transport timeout at 241s) on the same three tasks. That run is not in this ledger — it was re-run — but it is the reason the buckets exist: a pass that ended in a crash should not be averaged into "how long a solved task takes" without saying so.
+One `small-feature` run in the current ledger is a real failure: it hit the 240s harness timeout with the tests still red, so it is `taskResult: fail` + `termination: timeout` and it carries no trace (the recorder was killed before writing one). An earlier batch produced 8/9 with one `agent_error` (a transport timeout at 241s) on the same three tasks. That run is not in this ledger — it was re-run — but it is the reason the buckets exist: a pass that ended in a crash should not be averaged into "how long a solved task takes" without saying so.
 
 ## Measurement integrity
 

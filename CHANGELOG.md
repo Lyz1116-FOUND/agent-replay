@@ -84,6 +84,27 @@ recorded trace trustworthy enough to argue about.
 - **XDG isolation dirs are removed** after each run.
 - **Home-directory paths are sanitized** to `~/...` before a trace is written.
 
+### Fixed (review blockers, round 2)
+
+- **The verdict can no longer be gamed.** A green summary from a command that
+  exited non-zero is a failure, and a run that rewrote a protected test file is
+  recorded as `fail` with `reason: tests_modified` instead of passing.
+- **Saved traces agree with the ledger.** The harness rewrites `termination` in
+  the stored trace (a killed-but-green run is `timeout`, not `completed`) and
+  stamps `metadata.harness` with attempt, exit code, signal and timeout.
+- **Codex `turn.failed` is classified.** It now emits a classified error event
+  alongside the final event, so a 403/429 no longer lands as a task failure.
+- **Test recall uses parsed/native.** An extra command-driven test run can no
+  longer push `testCaptureRecall` past 100%.
+- **Each attempt has its own trace file** (`task-agent-run-aN.trace.json`); a
+  retry no longer overwrites the evidence it is retrying.
+- **A failed edit call is not a claim.** Edit calls that errored are counted as
+  `failedEdits` instead of `unverifiedEdits`, so a tool failure is not reported
+  as a fidelity gap.
+- **Patches apply.** `diffPatch` keeps the trailing newline that `git apply`
+  requires; the regression test round-trips a real repository.
+- **Historical traces are sanitized** as well, not just new ones.
+
 ### Changed
 
 - The free-model matrix is documented as **OpenCode Free-Model Capture

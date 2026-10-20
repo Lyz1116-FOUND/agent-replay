@@ -4,6 +4,15 @@
   "kind": "bug",
   "prompt": "Fix the failing tests. The bug spans more than one module; make the minimal edits and run `node --test` to verify. Work only inside the current working directory.",
   "verify": "node --test",
-  "expectedFiles": ["lib/cart.mjs", "lib/discount.mjs"],
-  "baseline": { "pass": 1, "fail": 3 }
+  "expectedFiles": [
+    "lib/cart.mjs",
+    "lib/discount.mjs"
+  ],
+  "baseline": {
+    "pass": 1,
+    "fail": 3
+  },
+  "protectedFiles": [
+    "test.mjs"
+  ]
 }

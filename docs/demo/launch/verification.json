@@ -1,0 +1,83 @@
+{
+  "agent-replay-launch-1080p.mp4": {
+    "sha256": "975708723acbc9c2a6ffbcc4b8053ea2a1aa6e6bd4d1f052b990f972b5d323a4",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1920,
+        "height": 1080,
+        "nb_frames": "900"
+      },
+      {
+        "codec_name": "aac",
+        "sample_rate": "48000",
+        "channels": 2,
+        "nb_frames": "1408"
+      }
+    ],
+    "format": {
+      "duration": "30.000000",
+      "size": "3901717"
+    }
+  },
+  "agent-replay-launch-720p.mp4": {
+    "sha256": "4ef589f8c6520d36f13ed69686b484a751b348106a11b45e6458807f98cbe600",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1280,
+        "height": 720,
+        "nb_frames": "900"
+      },
+      {
+        "codec_name": "aac",
+        "sample_rate": "48000",
+        "channels": 2,
+        "nb_frames": "1408"
+      }
+    ],
+    "format": {
+      "duration": "30.000000",
+      "size": "2089121"
+    }
+  },
+  "agent-replay-launch-video-only.mp4": {
+    "sha256": "5da13518e3b158ab211164041a8131d838abc191cd0eb5ccd7c841ad4d1eea8a",
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "h264",
+        "width": 1920,
+        "height": 1080,
+        "nb_frames": "900"
+      }
+    ],
+    "format": {
+      "duration": "30.000000",
+      "size": "3181541"
+    }
+  },
+  "launch-preview.gif": {
+    "sha256": "339506a96b4c1787095f2a6eb9729165fe55df74810b47b1d18c729162eb09bb",
+    "bytes": 1544568,
+    "duration": 10,
+    "width": 880,
+    "height": 495,
+    "fps": 8
+  },
+  "loudness": {
+    "integratedLUFS": -17.04,
+    "truePeakDbTP": -1.23,
+    "rangeLU": 7.3
+  },
+  "render": {
+    "frames": 900,
+    "errors": [],
+    "sourceSha256": "8a138a66e2a4a262c6b435542eed493917b7824fb02eb19dd488c55bd7a5be4d"
+  }
+}

@@ -1,10 +1,20 @@
 # Demo media
 
-These assets are generated from the **built-in Codex LRU demo**, not from the live OpenCode capture. The demo is labelled in the UI.
+## Launch film
+
+[Watch the 30-second film with sound](https://lyz1116-found.github.io/agent-replay/launch/) · [Download 1080p MP4](https://github.com/Lyz1116-FOUND/agent-replay/releases/download/v1.0.0-beta.1/agent-replay-launch-1080p.mp4) · [Editable source and production notes](launch/README.md).
+
+The film uses original motion graphics and synthesized sound. Its LRU story reconstructs the built-in demo; its OpenCode verification scene comes from a **separate real trace** and is re-typeset; actual product footage is labelled. It does not show a new live capture or automatic repair.
+
+`launch-preview.gif` is the README’s 10-second silent excerpt (880×495, 8fps). The static watch page in `public/launch/` serves the complete 1080p video, with native controls and optional sound-description captions. [Capture evidence](REAL_CAPTURE.md) remains separate from advertising animation.
+
+## UI replay recording
+
+The following original beta assets are generated from the **built-in Codex LRU demo**, not from the live OpenCode capture. The demo is labelled in the UI.
 
 | File | Purpose |
 |---|---|
-| `replay.gif` | README hero animation, 20 s, 1100×688, 10 fps |
+| `replay.gif` | Original UI replay animation, 20 s, 1100×688, 10 fps |
 | `social-preview.png` | GitHub repository social preview, 1280×640 |
 | `s06-failure.png` | First failing test |
 | `s08-wrong-fix.png` | First edit diff |

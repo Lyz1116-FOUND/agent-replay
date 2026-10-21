@@ -1,4 +1,6 @@
-# Agent Replay — 产品与技术规划
+# Agent Replay — 历史产品与技术规划（M0–M4）
+
+> **历史文档：** 本文保留 M0–M4 阶段的设计与当时判断，其中“M5 暂缓”“v0.3.0 beta”等表述不代表当前状态。当前已发布 `v1.0.0-beta.1`，包含离线 OTLP JSON 导入与中英文界面；当前能力与边界请以 [README](README.md)、[CHANGELOG](CHANGELOG.md) 和 [beta 发布说明](docs/RELEASE_v1.0.0-beta.1.md) 为准。
 
 > **Build the "Transformer Explainer for Coding Agents": an interactive, time-based visual replay system that lets users inspect how an agent reads, searches, edits, runs, fails, recovers and finishes a software task.**
 

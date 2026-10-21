@@ -1,0 +1,45 @@
+{
+  "id": "rec_mvgye1ef_5d4396",
+  "startedAt": "2026-10-20T17:24:43.287Z",
+  "agent": {
+    "name": "OpenCode",
+    "model": "opencode/glm-5.3-flash-free"
+  },
+  "capture": {
+    "fidelity": "native+workspace",
+    "timing": "observed",
+    "adapter": "opencode",
+    "sources": [
+      "native:opencode",
+      "workspace"
+    ],
+    "workspaceVerified": 1,
+    "unverifiedEdits": 0,
+    "integrity": {
+      "nativeEdits": 1,
+      "failedEdits": 0,
+      "workspaceEdits": 1,
+      "matchedEdits": 1,
+      "confirmedEdits": 1,
+      "supersededEdits": 0,
+      "unverifiedEdits": 0,
+      "outsideWorkspaceEdits": 0,
+      "nativeTestRuns": 2,
+      "parsedTestRuns": 2,
+      "capturedTests": 2
+    }
+  },
+  "result": {
+    "summary": "Recorded session: 3/3 tests pass after 1 edit (recovered).",
+    "exitCode": 0,
+    "tests": {
+      "passed": 3,
+      "failed": 0,
+      "total": 3
+    },
+    "filesChanged": [
+      "calc.mjs"
+    ],
+    "patch": "diff --git a/calc.mjs b/calc.mjs\nindex 752e015..f8c2880 100644\n--- a/calc.mjs\n+++ b/calc.mjs\n@@ -1,3 +1,3 @@\n export function bump(value) {\n-  return value\n+  return value + 1\n }\n"
+  }
+}

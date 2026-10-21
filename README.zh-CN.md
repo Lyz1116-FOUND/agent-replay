@@ -1,29 +1,32 @@
 # Agent Replay
 
-**录制、回放和对比 Coding Agent 完成任务的全过程。**
+**录制、回放和对比 Coding Agent 完成任务的过程。**
 
 看见 Agent 声称做了什么，也看见工作区实际发生了什么。
 
+[![Public beta](https://img.shields.io/badge/release-v1.0.0--beta.1-blue)](https://github.com/Lyz1116-FOUND/agent-replay/releases/tag/v1.0.0-beta.1)
 [![CI](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml/badge.svg)](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml)
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-[**在线演示**](https://lyz1116-found.github.io/agent-replay/) · [快速开始](#快速开始) · [功能](#功能) · [录制会话](#录制会话) · [导入轨迹](#导入轨迹) · [文档](#文档)
+[**在线演示**](https://lyz1116-found.github.io/agent-replay/) · [快速开始](#快速开始) · [文档](#文档)
 
-Agent Replay 将一次 Agent 会话变成可播放的可视化时间线。沿着文件读取、代码编辑、终端命令和测试结果，找到导致失败的那次修改，再对比另一个 Agent 如何解决同一道题。
+`FAIL → EDIT → REGRESSION → EDIT → RECOVERED`
 
-你可以用它排查失败的运行、复查 Agent 的代码改动，或向他人演示一次完整的解题过程。先体验在线演示，再导入已有轨迹，或者录制自己的 CLI 会话。
+[![观看 Agent Replay：跟随小点回溯失败、检查修改，再核对原生事件与工作区证据](docs/demo/launch-preview.gif)](https://lyz1116-found.github.io/agent-replay/launch/)
 
-![内置 Codex LRU 演示：失败、错误修复、回归、恢复](docs/demo/replay.gif)
+**[观看 30 秒有声短片 →](https://lyz1116-found.github.io/agent-replay/launch/)** · [下载 MP4](https://github.com/Lyz1116-FOUND/agent-replay/releases/download/v1.0.0-beta.1/agent-replay-launch-1080p.mp4)
 
-`FAIL → EDIT → REGRESSION → EDIT → RECOVERED` · 内置 Codex LRU 演示，4× 回放；真实 OpenCode 录制见下。
+无声预览为短片节选。全片包含重构的 LRU 演示、另一条真实 OpenCode 轨迹与标注来源的产品录屏。[素材与证据](docs/demo/README.md)。
 
 | 原生采集 | 工作区核验 | 轨迹互操作 |
 |---|---|---|
 | Codex · Claude Code · OpenCode · ZCode · Qoder | Git · 文件系统 · 解析后的测试 | SWE-agent · 离线 OpenTelemetry OTLP JSON |
 
-[**在线演示**](https://lyz1116-found.github.io/agent-replay/) 无需安装、API key 或登录即可打开内置演示。**只体验演示不需要安装任何 Agent。**
+在线演示无需安装、API key 或登录。
 
 ## 快速开始
+
+**本 beta 仅支持源码安装。** 尚未发布到 npm；npm 上的同名 `agent-replay` 包属于其他项目，请使用下面的源码安装命令。
 
 需要 **Node.js 22.12+**、npm 和 Git。
 
@@ -34,7 +37,7 @@ npm ci
 npm run dev
 ```
 
-打开终端打印的地址。**体验内置演示无需 API key、后端服务或安装 Agent。**
+打开终端打印的地址。
 
 建议按这条路线体验：
 
@@ -75,7 +78,7 @@ npm run dev
 
 这个 beta 附带一条新的真实录制：**OpenCode 2.0.32 + `opencode/glm-5.3-flash-free`**，43.4 秒、1 次编辑、2 次测试运行，最终 3/3 测试通过，1 次编辑得到工作区核验，0 次未核验。轨迹在[这里](examples/beta-opencode.trace.json)，[录制证据](docs/demo/REAL_CAPTURE.md)记录了命令、baseline 失败、测试文件校验值和脱敏说明。
 
-上面的 LRU 动画是**内置演示**，UI 中会明确标注；OpenCode 轨迹是录制器真实采集的结果。导入问题或轨迹可以通过 [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues) 提交。
+短片中的 LRU 故事是**内置演示**，UI 中会明确标注；OpenCode 是另一条真实采集的轨迹，核验镜头根据已记录事件重新排版。导入问题或轨迹可以通过 [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues) 提交。
 
 ## 录制会话
 
@@ -106,6 +109,8 @@ agent-replay open fix-lru
 | Qoder CLI | `agent-replay record qoder` | 已验证真实录制 |
 | ZCode CLI | `agent-replay record zcode` | 已验证真实录制 |
 | Cursor | `agent-replay record cursor` | 已有适配器与 fixture，真机录制待验证 |
+
+真实录制的版本、任务、结果与测量边界见[验证与测量](docs/validation.md)；本次 beta 的 OpenCode 样例见[录制证据](docs/demo/REAL_CAPTURE.md)。
 
 在上面的命令前缀后加上 `--name <名称> -- "<任务描述>"` 即可。需要传入 CLI 自身的额外参数时，使用显式命令包装：
 
@@ -144,6 +149,8 @@ agent-replay open desktop-fix
 
 ## 对比自己的运行
 
+**当前限制：** CLI 尚无独立的任务分组参数。不同名称的录制需要手动统一 trace JSON 的 `task.id`，才能在 Compare 中归到同一任务。
+
 1. 用不同名称录制每次尝试，例如 `codex-fix` 和 `claude-fix`，避免输出文件互相覆盖。
 2. 导入前编辑这些 trace JSON，将 `task.id` 统一为同一个值，例如 `lru-fix`；每条轨迹最外层的 `id` 保持各不相同。录制器根据 `--name` 生成 `task.id`，因此不同名称的录制需要这一步才能归到同一任务。
 3. 导入文件，打开 **对比 / Compare**，选择该任务，再勾选最多四条运行。
@@ -175,7 +182,7 @@ agent-replay open desktop-fix
 - [验证与测量](docs/validation.md)：真实录制、任务矩阵、recall、覆盖率与延迟口径。
 - [架构](docs/architecture.md)：适配器、事件合并、trace 构建与回放界面。
 - [演示素材](docs/demo/README.md) · [真实录制证据](docs/demo/REAL_CAPTURE.md)。
-- [发布说明](docs/RELEASE_v1.0.0-beta.1.md) · [变更记录](CHANGELOG.md) · [开发计划](PLAN.md)。
+- [发布说明](docs/RELEASE_v1.0.0-beta.1.md) · [变更记录](CHANGELOG.md) · [历史规划（M0–M4）](PLAN.md)。
 
 ## 开发
 

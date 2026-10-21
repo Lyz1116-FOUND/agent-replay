@@ -4,26 +4,29 @@
 
 See what the agent reported doing — and what actually changed.
 
+[![Public beta](https://img.shields.io/badge/release-v1.0.0--beta.1-blue)](https://github.com/Lyz1116-FOUND/agent-replay/releases/tag/v1.0.0-beta.1)
 [![CI](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml/badge.svg)](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml)
 [English](README.md) · [简体中文](README.zh-CN.md)
 
-[**Live Demo**](https://lyz1116-found.github.io/agent-replay/) · [Quick start](#quick-start) · [Features](#features) · [Record a session](#record-a-session) · [Import a trace](#import-a-trace) · [Documentation](#documentation)
+[**Live Demo**](https://lyz1116-found.github.io/agent-replay/) · [Quick start](#quick-start) · [Docs](#documentation)
 
-Agent Replay turns an agent session into a visual timeline. Follow the file reads, edits, terminal commands, and test runs; jump to the change that broke a test; then compare how another agent approached the same problem.
+`FAIL → EDIT → REGRESSION → EDIT → RECOVERED`
 
-Use it to debug a failed run, review an agent's changes, or walk someone through a solution. Start with the live demo, import an existing trace, or record your own CLI session.
+[![Watch Agent Replay: a dot follows a failing test back to an edit, then matches native events with workspace evidence](docs/demo/launch-preview.gif)](https://lyz1116-found.github.io/agent-replay/launch/)
 
-![Built-in Codex LRU demo: failure, wrong fix, regression, recovery](docs/demo/replay.gif)
+**[Watch the 30-second film with sound →](https://lyz1116-found.github.io/agent-replay/launch/)** · [Download MP4](https://github.com/Lyz1116-FOUND/agent-replay/releases/download/v1.0.0-beta.1/agent-replay-launch-1080p.mp4)
 
-`FAIL → EDIT → REGRESSION → EDIT → RECOVERED` · built-in Codex LRU demo, replayed at 4×. The live OpenCode capture is separate and labelled below.
+The silent preview is an excerpt. The film combines a reconstructed LRU demo, a separate real OpenCode trace, and labelled product footage. [Media & evidence](docs/demo/README.md).
 
 | Native capture | Verified evidence | Trace interoperability |
 |---|---|---|
 | Codex · Claude Code · OpenCode · ZCode · Qoder | Git · filesystem · parsed tests | SWE-agent · offline OpenTelemetry OTLP JSON |
 
-[**Live Demo**](https://lyz1116-found.github.io/agent-replay/) loads the built-in demos without an install, API key, or login. **No agent installation is needed to explore.**
+The live demo needs no installation, API key, or login.
 
 ## Quick start
+
+**Source installation only for this beta.** It is not published to npm; the npm package named `agent-replay` belongs to another project. Use the commands below to install Agent Replay.
 
 Requires **Node.js 22.12+**, npm, and Git.
 
@@ -34,7 +37,7 @@ npm ci
 npm run dev
 ```
 
-Open the URL printed in your terminal. **No API key, backend, or agent installation is needed to explore the demos.**
+Open the URL printed in your terminal.
 
 Try this first:
 
@@ -75,7 +78,7 @@ Import native Agent Replay JSON, SWE-agent trajectories, or offline OpenTelemetr
 
 The beta ships with a fresh live recording from **OpenCode 2.0.32 + `opencode/glm-5.3-flash-free`**: 43.4 s, one edit, two test runs, 3/3 tests passing at the end, one edit verified against the workspace, zero unverified edits. The trace is [here](examples/beta-opencode.trace.json), and the [capture evidence](docs/demo/REAL_CAPTURE.md) records the command, baseline failure, test-file checksum, and sanitization.
 
-The built-in LRU animation above is a **demo** and is labelled as such in the UI. The OpenCode trace is a real recorder run. Import bugs and traces can be filed through [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues).
+The LRU story in the film is a **built-in demo** and is labelled as such in the UI. The OpenCode trace is a separate real recorder run; its verification scene is reconstructed from recorded events. Import bugs and traces can be filed through [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues).
 
 ## Record a session
 
@@ -106,6 +109,8 @@ Choose the adapter for your CLI:
 | Qoder CLI | `agent-replay record qoder` | Live recording verified |
 | ZCode CLI | `agent-replay record zcode` | Live recording verified |
 | Cursor | `agent-replay record cursor` | Adapter + fixtures; live recording pending |
+
+See [validation and measurement](docs/validation.md) for the recorded versions, tasks, results, and measurement limits, and the [capture evidence](docs/demo/REAL_CAPTURE.md) for this beta’s OpenCode sample.
 
 Add `--name <name> -- "<prompt>"` to any prefix above. To pass extra vendor flags, wrap an explicit command instead:
 
@@ -144,6 +149,8 @@ The import dialog also includes a built-in SWE-agent sample. No agent execution 
 
 ## Compare your own runs
 
+**Current limitation:** the CLI has no separate task-grouping option. Recordings with different names require manually matching their trace JSON `task.id` values before Compare can group them under one task.
+
 1. Record each attempt with a distinct name, such as `codex-fix` and `claude-fix`, so the output files do not overwrite each other.
 2. Before importing, edit the trace JSON files so their `task.id` fields share a value, such as `lru-fix`. Keep each trace's top-level `id` unique. The recorder derives `task.id` from `--name`, so differently named recordings need this adjustment to be grouped together.
 3. Import the files, open **Compare**, select the shared task, and choose up to four runs.
@@ -173,7 +180,7 @@ No. It shows observable tool activity and reasoning summaries exposed by the age
 - [Validation and measurement](docs/validation.md) — real recordings, task matrix, recall, coverage, and timing definitions.
 - [Architecture](docs/architecture.md) — adapters, event merger, trace builder, and replay UI.
 - [Demo media](docs/demo/README.md) · [live capture evidence](docs/demo/REAL_CAPTURE.md).
-- [Release notes](docs/RELEASE_v1.0.0-beta.1.md) · [Changelog](CHANGELOG.md) · [Development plan](PLAN.md).
+- [Release notes](docs/RELEASE_v1.0.0-beta.1.md) · [Changelog](CHANGELOG.md) · [Historical plan (M0–M4)](PLAN.md).
 
 ## Development
 

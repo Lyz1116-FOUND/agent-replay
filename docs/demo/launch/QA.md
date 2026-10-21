@@ -18,6 +18,6 @@ Checks performed for the final 2026-10-21 media publication:
 
 Browser media requests cancelled during seeking or leaving the page were recorded separately from actual failures. Playback, seeking and the media error state were checked; expected `ERR_ABORTED` cancellations are not counted as broken downloads.
 
-The original v6 footage, earlier previews and release assets remain available. The film is not a new live agent recording; the LRU and OpenCode segments are explicitly separate. Read the source boundaries in [README](README.md).
+The original v6 baseline preview and source archive are retained locally. Intermediate previews, frame caches and the superseded promotional release asset were removed after final publication; the final launch media and original UI replay remain available. The film is not a new live agent recording; the LRU and OpenCode segments are explicitly separate. Read the source boundaries in [README](README.md).
 
 These checks establish technical delivery and some layout/navigation behavior. They do not establish audience response, subjective listening quality, or Safari compatibility. The GitHub Actions results for the publication commit are linked from the repository’s CI badge.

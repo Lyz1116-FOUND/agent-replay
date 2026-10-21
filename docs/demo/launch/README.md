@@ -56,4 +56,4 @@ Film graphics, character modules, and procedural music/effects are project mater
 
 The shipped master is 1920×1080, 30fps, 30.000 seconds, 900 frames, H.264/yuv420p with AAC stereo at 48kHz and faststart. Its measured integrated loudness is **−17.04 LUFS**, true peak **−1.23 dBTP**, and loudness range **7.30 LU**. These are measurements of the encoded final video, not a promise that every playback device sounds the same. Full decode and frame checks passed; creative impact and subjective listening remain human judgments.
 
-See [checksums and media metadata](verification.json). The original v6 file is preserved locally; the beta tag and earlier release assets are unchanged. This publication adds independently named media and a small static watch page.
+See [checksums and media metadata](verification.json). The original v6 baseline preview and source archive are preserved locally; intermediate cuts and regenerable frame caches have been cleaned up. The beta tag is unchanged. The release retains the final launch exports/source and the distinct original UI replay; the superseded promotional video has been removed.

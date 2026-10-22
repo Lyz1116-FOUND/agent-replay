@@ -348,6 +348,7 @@ export function buildTrace(options: BuildOptions): Trace {
       recoveryDetected: Boolean(recovery),
       regressionDetected,
       recordedAt: new Date().toISOString(),
+      ...(merge.usage ? { usage: merge.usage } : {}),
     },
   }
 }

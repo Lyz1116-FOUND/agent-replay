@@ -34,6 +34,8 @@ export type MergeResult = {
   finalText?: string
   finalStatus?: 'success' | 'error'
   sessionId?: string
+  /** Provider-reported token usage from the agent's final event, when available. */
+  usage?: Record<string, string | number>
   errors: AgentErrorEvent[]
 }
 
@@ -331,6 +333,7 @@ export function mergeEvents(options: {
   let finalText: string | undefined
   let finalStatus: 'success' | 'error' | undefined
   let sessionId: string | undefined
+  let finalUsage: Record<string, string | number> | undefined
 
   for (const event of events) {
     if (event.kind === 'session') {
@@ -364,6 +367,7 @@ export function mergeEvents(options: {
     if (event.kind === 'final') {
       finalText = event.text ?? finalText
       finalStatus = event.status ?? finalStatus
+      finalUsage = event.usage ?? finalUsage
       continue
     }
     if (event.kind === 'error') {
@@ -609,6 +613,7 @@ export function mergeEvents(options: {
     finalText,
     finalStatus,
     sessionId,
+    usage: finalUsage,
     errors,
   }
 }

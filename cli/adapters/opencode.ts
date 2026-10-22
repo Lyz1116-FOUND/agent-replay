@@ -44,6 +44,9 @@ export class OpenCodeAdapter implements AgentStreamAdapter {
   private sessionId: string | undefined
   private emittedSession = false
   private lastText = ''
+  /** Accumulated token usage across steps, reported in finalize(). */
+  private usage: { input: number; output: number } | undefined
+  private lastAtMs = 0
 
   detect(command: string, args: string[]): boolean {
     if ((basename(command) ?? command) !== 'opencode') return false
@@ -58,6 +61,7 @@ export class OpenCodeAdapter implements AgentStreamAdapter {
   parseLine(line: string, receivedAtMs: number): AgentEvent[] {
     const event = safeJson(line)
     if (!event) return []
+    this.lastAtMs = receivedAtMs
     const type = asString(event.type)
     const part = asRecord(event.part)
     const events: AgentEvent[] = []
@@ -94,8 +98,19 @@ export class OpenCodeAdapter implements AgentStreamAdapter {
     }
 
     if (type === 'step_finish') {
+      // In `--auto` mode the agent emits `reason: "tool-calls"` on every step
+      // (never `"stop"`), so accumulate tokens here and report the total in
+      // finalize() rather than relying on a terminal "stop" step.
+      const tokens = asRecord(part.tokens)
+      const input = asNumber(tokens.input)
+      const output = asNumber(tokens.output)
+      if (input !== undefined || output !== undefined) {
+        this.usage = {
+          input: (this.usage?.input ?? 0) + (input ?? 0),
+          output: (this.usage?.output ?? 0) + (output ?? 0),
+        }
+      }
       if (asString(part.reason) === 'stop') {
-        const tokens = asRecord(part.tokens)
         events.push({
           kind: 'final',
           atMs: receivedAtMs,
@@ -132,6 +147,20 @@ export class OpenCodeAdapter implements AgentStreamAdapter {
     }
 
     return events
+  }
+
+  finalize(): AgentEvent[] {
+    if (!this.usage) return []
+    return [
+      {
+        kind: 'final',
+        atMs: this.lastAtMs,
+        usage: {
+          input_tokens: this.usage.input,
+          output_tokens: this.usage.output,
+        },
+      },
+    ]
   }
 
   private handleTool(part: Record<string, unknown>, receivedAtMs: number): AgentEvent[] {

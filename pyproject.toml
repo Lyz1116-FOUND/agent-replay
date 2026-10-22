@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-replay-backend"
+version = "1.0.0-beta.1"
+description = "FastAPI service and prompt-evaluation harness for Agent Replay"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi==0.159.1",
+    "uvicorn[standard]==0.54.0",
+    "pydantic==2.14.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9",
+    "httpx>=0.28",
+]
+
+[tool.setuptools.packages.find]
+include = ["agent_replay*", "experiments*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Use a repo-local temp base so sandboxed environments that restrict
+# /var/folders (e.g. WorkBuddy) do not block the tmp_path fixture.
+addopts = "--basetemp=.agent_replay/pytest-tmp"

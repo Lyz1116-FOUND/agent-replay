@@ -1,0 +1,28 @@
+# Node
+node_modules/
+dist/
+dist-demo/
+dist-cli/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Runtime artifacts (rebuilt or generated on demand)
+.agent_replay/
+results/
+demo-output/
+
+# VCS / editor / OS
+.git/
+.gitignore
+.DS_Store
+*.log
+
+# Large demo media (not needed to build/serve the API)
+docs/demo/
+docs/*.png
+docs/*.gif

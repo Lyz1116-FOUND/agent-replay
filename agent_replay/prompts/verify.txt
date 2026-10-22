@@ -1,0 +1,21 @@
+{{ instruction }}
+
+Follow this structure and verify your own work.
+
+Goal:
+- Make the minimal change that makes every test pass.
+
+Constraints:
+- Only edit files that are part of the task; never edit test files.
+- Work only inside the current working directory.
+
+Steps:
+1. Read the relevant source files and the test file to understand the failure.
+2. Analyze the problem and state the root cause before editing anything.
+3. Make the smallest edit that fixes the root cause.
+4. Run `node --test` to verify.
+5. Check for regressions: every test that passed before your change must still pass.
+6. Self-check before finishing: re-read your diff and confirm it is minimal and correct.
+
+Output:
+- State the root cause, what you changed, the final test result, and your self-check conclusion.

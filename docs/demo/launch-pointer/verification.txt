@@ -1,0 +1,19 @@
+
+agent-replay-pointer-final-1080p60.mp4 — energy map:
+  0.0s |                                ....            |
+  4.0s |  .:.            ....             .....         |
+  8.0s |  .....                                 .       |
+ 12.0s |                                                |
+ 16.0s |                .+=.                            |
+ 20.0s |  .=*.                                          |
+
+  PASS  cadence    shot lengths [2.43, 0.89, 0.53, 1.45, 0.5, 2.15, 0.77, 2.93, 0.55, 1.22, 0.83, 0.75, 1.95, 0.9, 2.15, 0.65, 0.75, 2.6]  CV 0.59 (need >= 0.25)
+  PASS  rest       still 0.535  longest quiet 3.58 s
+  WARN  burst      no burst — fine for a concept without hits; --ref holds it to a reference
+  PASS  not-flat   row-profile variation 0.37 (advisory, >= 0.35)
+  PASS  audio      peak -3.9 dBFS  clipped 0  quiet 0.467
+  PASS  continuity carry score 1.00 over 3 boundaries; nothing carried at — (probe.py lists each)
+  PASS  curves     peak 394 px/frame @60 fps (workspace: at 3.92 s), shutter 180° (render.json); soft curves 86 % of travel, median t80 0.64
+  PASS  framing    operator wholly in frame 0–24 s (1441 samples)
+
+VERDICT: PASS

@@ -2,11 +2,11 @@
 
 ## Launch film
 
-[Watch the 30-second film with sound](https://lyz1116-found.github.io/agent-replay/launch/) · [Download 1080p MP4](https://github.com/Lyz1116-FOUND/agent-replay/releases/download/v1.0.0-beta.1/agent-replay-launch-1080p.mp4) · [Editable source and production notes](launch/README.md).
+[Watch the 24-second film with sound](https://lyz1116-found.github.io/agent-replay/launch/) · [Download 1080p60 MP4](https://github.com/Lyz1116-FOUND/agent-replay/releases/download/v1.0.0-beta.1/agent-replay-pointer-final-1080p60.mp4) · [Editable source and production notes](launch-pointer/README.md).
 
-The film uses original motion graphics and synthesized sound. Its LRU story reconstructs the built-in demo; its OpenCode verification scene comes from a **separate real trace** and is re-typeset; actual product footage is labelled. It does not show a new live capture or automatic repair.
+The new film uses an expressive blue 3D character and original synthesized sound. A return-key detail opens the workspace; a timeline playhead becomes an edit frame; a code underline opens the test result; a fine result rule opens actual product footage; a quiet dot at the window edge carries the closing play token. Secondary context recedes while one subject is active. Its LRU story reconstructs the built-in demo; actual product footage is labelled. It does not show a new live capture or automatic repair. The production pipeline uses onetake under its noncommercial license, separate from the application's MIT license.
 
-`launch-preview.gif` is the README’s 10-second silent excerpt (880×495, 8fps). The static watch page in `public/launch/` serves the complete 1080p video, with native controls and optional sound-description captions. [Capture evidence](REAL_CAPTURE.md) remains separate from advertising animation.
+`launch-preview.gif` is the README’s approximately 10-second silent excerpt (880×495, 8fps): 0.4–2.5s, 3.8–5.35s, 7.85–8.9s, 12.15–15.4s and 20–22s. The static watch page in `public/launch/` serves the complete 1080p60 video, with native controls and optional sound-description captions. [Capture evidence](REAL_CAPTURE.md) remains separate from advertising animation. The [original 30-second film and its production notes](launch/README.md) remain archived; earlier release attachments are retained.
 
 ## UI replay recording
 

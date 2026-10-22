@@ -12,11 +12,11 @@ See what the agent reported doing — and what actually changed.
 
 `FAIL → EDIT → REGRESSION → EDIT → RECOVERED`
 
-[![Watch Agent Replay: a dot follows a failing test back to an edit, then matches native events with workspace evidence](docs/demo/launch-preview.gif)](https://lyz1116-found.github.io/agent-replay/launch/)
+[![Watch Agent Replay: a blue character follows a failing run back to an edit; tiny details carry every transition](docs/demo/launch-preview.gif)](https://lyz1116-found.github.io/agent-replay/launch/)
 
-**[Watch the 30-second film with sound →](https://lyz1116-found.github.io/agent-replay/launch/)** · [Download MP4](https://github.com/Lyz1116-FOUND/agent-replay/releases/download/v1.0.0-beta.1/agent-replay-launch-1080p.mp4)
+**[Watch the 24-second film with sound →](https://lyz1116-found.github.io/agent-replay/launch/)** · [Download MP4](https://github.com/Lyz1116-FOUND/agent-replay/releases/download/v1.0.0-beta.1/agent-replay-pointer-final-1080p60.mp4)
 
-The silent preview is an excerpt. The film combines a reconstructed LRU demo, a separate real OpenCode trace, and labelled product footage. [Media & evidence](docs/demo/README.md).
+The silent preview is an excerpt. The film follows a reconstructed built-in LRU demo into labelled product footage, with an expressive 3D character and continuous detail-led transitions. [Media & evidence](docs/demo/README.md).
 
 | Native capture | Verified evidence | Trace interoperability |
 |---|---|---|
@@ -78,7 +78,7 @@ Import native Agent Replay JSON, SWE-agent trajectories, or offline OpenTelemetr
 
 The beta ships with a fresh live recording from **OpenCode 2.0.32 + `opencode/glm-5.3-flash-free`**: 43.4 s, one edit, two test runs, 3/3 tests passing at the end, one edit verified against the workspace, zero unverified edits. The trace is [here](examples/beta-opencode.trace.json), and the [capture evidence](docs/demo/REAL_CAPTURE.md) records the command, baseline failure, test-file checksum, and sanitization.
 
-The LRU story in the film is a **built-in demo** and is labelled as such in the UI. The OpenCode trace is a separate real recorder run; its verification scene is reconstructed from recorded events. Import bugs and traces can be filed through [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues).
+The LRU story in the film is a **built-in demo** and is labelled as such. The separate OpenCode recording remains available as capture evidence; the new film does not depict that session. Import bugs and traces can be filed through [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues).
 
 ## Record a session
 
@@ -195,4 +195,4 @@ Bug reports and contributions are welcome through [Issues](https://github.com/Ly
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) for the application. The new launch-film pipeline uses onetake under its noncommercial license; see [media licensing](docs/demo/launch-pointer/README.md).

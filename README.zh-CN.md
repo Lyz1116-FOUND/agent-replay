@@ -12,11 +12,11 @@
 
 `FAIL → EDIT → REGRESSION → EDIT → RECOVERED`
 
-[![观看 Agent Replay：跟随小点回溯失败、检查修改，再核对原生事件与工作区证据](docs/demo/launch-preview.gif)](https://lyz1116-found.github.io/agent-replay/launch/)
+[![观看 Agent Replay：跟随蓝色角色回溯失败，让细小元素承接每次转场](docs/demo/launch-preview.gif)](https://lyz1116-found.github.io/agent-replay/launch/)
 
-**[观看 30 秒有声短片 →](https://lyz1116-found.github.io/agent-replay/launch/)** · [下载 MP4](https://github.com/Lyz1116-FOUND/agent-replay/releases/download/v1.0.0-beta.1/agent-replay-launch-1080p.mp4)
+**[观看 24 秒有声短片 →](https://lyz1116-found.github.io/agent-replay/launch/)** · [下载 MP4](https://github.com/Lyz1116-FOUND/agent-replay/releases/download/v1.0.0-beta.1/agent-replay-pointer-final-1080p60.mp4)
 
-无声预览为短片节选。全片包含重构的 LRU 演示、另一条真实 OpenCode 轨迹与标注来源的产品录屏。[素材与证据](docs/demo/README.md)。
+无声预览为短片节选。全片由立体角色带领，回看内置 LRU 演示，再进入标注来源的真实产品录屏；转场从游标、下划线和窗口边缘的小点展开。[素材与证据](docs/demo/README.md)。
 
 | 原生采集 | 工作区核验 | 轨迹互操作 |
 |---|---|---|
@@ -78,7 +78,7 @@ npm run dev
 
 这个 beta 附带一条新的真实录制：**OpenCode 2.0.32 + `opencode/glm-5.3-flash-free`**，43.4 秒、1 次编辑、2 次测试运行，最终 3/3 测试通过，1 次编辑得到工作区核验，0 次未核验。轨迹在[这里](examples/beta-opencode.trace.json)，[录制证据](docs/demo/REAL_CAPTURE.md)记录了命令、baseline 失败、测试文件校验值和脱敏说明。
 
-短片中的 LRU 故事是**内置演示**，UI 中会明确标注；OpenCode 是另一条真实采集的轨迹，核验镜头根据已记录事件重新排版。导入问题或轨迹可以通过 [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues) 提交。
+短片中的 LRU 故事是**内置演示**，画面中会明确标注；另一条 OpenCode 真实采集轨迹仍作为录制证据提供，新版短片不展示该会话。导入问题或轨迹可以通过 [Issues](https://github.com/Lyz1116-FOUND/agent-replay/issues) 提交。
 
 ## 录制会话
 
@@ -197,4 +197,4 @@ npm run build      # 类型检查、Web、录制 CLI 与验证 harness
 
 ## 许可证
 
-[MIT](LICENSE)
+应用采用 [MIT](LICENSE)。新版宣传片制作流程使用非商业许可的 onetake，详见[媒体授权说明](docs/demo/launch-pointer/README.md#依赖与许可)。

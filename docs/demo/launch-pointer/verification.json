@@ -1,0 +1,31 @@
+{
+  "date": "2026-10-22",
+  "video": "agent-replay-pointer-final-1080p60.mp4",
+  "sha256": "a22cd21172859cbe898b9d1f2d96ee5e60c4c1300ae7ecb279ab56e2b1389ebe",
+  "duration": 24,
+  "fps": 60,
+  "frames": 1440,
+  "integratedLUFS": -18.5,
+  "truePeakDBTP": -3.9,
+  "oracleVerdict": "PASS",
+  "carryScore": 1.0,
+  "trackedMainBoundaries": 3,
+  "playerChecked": [
+    "desktop 1440px",
+    "mobile 390px"
+  ],
+  "oldVersionsRetained": true,
+  "appLicense": "MIT",
+  "productionDependency": "onetake / PolyForm Noncommercial 1.0.0",
+  "sourceFiles": {
+    "docs/demo/launch-pointer/composition.mjs": "8664dbfebcf8d278b8b34df197e5cf61aba0e0d3d5752895839f26df874ae7f7",
+    "docs/demo/launch-pointer/film.html": "ec35b73b93e9d374d9dcb01aeb8d9c44ecaca582925452fd04f66f56834bc3ad",
+    "docs/demo/launch-pointer/QA.md": "bd60ed1acb02f53c9458100ad6a1ee472e3c7521139f3ac212a91b57afe357bf",
+    "docs/demo/launch-pointer/render.mjs": "9a63013f6b5ca2a9223a1a099559de150c10e0b2bf5d53b601435aec185298b8",
+    "docs/demo/launch-pointer/verification.txt": "0190989a2d690d11bca6f7804ab795fd431acab329e6155462de353dd2b26861",
+    "docs/demo/launch-pointer/PROMPT.zh-CN.md": "087b269a6a76784a91cc8699f3d8adfe24cfe2acef89dc0c44c1c78b70340d57",
+    "docs/demo/launch-pointer/README.md": "ec4a43e5fba0c12158ce4e7e7af7e8aff230e40f0893199ed07a3e57f20b5e9c",
+    "docs/demo/launch-pointer/encode.sh": "3ca63a77cddd8cb23c8cf14beeb253e578c6993dd3915eebd97cdcd3b608c228",
+    "docs/demo/launch-pointer/score.py": "c1febd1699975560a88de5d12b7b2b64f37a68a7552ff0ced661dc20420c0fec"
+  }
+}

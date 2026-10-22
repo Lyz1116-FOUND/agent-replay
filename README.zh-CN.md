@@ -1,8 +1,8 @@
 # Agent Replay
 
-**回看 Agent 的编程过程，找到出错和修正的那一步。**
+**回看 Agent 的编程过程，评估 Prompt，对比不同做法。**
 
-Agent Replay 把录制的编程会话变成一条可交互的时间线。你可以回看 Agent 读过哪些文件、改了哪里、测试何时失败或恢复，也可以对比不同 Agent 解决同一任务的过程。
+Agent Replay 把录制的编程会话变成一条可交互的时间线，将录制器与评测器封装为 **FastAPI 服务**，并在固定任务集上运行可复现的 **Prompt 优化实验**。你可以回看 Agent 读过哪些文件、改了哪里、测试何时失败或恢复，也可以衡量不同 Prompt 的表现。
 
 [![Public beta](https://img.shields.io/badge/release-v1.0.0--beta.1-blue)](https://github.com/Lyz1116-FOUND/agent-replay/releases/tag/v1.0.0-beta.1)
 [![CI](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml/badge.svg)](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml)
@@ -116,6 +116,60 @@ CLI 目前根据 `--name` 生成 `task.id`，尚无独立的任务分组参数�
 采集标签会区分 Agent 上报的活动与工作区已核验的变化。查看器展示可观察的工具活动，以及 Agent 产品公开提供的推理摘要，不访问隐藏思维链或模型内部状态。
 
 内置示例标有 **DEMO**。宣传片重构了其中一条演示，并包含标注来源的产品录屏。仓库还附有一条[真实 OpenCode 录制](examples/beta-opencode.trace.json)，其命令、测试结果和核验过程见[录制证据](docs/demo/REAL_CAPTURE.md)。
+
+## 服务 API 与 Prompt 实验
+
+录制器和评测器还通过 **FastAPI 服务**和 **Prompt 优化实验框架**对外提供。两者复用与 CLI 相同的执行与可信评测逻辑，因此每个结果都可复现、可审计。
+
+```
+Task → Agent → Execution → Patch → Tests → Evaluator → Replay / Report
+```
+
+### 启动 API
+
+```bash
+# 本地
+pip install -e .                            # 安装 agent_replay + experiments
+uvicorn agent_replay.api.main:app --reload   # http://127.0.0.1:8000/docs
+
+# Docker
+docker build -t agent-replay .
+docker run -p 8000:8000 agent-replay
+curl http://127.0.0.1:8000/health           # {"status":"ok"}
+```
+
+### API 调用示例
+
+```bash
+curl -X POST http://127.0.0.1:8000/tasks \
+  -H 'Content-Type: application/json' \
+  -d '{"task": "single-file-bug", "prompt_template": "structured"}'
+
+curl -X POST http://127.0.0.1:8000/tasks/<task_id>/run
+curl http://127.0.0.1:8000/runs/<run_id>
+```
+
+### 运行 Prompt 实验
+
+```bash
+python -m experiments.prompt_eval \
+  --prompts default,structured,verify --tasks all --runs 1
+# → results/<experiment_id>/{raw_runs.jsonl, summary.json, summary.csv, report.md}
+```
+
+### 实测结果
+
+在 `zhipu/glm-5.3-flash` 上完成 30 次运行（3 种 Prompt × 10 个任务）：
+
+| Prompt | 成功率 | 延迟中位数 | Tokens |
+|---|---|---|---|
+| default | 90.0% (9/10) | 24.0s | 57,118 |
+| structured | 100% (10/10) | 22.4s | 57,196 |
+| verify | 100% (10/10) | 37.6s | 80,712 |
+
+「成功」由在最终工作树中运行任务自带的 verify 命令判定。structured 和 verify 变体避开了 default 唯一的失败（一次超时，Agent 未做任何编辑）。当前每个任务仅运行一次，请将结果视为观察而非排名。
+
+API 契约、三种 Prompt 变体、固定任务集和复现方法见[后端与实验](docs/backend.md)。
 
 ## 文档
 

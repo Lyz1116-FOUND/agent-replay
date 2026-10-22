@@ -1,8 +1,8 @@
 # Agent Replay
 
-**Replay your coding agent’s work. Understand what changed.**
+**Replay your coding agent’s work. Evaluate prompts. Compare approaches.**
 
-Agent Replay turns recorded coding sessions into an interactive timeline. Follow the files an agent read, inspect its edits, and see when tests failed or recovered. Compare runs to understand how different agents approached the same task.
+Agent Replay turns recorded coding sessions into an interactive timeline, exposes the recorder and evaluator as a **FastAPI service**, and runs reproducible **prompt-optimization experiments** on a fixed task set. Follow the files an agent read, inspect its edits, see when tests failed or recovered, and measure how different prompts perform.
 
 [![Public beta](https://img.shields.io/badge/release-v1.0.0--beta.1-blue)](https://github.com/Lyz1116-FOUND/agent-replay/releases/tag/v1.0.0-beta.1)
 [![CI](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml/badge.svg)](https://github.com/Lyz1116-FOUND/agent-replay/actions/workflows/ci.yml)
@@ -158,6 +158,18 @@ python -m experiments.prompt_eval \
   --prompts default,structured,verify --tasks all --runs 1
 # → results/<experiment_id>/{raw_runs.jsonl, summary.json, summary.csv, report.md}
 ```
+
+### Measured results
+
+A 30-run experiment (3 prompts × 10 tasks) on `zhipu/glm-5.3-flash`:
+
+| Prompt | Success Rate | Median Latency | Tokens |
+|---|---|---|---|
+| default | 90.0% (9/10) | 24.0s | 57,118 |
+| structured | 100% (10/10) | 22.4s | 57,196 |
+| verify | 100% (10/10) | 37.6s | 80,712 |
+
+Success is the trusted verdict from running the task’s own verify command in the final worktree. The structured and verify variants avoided the single default failure (a timeout where the agent made no edit). Results reflect one run per task, so treat them as an observation, not a ranking.
 
 See [Backend & experiments](docs/backend.md) for the API contract, the three
 prompt variants, the fixed task set, and how to run the experiment.

@@ -31,3 +31,13 @@ dist-cli/
 
 # Agent working memory
 .workbuddy-ai/
+
+# Python (FastAPI backend + experiments)
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Experiment results
+results/

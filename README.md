@@ -117,6 +117,51 @@ Capture labels distinguish agent-reported activity from workspace-verified chang
 
 Built-in examples are labelled **DEMO**. The launch film reconstructs one of these examples and includes labelled product footage. The repository also includes a [real OpenCode recording](examples/beta-opencode.trace.json), with its commands, test results, and verification documented in [capture evidence](docs/demo/REAL_CAPTURE.md).
 
+## Service API & Prompt Evaluation
+
+The recorder and evaluator are also exposed as a **FastAPI service** and a
+**prompt-optimization experiment harness**. Both reuse the same execution and
+trusted-verify logic as the CLI, so every result is reproducible and auditable.
+
+```
+Task → Agent → Execution → Patch → Tests → Evaluator → Replay / Report
+```
+
+### Start the API
+
+```bash
+# Local
+pip install -e .                            # installs agent_replay + experiments
+uvicorn agent_replay.api.main:app --reload   # http://127.0.0.1:8000/docs
+
+# Docker
+docker build -t agent-replay .
+docker run -p 8000:8000 agent-replay
+curl http://127.0.0.1:8000/health           # {"status":"ok"}
+```
+
+### Example API calls
+
+```bash
+curl -X POST http://127.0.0.1:8000/tasks \
+  -H 'Content-Type: application/json' \
+  -d '{"task": "single-file-bug", "prompt_template": "structured"}'
+
+curl -X POST http://127.0.0.1:8000/tasks/<task_id>/run
+curl http://127.0.0.1:8000/runs/<run_id>
+```
+
+### Run the prompt experiment
+
+```bash
+python -m experiments.prompt_eval \
+  --prompts default,structured,verify --tasks all --runs 1
+# → results/<experiment_id>/{raw_runs.jsonl, summary.json, summary.csv, report.md}
+```
+
+See [Backend & experiments](docs/backend.md) for the API contract, the three
+prompt variants, the fixed task set, and how to run the experiment.
+
 ## Documentation
 
 - [Recording guide](docs/recording.md) — native capture, passive recording, and CLI options.

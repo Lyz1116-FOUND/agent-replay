@@ -1,0 +1,17 @@
+{
+  "id": "sum-array",
+  "title": "Sum an array",
+  "kind": "feature",
+  "prompt": "Implement the missing feature so the tests pass. Run `node --test` to verify. Work only inside the current working directory.",
+  "verify": "node --test",
+  "expectedFiles": [
+    "sum.mjs"
+  ],
+  "baseline": {
+    "pass": 2,
+    "fail": 1
+  },
+  "protectedFiles": [
+    "test.mjs"
+  ]
+}

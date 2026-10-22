@@ -1,0 +1,17 @@
+{
+  "id": "dedupe",
+  "title": "Deduplicate an array",
+  "kind": "feature",
+  "prompt": "Implement the missing feature so the tests pass. Run `node --test` to verify. Work only inside the current working directory.",
+  "verify": "node --test",
+  "expectedFiles": [
+    "dedupe.mjs"
+  ],
+  "baseline": {
+    "pass": 1,
+    "fail": 2
+  },
+  "protectedFiles": [
+    "test.mjs"
+  ]
+}

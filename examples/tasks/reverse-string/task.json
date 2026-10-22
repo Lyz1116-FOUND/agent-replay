@@ -1,0 +1,17 @@
+{
+  "id": "reverse-string",
+  "title": "Reverse a string",
+  "kind": "bug",
+  "prompt": "Fix the failing tests. Make the minimal edit and run `node --test` to verify. Work only inside the current working directory.",
+  "verify": "node --test",
+  "expectedFiles": [
+    "reverse.mjs"
+  ],
+  "baseline": {
+    "pass": 1,
+    "fail": 2
+  },
+  "protectedFiles": [
+    "test.mjs"
+  ]
+}

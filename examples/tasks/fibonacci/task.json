@@ -1,0 +1,17 @@
+{
+  "id": "fibonacci",
+  "title": "Fibonacci sequence",
+  "kind": "bug",
+  "prompt": "Fix the failing tests. Make the minimal edit and run `node --test` to verify. Work only inside the current working directory.",
+  "verify": "node --test",
+  "expectedFiles": [
+    "fib.mjs"
+  ],
+  "baseline": {
+    "pass": 2,
+    "fail": 2
+  },
+  "protectedFiles": [
+    "test.mjs"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "id": "capitalize",
+  "title": "Capitalize a string",
+  "kind": "bug",
+  "prompt": "Fix the failing tests. Make the minimal edit and run `node --test` to verify. Work only inside the current working directory.",
+  "verify": "node --test",
+  "expectedFiles": [
+    "capitalize.mjs"
+  ],
+  "baseline": {
+    "pass": 1,
+    "fail": 2
+  },
+  "protectedFiles": [
+    "test.mjs"
+  ]
+}

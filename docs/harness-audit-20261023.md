@@ -81,7 +81,9 @@ git diff --check
 - 测试输出只保存有界首尾，巨大输出中间的失败 ID 可能缺失；非标准测试输出无法解析时按 unverified 处理。
 - 早期 setup 异常可留下部分产物；完整 artifact 契约适用于正常走到 finalize 的 run。
 - 内部 A2A、确定性摘要、JSON Memory 均按实际范围描述；未声称外部 A2A 协议、模型摘要或向量检索。
-- 本机验证使用 Python 3.13/macOS。新增 CI 配置在推送后运行；Windows transport 未实现。
+- 本机验证使用 Python 3.13/macOS；GitHub Actions run `39898175753` 在
+  Python 3.10/3.13 与 Node 22/24（macOS/Linux）矩阵上全部通过。Windows
+  transport 未实现。
 
 ## 审核后的 live 验证（2026-10-23）
 

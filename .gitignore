@@ -26,6 +26,7 @@ demo-output
 *.sw?
 
 .agent-replay/
+.agent_replay/
 replays/
 dist-cli/
 

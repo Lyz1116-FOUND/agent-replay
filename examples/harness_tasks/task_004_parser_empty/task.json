@@ -1,0 +1,24 @@
+{
+  "id": "task_004_parser_empty",
+  "title": "Fix parser crash on empty input",
+  "kind": "bug",
+  "instruction": "The key=value parser crashes on empty input and mishandles blank lines. Fix the parser so it returns an empty mapping for empty input, skips blank lines, and keeps '=' characters inside values. Do not modify tests or pytest.ini.",
+  "test_command": "{python} -m pytest -q -c pytest.ini",
+  "protected_paths": [
+    "tests/",
+    "pytest.ini"
+  ],
+  "expected_paths": [
+    "src/parser.py"
+  ],
+  "timeout_seconds": 120,
+  "metadata": {
+    "tags": [
+      "python",
+      "pytest",
+      "parser",
+      "edge_case"
+    ],
+    "repo": "agent-replay/harness-fixture"
+  }
+}

@@ -1,5 +1,65 @@
 # Changelog
 
+## Unreleased — M6 minimal coding-agent harness
+
+### Added
+
+- **Native Python harness.** `agent_replay/harness/` implements the five M0
+  contracts (`TaskSpec`, `RunState`, `ModelTurn`, `ToolResult`, `GradeResult`),
+  an OpenAI-compatible model client, a ReAct loop with step/time/token budgets,
+  stuck-loop detection, and grader-driven retries. The harness, not the model,
+  owns the success verdict.
+- **Six built-in tools.** `read_file`, `grep`, `write_file`, `shell`,
+  `run_tests`, and `git_diff` all return one `ToolResult`, with workspace path
+  containment, credential-stripped environments, output caps, and structured
+  pytest counts/failed test IDs.
+- **Graders and context strategies.** Test, constraint, composite, explicit
+  agent-claim, and optional LLM graders; full, truncated, and extractive
+  compressed context managers with whole-turn budget enforcement and a
+  structured state (`goal`, files, tests, remaining work) in each context
+  build.
+- **Opt-in memory and abort.** A JSON key/value `MemoryStore` records prior
+  run outcomes and recalls up to three same-task entries into the system
+  prompt; `abort_check` stops a run between calls and records `run_aborted`.
+- **Replay artifacts and native trace.** `runs/<run_id>/` contains
+  `events.jsonl`, `messages.jsonl`, `patch.diff`, `test_results.json`,
+  `grade.json`, `metrics.json`, `result.json`, and an importable
+  `agent-replay/v1` `trace.json`.
+- **Fixed task set and CLI.** Ten Python tasks under `examples/harness_tasks/`
+  (including multi-file, misleading-context, regression, feature, and parser
+  edge-case tasks), each proven to fail at baseline and pass with its reference
+  fix. Commands: `run`, `list`, `validate-tasks`, `benchmark`.
+- **Experiments.** `experiments/harness_eval.py` covers harness vs single-shot,
+  no verification vs verified, three context strategies, single agent vs
+  coder+reviewer, skills on/off, and retry on/off. Metrics include success,
+  verified success, pass@1, retry recovery, regression, false completion, tool
+  error rate, tokens, latency, and context tokens.
+- **Failure taxonomy.** F1–F12 plus F13 constraint violations and I1
+  infrastructure/provider failures.
+- **Skills, MCP, and multi-agent.** Skill loader with a built-in Python
+  test-debugging skill; stdio MCP client and tool adapter; advisory reviewer;
+  capped supervisor rounds with internal A2A messages.
+- **Mechanics benchmark.** A labelled scripted-oracle run over all 10 tasks
+  validates the pipeline; it is explicitly not model-capability evidence. See
+  [`docs/harness.md`](docs/harness.md).
+- **Live validation (`spark-x2.6`, 2026-10-23).** 130 runs (13 variants × 10
+  tasks, one run per cell): harness 10/10 vs one-turn baseline 0/10; context
+  full/truncated/compressed all 10/10 with total tokens 229k/156k/107k;
+  coder+reviewer 10/10 with ~30.6k extra tokens; one `verified` provider
+  timeout (I1). Single runs, not a ranking; the scripted forced-failure
+  experiment remains the controlled retry and false-completion evidence.
+
+### Fixed
+
+- **Boundary hardening from the independent audit.** Context budgets terminate
+  and reject oversized system prompts, reviewer JSON requires a real boolean,
+  committed test tampering is still detected, MCP partial lines honor
+  deadlines, timed-out shells kill their process group, token totals accumulate
+  across turns, constraints are rechecked after tests, total-only provider
+  usage enforces the run budget, truncation preserves trailing test summaries,
+  and benchmarks reject missing model factories or mismatched evidence labels.
+  25 boundary tests were added; the suite is 139 tests.
+
 ## 1.0.0-beta.1 — 2026-10-21
 
 First public beta. Capture, verification, replay, comparison, and OTLP JSON import now form the v1 core loop. This release is about shipping the existing loop, not adding another milestone.

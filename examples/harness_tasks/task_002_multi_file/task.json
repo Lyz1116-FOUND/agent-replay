@@ -1,0 +1,25 @@
+{
+  "id": "task_002_multi_file",
+  "title": "Fix pricing across two modules",
+  "kind": "bug",
+  "instruction": "Checkout totals are wrong and the cause spans more than one source file. Fix the source so the full suite passes. Do not modify tests or pytest.ini.",
+  "test_command": "{python} -m pytest -q -c pytest.ini",
+  "protected_paths": [
+    "tests/",
+    "pytest.ini"
+  ],
+  "expected_paths": [
+    "src/pricing/config.py",
+    "src/pricing/checkout.py"
+  ],
+  "timeout_seconds": 120,
+  "metadata": {
+    "tags": [
+      "python",
+      "pytest",
+      "multi_file",
+      "pricing"
+    ],
+    "repo": "agent-replay/harness-fixture"
+  }
+}

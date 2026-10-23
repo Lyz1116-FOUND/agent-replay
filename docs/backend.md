@@ -125,3 +125,10 @@ The image bundles Node 22 (recorder), Python 3 (FastAPI), and git (recorder +
 evaluator). The agent CLI itself (e.g. `opencode`) is **not** installed: real
 agent runs require the user's own credentials, so mount them at run time if you
 need `/tasks/{id}/run` to execute an agent.
+
+## Related: native coding harness
+
+The FastAPI service evaluates existing agent CLIs. For the separate native
+Python harness that runs a model, owns the success verdict, writes replay
+artifacts, and supports context/reviewer/MCP experiments, see
+[Minimal coding-agent harness](harness.md).

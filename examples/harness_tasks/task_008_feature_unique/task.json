@@ -1,0 +1,24 @@
+{
+  "id": "task_008_feature_unique",
+  "title": "Implement order-preserving unique",
+  "kind": "feature",
+  "instruction": "Implement unique_preserving_order so it returns the first occurrence of each value in input order. Empty input returns an empty list. Do not modify tests or pytest.ini.",
+  "test_command": "{python} -m pytest -q -c pytest.ini",
+  "protected_paths": [
+    "tests/",
+    "pytest.ini"
+  ],
+  "expected_paths": [
+    "src/lists.py"
+  ],
+  "timeout_seconds": 120,
+  "metadata": {
+    "tags": [
+      "python",
+      "pytest",
+      "feature",
+      "lists"
+    ],
+    "repo": "agent-replay/harness-fixture"
+  }
+}

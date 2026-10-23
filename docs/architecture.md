@@ -55,6 +55,49 @@ Key decisions:
 - **One schema, one UI.** CLI output, native JSON, SWE-agent imports, and demo traces all pass the same Zod schema and semantic invariants.
 - **No backend.** Demo traces are bundled, imports persist locally, and recorder traces are served by a local `agent-replay open` process.
 
+## Harness (Python, M6)
+
+The repository also contains a native coding-agent harness that runs a model
+instead of observing one:
+
+```
+Task → Context → Model → Tool → Observation → Loop → Verification → Grader → Retry/Finish
+```
+
+```
+agent_replay/harness/   contracts, loop, model client, grader, artifacts
+agent_replay/tools/     six built-in tools returning one ToolResult shape
+agent_replay/context/   full / truncated / compressed strategies
+agent_replay/skills/    prompt-level procedures matched to tasks
+agent_replay/mcp/       stdio client + Tool adapter (protocol boundary only)
+agent_replay/agents/    coder, reviewer, supervisor, internal A2A messages
+agent_replay/evaluation/metrics, failure taxonomy, benchmark, report
+agent_replay/replay/    run → agent-replay/v1 trace
+```
+
+Key decisions:
+
+- **The harness owns success.** A model turn without tool calls is a
+  completion *claim*; tests and protected-path hashes decide the verdict.
+- **One tool result shape.** Unknown tools, invalid arguments, timeouts, and
+  test failures are all observations; tools never return ad-hoc types.
+- **Retries are feedback loops.** Grader feedback returns to the same
+  workspace. The reviewer is advisory and cannot override the grader.
+- **Context is an experiment variable.** Full, truncated, and compressed
+  strategies share one boundary; compression is deterministic and
+  extractive so it adds no hidden model cost.
+- **Replay is generated, not bolted on.** Ordered events and diagnostics
+  produce `runs/<run_id>/` artifacts and a native trace importable by the
+  existing viewer.
+- **Protocols end at the adapter.** MCP tools become native `Tool` objects;
+  the loop, context manager, and grader are protocol-agnostic.
+- **Evidence is labelled.** Scripted oracle runs are `mechanics`; live model
+  runs are `live`. Token usage never fabricates zeros.
+
+The Node recorder, viewer, and FastAPI prompt-evaluation service are
+unchanged. The harness is additive and reuses the same task workspace and
+trusted-verify ideas.
+
 ## Design references
 
 - [Transformer Explainer](https://poloclub.github.io/transformer-explainer/) — progressive disclosure and linked views

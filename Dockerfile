@@ -24,7 +24,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Install Python dependencies first (leverages layer cache).
+# Install Python dependencies first (leverages layer cache). pytest is
+# included because the native harness runs the fixed task suites.
 COPY requirements.txt ./
 RUN pip3 install --no-cache-dir --break-system-packages -r requirements.txt
 

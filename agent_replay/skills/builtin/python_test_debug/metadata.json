@@ -1,0 +1,6 @@
+{
+  "name": "python_test_debug",
+  "description": "Diagnose a failing Python test, apply a minimal source fix, and verify with the full suite.",
+  "triggers": ["python", "pytest", "test", "bug", "fix", "failure"],
+  "min_score": 1
+}

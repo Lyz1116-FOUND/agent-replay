@@ -20,8 +20,14 @@ dev = [
     "httpx>=0.28",
 ]
 
+[project.scripts]
+agent-replay-harness = "agent_replay.harness.cli:main"
+
 [tool.setuptools.packages.find]
 include = ["agent_replay*", "experiments*"]
+
+[tool.setuptools.package-data]
+"agent_replay.skills" = ["builtin/*/SKILL.md", "builtin/*/metadata.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

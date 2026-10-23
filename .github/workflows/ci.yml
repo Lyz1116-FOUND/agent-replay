@@ -10,6 +10,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  python:
+    name: Python ${{ matrix.python }} harness
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.10', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest -q
+      - run: python -m agent_replay.harness validate-tasks
+      - run: python -m experiments.harness_eval --backend scripted --experiments all --tasks all --runs 1 --out-dir results/harness-ci
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: harness-python-${{ matrix.python }}
+          path: results/harness-ci
+
   verify:
     name: ${{ matrix.os }} · node ${{ matrix.node }}
     runs-on: ${{ matrix.os }}

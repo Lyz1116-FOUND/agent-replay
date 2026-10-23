@@ -1,0 +1,24 @@
+{
+  "id": "task_005_misleading_comment",
+  "title": "Ignore the misleading comment",
+  "kind": "bug",
+  "instruction": "A test fails in the text helpers. A code comment may point at the wrong place; verify the actual behavior with the tests. Fix the source and do not modify tests or pytest.ini.",
+  "test_command": "{python} -m pytest -q -c pytest.ini",
+  "protected_paths": [
+    "tests/",
+    "pytest.ini"
+  ],
+  "expected_paths": [
+    "src/text.py"
+  ],
+  "timeout_seconds": 120,
+  "metadata": {
+    "tags": [
+      "python",
+      "pytest",
+      "misleading_context",
+      "text"
+    ],
+    "repo": "agent-replay/harness-fixture"
+  }
+}

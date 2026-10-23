@@ -1,0 +1,24 @@
+{
+  "id": "task_001_add_bug",
+  "title": "Fix the addition helper",
+  "kind": "bug",
+  "instruction": "The repository's test suite fails. Diagnose the cause in the source, apply the smallest correct fix, and make the full suite pass. Do not modify anything under tests/ or pytest.ini.",
+  "test_command": "{python} -m pytest -q -c pytest.ini",
+  "protected_paths": [
+    "tests/",
+    "pytest.ini"
+  ],
+  "expected_paths": [
+    "src/calc.py"
+  ],
+  "timeout_seconds": 120,
+  "metadata": {
+    "tags": [
+      "python",
+      "pytest",
+      "single_file",
+      "arithmetic"
+    ],
+    "repo": "agent-replay/harness-fixture"
+  }
+}

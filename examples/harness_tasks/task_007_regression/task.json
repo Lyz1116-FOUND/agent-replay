@@ -1,0 +1,24 @@
+{
+  "id": "task_007_regression",
+  "title": "Fix median without breaking mean",
+  "kind": "bug",
+  "instruction": "The median tests fail. Fix the median implementation and preserve all existing behavior covered by the suite, especially the mean tests. Do not modify tests or pytest.ini.",
+  "test_command": "{python} -m pytest -q -c pytest.ini",
+  "protected_paths": [
+    "tests/",
+    "pytest.ini"
+  ],
+  "expected_paths": [
+    "src/stats.py"
+  ],
+  "timeout_seconds": 120,
+  "metadata": {
+    "tags": [
+      "python",
+      "pytest",
+      "regression",
+      "statistics"
+    ],
+    "repo": "agent-replay/harness-fixture"
+  }
+}
